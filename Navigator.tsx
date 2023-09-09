@@ -6,6 +6,7 @@ import Register from './pages/auth/Register';
 import Home from './pages/main/Home';
 import { RootState } from './redux/store';
 import { useAppSelector } from './redux/hooks';
+import Chat from './pages/main/Chat';
 
 // eslint-disable-next-line @typescript-eslint/typedef
 const Stack = createNativeStackNavigator();
@@ -18,22 +19,14 @@ export default function Navigator(): JSX.Element {
       { isLoggedIn ?
         (
           <>
-            <Stack.Screen
-              name="Home"
-              component={Home}
-            />
+            <Stack.Screen name="Home" component={Home} />
+            <Stack.Screen name="Chat" component={Chat} />
           </>
         ) :
         (
           <>
-            <Stack.Screen
-              name="Login"
-              component={Login}
-            />
-            <Stack.Screen
-              name="Register"
-              component={Register}
-            />
+            <Stack.Screen name="Login" component={Login} />
+            <Stack.Screen name="Register" component={Register} />
           </>
         )
       }

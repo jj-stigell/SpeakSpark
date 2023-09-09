@@ -9,7 +9,7 @@ import accountReducer from './features/accountSlice';
 export const persistConfig = {
   key: 'root',
   storage,
-  blacklist: ['register', 'notification']
+  blacklist: ['notification']
 };
 
 const appReducer = combineReducers({
