@@ -7,16 +7,24 @@ import {
 import { JSX, useState } from 'react';
 import React from 'react';
 import { gql, useMutation, DocumentNode, ApolloError } from '@apollo/client';
+
 import Notification, { Action } from './Notification';
+import { useAppDispatch } from '../../redux/hooks';
+import { setAccount } from '../../redux/features/accountSlice';
+import { validEmail } from '../../util';
 
 const CREATE_ACCOUNT: DocumentNode = gql`
 mutation Register($email: String!, $password: String!) {
   register(email: $email, password: $password) {
-    id
+    user {
+      id
+    }
+    token
   }
 }`;
 
 export default function Register({ navigation }: { navigation: any }): JSX.Element {
+  const dispatch = useAppDispatch();
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [confirmPassword, setConfirmPassword] = useState<string>('');
@@ -24,9 +32,8 @@ export default function Register({ navigation }: { navigation: any }): JSX.Eleme
     message: '',
     action: 'success'
   });
-  const emailRegex: RegExp = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$/;
 
-  const [createAccount, { loading }] = useMutation(CREATE_ACCOUNT, {
+  const [createAccount, { data, loading }] = useMutation(CREATE_ACCOUNT, {
     errorPolicy: 'all',
     onError: (error: Error) => {
       if (error instanceof ApolloError) {
@@ -43,11 +50,13 @@ export default function Register({ navigation }: { navigation: any }): JSX.Eleme
     },
     onCompleted: () => {
       setNotification({
-        message: 'Account created succesfully, redirecting to login',
+        message: 'Account created succesfully. Logging in, please wait...',
         action: 'success'
       });
       setTimeout(() => {
-        navigation.navigate('Login');
+        dispatch(setAccount({ isLoggedIn: true, account:
+          { id: data.register.user.id, email, token: data.register.token }
+        }));
       }, 1000);
     }
   });
@@ -101,7 +110,7 @@ export default function Register({ navigation }: { navigation: any }): JSX.Eleme
         </VStack>
         <Button
           isDisabled={
-            !emailRegex.test(email) || password.length == 0 ||
+            !validEmail(email) || password.length == 0 ||
             loading || password !== confirmPassword
           }
           onPress={register}

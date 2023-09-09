@@ -6,9 +6,11 @@ import {
 import { JSX, useState } from 'react';
 import React from 'react';
 import { gql, useMutation, DocumentNode, ApolloError } from '@apollo/client';
+
 import Notification, { Action } from './Notification';
 import { useAppDispatch } from '../../redux/hooks';
 import { setAccount } from '../../redux/features/accountSlice';
+import { validEmail } from '../../util';
 
 const LOGIN: DocumentNode = gql`
 mutation Login($password: String!, $email: String!) {
@@ -20,18 +22,14 @@ mutation Login($password: String!, $email: String!) {
   }
 }`;
 
-export default function Login(
-  props: { navigation: any }
-): JSX.Element {
+export default function Login(props: { navigation: any }): JSX.Element {
+  const dispatch = useAppDispatch();
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [notification, setNotification] = useState<{ message: string, action: Action }>({
     message: '',
     action: 'success'
   });
-  const emailRegex: RegExp = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$/;
-
-  const dispatch = useAppDispatch();
 
   const [loginAccount, { data, loading }] = useMutation(LOGIN, {
     errorPolicy: 'all',
@@ -49,10 +47,6 @@ export default function Login(
       }
     },
     onCompleted: () => {
-      //console.log(data);
-      //props.setToken(data.login.token);
-      //console.log('USER ID is', data.login.user.id);
-
       dispatch(setAccount({ isLoggedIn: true, account:
         { id: data.login.user.id, email, token: data.login.token }
       }));
@@ -93,7 +87,7 @@ export default function Login(
           </Input>
         </VStack>
         <Button
-          isDisabled={!emailRegex.test(email) || password.length == 0 || loading}
+          isDisabled={!validEmail(email) || password.length == 0 || loading}
           onPress={login}
         >
           {loading && <ButtonSpinner mr="$2" />}

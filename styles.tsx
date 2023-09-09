@@ -6,6 +6,6 @@ export const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     marginHorizontal: 30,
-    justifyContent: 'center',
+    justifyContent: 'center'
   }
 });
