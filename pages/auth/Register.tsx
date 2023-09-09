@@ -64,7 +64,7 @@ export default function Register({ navigation }: { navigation: any }): JSX.Eleme
     <FormControl p='$4' marginTop='$32'>
       <VStack space='xl'>
         <Center>
-          <Heading lineHeight='$md'>Register new account</Heading>
+          <Heading lineHeight='$md'>Register new account to SpeakSpark</Heading>
         </Center>
         { notification.message.length !== 0 && (
           <Notification message={notification.message} action={notification.action} />

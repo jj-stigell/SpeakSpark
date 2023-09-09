@@ -5,33 +5,75 @@ import {
 } from '@gluestack-ui/themed';
 import { JSX, useState } from 'react';
 import React from 'react';
+import { gql, useMutation, DocumentNode, ApolloError } from '@apollo/client';
+import Notification, { Action } from './Notification';
+import { useAppDispatch } from '../../redux/hooks';
+import { setAccount } from '../../redux/features/accountSlice';
 
-export default function Login({ navigation }: { navigation: any }): JSX.Element {
+const LOGIN: DocumentNode = gql`
+mutation Login($password: String!, $email: String!) {
+  login(password: $password, email: $email) {
+    user {
+      id
+    }
+    token
+  }
+}`;
+
+export default function Login(
+  props: { navigation: any }
+): JSX.Element {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
-  const [loading, setLoading] = useState<boolean>(false);
+  const [notification, setNotification] = useState<{ message: string, action: Action }>({
+    message: '',
+    action: 'success'
+  });
   const emailRegex: RegExp = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$/;
 
+  const dispatch = useAppDispatch();
+
+  const [loginAccount, { data, loading }] = useMutation(LOGIN, {
+    errorPolicy: 'all',
+    onError: (error: Error) => {
+      if (error instanceof ApolloError) {
+        setNotification({
+          message: error.graphQLErrors[0].message,
+          action: 'error'
+        });
+      } else {
+        setNotification({
+          message: error.message,
+          action: 'error'
+        });
+      }
+    },
+    onCompleted: () => {
+      //console.log(data);
+      //props.setToken(data.login.token);
+      //console.log('USER ID is', data.login.user.id);
+
+      dispatch(setAccount({ isLoggedIn: true, account:
+        { id: data.login.user.id, email, token: data.login.token }
+      }));
+    }
+  });
+
   async function login(): Promise<void> {
-    setLoading(true);
-    console.log('loggin in!!!');
-    console.log('email', email);
-    console.log('password', password);
-    setLoading(false);
+    await loginAccount({ variables: { email, password } });
   }
 
   return (
     <FormControl p='$4' marginTop='$32'>
       <VStack space='xl'>
         <Center>
-          <Heading lineHeight='$md'>
-            Login to Yomiko
-          </Heading>
+          <Heading lineHeight='$md'>Login to SpeakSpark</Heading>
         </Center>
+        { notification.message.length !== 0 && (
+          <Notification message={notification.message} action={notification.action} />
+        )}
         <VStack space='xs'>
-          <Text lineHeight='$xs'>
-            Email
-          </Text>
+          <Text lineHeight='$xs'>Email</Text>
           <Input>
             <InputField
               type="text"
@@ -60,7 +102,7 @@ export default function Login({ navigation }: { navigation: any }): JSX.Element 
           </ButtonText>
         </Button>
         <Button
-          onPress={(): void => navigation.navigate('Register')}
+          onPress={(): void => props.navigation.navigate('Register')}
           isDisabled={loading}
           bgColor='#5adbb5'
         >
