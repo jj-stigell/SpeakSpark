@@ -11,13 +11,16 @@ import { gql, useMutation, DocumentNode, ApolloError } from '@apollo/client';
 import Notification, { Action } from './Notification';
 import { useAppDispatch } from '../../redux/hooks';
 import { setAccount } from '../../redux/features/accountSlice';
-import { validEmail } from '../../util';
+import { validEmail } from '../../utils/validators';
 
 const CREATE_ACCOUNT: DocumentNode = gql`
 mutation Register($email: String!, $password: String!) {
   register(email: $email, password: $password) {
     user {
       id
+      darkMode
+      uiLanguage
+      studyLanguage
     }
     token
   }
@@ -54,8 +57,16 @@ export default function Register({ navigation }: { navigation: any }): JSX.Eleme
         action: 'success'
       });
       setTimeout(() => {
-        dispatch(setAccount({ isLoggedIn: true, account:
-          { id: data.register.user.id, email, token: data.register.token }
+        dispatch(setAccount({
+          isLoggedIn: true,
+          account: {
+            id: data.register.user.id,
+            email,
+            token: data.register.token,
+            darkMode: data.login.user.darkMode,
+            uiLanguage: data.login.user.uiLanguage,
+            studyLanguage: data.login.user.studyLanguage
+          }
         }));
       }, 1000);
     }

@@ -4,7 +4,10 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 export interface Account {
   id: string,
   email: string,
-  token: string
+  token: string,
+  darkMode: boolean,
+  uiLanguage: string,
+  studyLanguage: string
 }
 
 export interface AccountState {
@@ -17,7 +20,10 @@ export const initialState: AccountState = {
   account: {
     id: '',
     email: '',
-    token: ''
+    token: '',
+    darkMode: false,
+    uiLanguage: 'en',
+    studyLanguage: 'jp'
   }
 };
 

@@ -10,13 +10,16 @@ import { gql, useMutation, DocumentNode, ApolloError } from '@apollo/client';
 import Notification, { Action } from './Notification';
 import { useAppDispatch } from '../../redux/hooks';
 import { setAccount } from '../../redux/features/accountSlice';
-import { validEmail } from '../../util';
+import { validEmail } from '../../utils/validators';
 
 const LOGIN: DocumentNode = gql`
 mutation Login($password: String!, $email: String!) {
   login(password: $password, email: $email) {
     user {
       id
+      darkMode
+      uiLanguage
+      studyLanguage
     }
     token
   }
@@ -47,8 +50,17 @@ export default function Login(props: { navigation: any }): JSX.Element {
       }
     },
     onCompleted: () => {
-      dispatch(setAccount({ isLoggedIn: true, account:
-        { id: data.login.user.id, email, token: data.login.token }
+      console.log(data.login);
+      dispatch(setAccount({
+        isLoggedIn: true,
+        account: {
+          id: data.login.user.id,
+          email,
+          token: data.login.token,
+          darkMode: data.login.user.darkMode,
+          uiLanguage: data.login.user.uiLanguage,
+          studyLanguage: data.login.user.studyLanguage
+        }
       }));
     }
   });

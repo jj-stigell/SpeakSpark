@@ -4,9 +4,10 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Login from './pages/auth/Login';
 import Register from './pages/auth/Register';
 import Home from './pages/main/Home';
+import Chat from './pages/main/Chat';
+import Settings from './pages/main/Settings';
 import { RootState } from './redux/store';
 import { useAppSelector } from './redux/hooks';
-import Chat from './pages/main/Chat';
 
 // eslint-disable-next-line @typescript-eslint/typedef
 const Stack = createNativeStackNavigator();
@@ -21,6 +22,7 @@ export default function Navigator(): JSX.Element {
           <>
             <Stack.Screen name="Home" component={Home} />
             <Stack.Screen name="Chat" component={Chat} />
+            <Stack.Screen name="Settings" component={Settings} />
           </>
         ) :
         (

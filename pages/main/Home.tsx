@@ -61,8 +61,8 @@ export default function Home({ navigation }: { navigation: any }): JSX.Element {
                  sunt in culpa qui officia deserunt mollit anim id est laborum.
           </Text>
         </VStack>
-        <Button onPress={logout}>
-          <ButtonText color='$white'>logout</ButtonText>
+        <Button marginTop='$64' onPress={(): void => navigation.navigate('Settings')}>
+          <ButtonText color='$white'>Settings</ButtonText>
         </Button>
       </VStack>
     </FormControl>
