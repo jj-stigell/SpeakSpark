@@ -4,7 +4,6 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 export interface Account {
   id: string,
   email: string,
-  token: string,
   darkMode: boolean,
   uiLanguage: string,
   studyLanguage: string
@@ -15,12 +14,11 @@ export interface AccountState {
   account: Account
 }
 
-export const initialState: AccountState = {
+const initialState: AccountState = {
   isLoggedIn: false,
   account: {
     id: '',
     email: '',
-    token: '',
     darkMode: false,
     uiLanguage: 'en',
     studyLanguage: 'jp'
@@ -31,16 +29,14 @@ const accountSlice = createSlice({
   name: 'account',
   initialState,
   reducers: {
-    setAccount(state, action: PayloadAction<AccountState>) {
-      return action.payload;
+    setAccount(state, action: PayloadAction<Account>) {
+      return {
+        isLoggedIn: true,
+        account: action.payload
+      };
     },
     resetAccount() {
-      return {
-        isLoggedIn: false,
-        account: {
-          ...initialState.account
-        }
-      };
+      return initialState;
     }
   }
 });
