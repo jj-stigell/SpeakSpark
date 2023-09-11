@@ -3,7 +3,11 @@ import {
   FormControl, VStack, Heading, ButtonText, Text, Button, Center
 } from '@gluestack-ui/themed';
 
+import { setStudyLanguage } from '../../redux/features/accountSlice';
+import { useAppSelector } from '../../redux/hooks';
+import LanguageSelector from '../../components/LanguageSelector';
 import Card, { CardData } from '../../components/ChatCard';
+import { RootState } from '../../redux/store';
 
 const previousChats: Array<CardData> = [
   {
@@ -29,32 +33,27 @@ const previousChats: Array<CardData> = [
     avatar: 'https://i.ibb.co/LrRJGh2/takeshi.png',
     language: 'jp',
     updatedAt: new Date('2022-12-01')
-  },
-  {
-    chatId: 'fgdfjgds98gsd0',
-    name: '정은',
-    nameRomaji: 'Jung-Eun',
-    avatar: 'https://i.ibb.co/h7DJ1M3/jung-eun.png',
-    language: 'ko',
-    updatedAt: new Date('2023-12-01')
   }
 ];
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export default function Home(props: { navigation: any }): React.JSX.Element {
+export default function NewChat(props: { navigation: any }): React.JSX.Element {
+  const lang: string = useAppSelector((state: RootState) => state.account.account.studyLanguage);
 
-  function navigateToChatId(chatId: string): void {
-    props.navigation.navigate('Chat', { chatId });
+  function newChat(chatId: string): void {
+    props.navigation.navigate('Chat', { chatId, newChat: true });
   }
 
   return (
     <FormControl p='$4' marginTop='$12'>
       <VStack space='xl'>
         <Center>
-          <Heading lineHeight='$md'>SpeakSpark</Heading>
+          <Heading lineHeight='$md'>Start a new chat</Heading>
         </Center>
         <VStack space='xs'>
-          <Text marginTop='$2'>Previous chats</Text>
+          <Text>Chatting language</Text>
+          <LanguageSelector language={lang} setLanguage={setStudyLanguage} />
+          <Text marginTop='$2'>Chat buddies</Text>
           { previousChats.map((data: CardData) => (
             <Card
               key={data.chatId}
@@ -64,15 +63,12 @@ export default function Home(props: { navigation: any }): React.JSX.Element {
               avatar={data.avatar}
               language={data.language}
               updatedAt={data.updatedAt}
-              onPress={navigateToChatId}
+              onPress={newChat}
             />
           ))}
         </VStack>
-        <Button onPress={(): void => props.navigation.navigate('NewChat')}>
-          <ButtonText color='$white'>New chat</ButtonText>
-        </Button>
-        <Button onPress={(): void => props.navigation.navigate('Settings')}>
-          <ButtonText color='$white'>Settings</ButtonText>
+        <Button marginTop='$16' onPress={(): void => props.navigation.navigate('Home')}>
+          <ButtonText color='$white'>Back Home</ButtonText>
         </Button>
       </VStack>
     </FormControl>

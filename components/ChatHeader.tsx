@@ -1,4 +1,4 @@
-import React, { JSX } from 'react';
+import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, StatusBar } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -8,7 +8,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     padding: 10,
-    // Add the status bar's height to the padding
     paddingTop: StatusBar.currentHeight ? StatusBar.currentHeight + 10 : 10,
     borderBottomWidth: 1,
     borderBottomColor: '#e0e0e0'
@@ -21,13 +20,15 @@ const styles = StyleSheet.create({
   }
 });
 
-export default function ChatHeader(props: { botName: string, onBack: () => void }): JSX.Element {
+export default function ChatHeader(props: {
+  name: string, nameRomaji: string, onBack: () => void
+}): React.JSX.Element {
   return (
     <View style={styles.headerContainer}>
       <TouchableOpacity onPress={props.onBack}>
         <Ionicons name="arrow-back" size={24} color="black" />
       </TouchableOpacity>
-      <Text style={styles.headerText}>{props.botName}</Text>
+      <Text style={styles.headerText}>{props.name} - {props.nameRomaji}</Text>
     </View>
   );
 }

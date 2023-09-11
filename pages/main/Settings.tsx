@@ -1,29 +1,27 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/typedef */
+import React from 'react';
+import { AnyAction, Dispatch, PayloadAction } from '@reduxjs/toolkit';
 import {
   FormControl, VStack, Heading, ButtonText,
   Text, Button, Center, HStack, Switch
 } from '@gluestack-ui/themed';
-import React, { JSX, useState } from 'react';
-import { Dropdown } from 'react-native-element-dropdown';
 
-import { Account, resetAccount } from '../../redux/features/accountSlice';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
-import { styles } from '../../styles';
-import { languages } from '../../utils/languages';
 import { deleteFromStore } from '../../utils/expoStore';
+import LanguageSelector from '../../components/LanguageSelector';
+import {
+  Account, resetAccount, setUiLanguage, toggleDarkMode
+} from '../../redux/features/accountSlice';
 
-export default function Settings({ navigation }: { navigation: any }): JSX.Element {
-  const dispatch = useAppDispatch();
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export default function Settings({ navigation }: { navigation: any }): React.JSX.Element {
+  const dispatch: Dispatch<AnyAction> = useAppDispatch();
   const account: Account = useAppSelector((state: RootState) => state.account.account);
-  const [darkMode, setDarkMode] = useState<boolean>(account.darkMode);
-  const [value, setValue] = useState<string>(account.uiLanguage);
-  const [isFocus, setIsFocus] = useState<boolean>(false);
 
   async function logout(): Promise<void> {
-    deleteFromStore('jwt');
-    dispatch(resetAccount());
+    deleteFromStore('jwt').then(() => {
+      dispatch(resetAccount());
+    });
   }
 
   return (
@@ -40,35 +38,15 @@ export default function Settings({ navigation }: { navigation: any }): JSX.Eleme
         <VStack space='xs'>
           <HStack space="md" marginBottom='$1' alignItems='center'>
             <Switch
-              value={darkMode}
-              onToggle={(value: boolean): void => setDarkMode(value)}
+              value={account.darkMode}
+              onToggle={(): PayloadAction<undefined, string> => dispatch(toggleDarkMode())}
             />
             <Text size="lg">Dark mode</Text>
           </HStack>
         </VStack>
         <VStack space='xs' marginBottom='$5'>
           <Text size="lg">UI Language</Text>
-          <Dropdown
-            style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
-            placeholderStyle={styles.placeholderStyle}
-            selectedTextStyle={styles.selectedTextStyle}
-            inputSearchStyle={styles.inputSearchStyle}
-            iconStyle={styles.iconStyle}
-            data={languages}
-            search
-            maxHeight={300}
-            labelField="label"
-            valueField="value"
-            placeholder='Select Language'
-            searchPlaceholder="Search..."
-            value={value}
-            onFocus={(): void => setIsFocus(true)}
-            onBlur={(): void => setIsFocus(false)}
-            onChange={(item): void => {
-              setValue(item.value);
-              setIsFocus(false);
-            }}
-          />
+          <LanguageSelector language={account.uiLanguage} setLanguage={setUiLanguage} />
         </VStack>
         <Button onPress={(): void => navigation.navigate('Home')} marginBottom='$5'>
           <ButtonText color='$white'>Go Back</ButtonText>
