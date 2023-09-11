@@ -11,6 +11,7 @@ import Notification, { Action } from './Notification';
 import { useAppDispatch } from '../../redux/hooks';
 import { setAccount } from '../../redux/features/accountSlice';
 import { validEmail } from '../../utils/validators';
+import { saveToStore } from '../../utils/expoStore';
 
 const LOGIN: DocumentNode = gql`
 mutation Login($password: String!, $email: String!) {
@@ -50,17 +51,13 @@ export default function Login(props: { navigation: any }): JSX.Element {
       }
     },
     onCompleted: () => {
-      console.log(data.login);
+      saveToStore('jwt', data.login.token);
       dispatch(setAccount({
-        isLoggedIn: true,
-        account: {
-          id: data.login.user.id,
-          email,
-          token: data.login.token,
-          darkMode: data.login.user.darkMode,
-          uiLanguage: data.login.user.uiLanguage,
-          studyLanguage: data.login.user.studyLanguage
-        }
+        id: data.login.user.id,
+        email,
+        darkMode: data.login.user.darkMode,
+        uiLanguage: data.login.user.uiLanguage,
+        studyLanguage: data.login.user.studyLanguage
       }));
     }
   });

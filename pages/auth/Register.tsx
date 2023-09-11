@@ -12,6 +12,7 @@ import Notification, { Action } from './Notification';
 import { useAppDispatch } from '../../redux/hooks';
 import { setAccount } from '../../redux/features/accountSlice';
 import { validEmail } from '../../utils/validators';
+import { saveToStore } from '../../utils/expoStore';
 
 const CREATE_ACCOUNT: DocumentNode = gql`
 mutation Register($email: String!, $password: String!) {
@@ -57,16 +58,13 @@ export default function Register({ navigation }: { navigation: any }): JSX.Eleme
         action: 'success'
       });
       setTimeout(() => {
+        saveToStore('jwt', data.register.token);
         dispatch(setAccount({
-          isLoggedIn: true,
-          account: {
-            id: data.register.user.id,
-            email,
-            token: data.register.token,
-            darkMode: data.login.user.darkMode,
-            uiLanguage: data.login.user.uiLanguage,
-            studyLanguage: data.login.user.studyLanguage
-          }
+          id: data.register.user.id,
+          email,
+          darkMode: data.login.user.darkMode,
+          uiLanguage: data.login.user.uiLanguage,
+          studyLanguage: data.login.user.studyLanguage
         }));
       }, 1000);
     }

@@ -1,8 +1,9 @@
-/* eslint-disable max-len */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/typedef */
-import { FormControl, VStack, Heading, ButtonText, Text, Button, Center, HStack, Switch } from '@gluestack-ui/themed';
+import {
+  FormControl, VStack, Heading, ButtonText,
+  Text, Button, Center, HStack, Switch
+} from '@gluestack-ui/themed';
 import React, { JSX, useState } from 'react';
 import { Dropdown } from 'react-native-element-dropdown';
 
@@ -11,6 +12,7 @@ import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 import { styles } from '../../styles';
 import { languages } from '../../utils/languages';
+import { deleteFromStore } from '../../utils/expoStore';
 
 export default function Settings({ navigation }: { navigation: any }): JSX.Element {
   const dispatch = useAppDispatch();
@@ -20,6 +22,7 @@ export default function Settings({ navigation }: { navigation: any }): JSX.Eleme
   const [isFocus, setIsFocus] = useState<boolean>(false);
 
   async function logout(): Promise<void> {
+    deleteFromStore('jwt');
     dispatch(resetAccount());
   }
 
@@ -56,7 +59,7 @@ export default function Settings({ navigation }: { navigation: any }): JSX.Eleme
             maxHeight={300}
             labelField="label"
             valueField="value"
-            placeholder={!isFocus ? 'Select Language' : '...'}
+            placeholder='Select Language'
             searchPlaceholder="Search..."
             value={value}
             onFocus={(): void => setIsFocus(true)}
