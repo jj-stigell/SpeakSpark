@@ -133,3 +133,9 @@ export const languages: Array<LanguageSet> = [
     value: 'zh'
   }
 ];
+
+export function getLabelForValue(value: string): string {
+  const language: LanguageSet | undefined = languages
+    .find((lang: LanguageSet) => lang.value === value);
+  return language ? language.label : '-';
+}

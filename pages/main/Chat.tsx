@@ -1,20 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/typedef */
-import {
-  FormControl, VStack, Heading, Input, InputField, ButtonText, Text, Button, Center, ButtonSpinner
-} from '@gluestack-ui/themed';
 import React, { JSX, useState, useCallback, useEffect } from 'react';
-import { gql, useMutation, DocumentNode } from '@apollo/client';
-import { resetAccount } from '../../redux/features/accountSlice';
-import { useAppDispatch } from '../../redux/hooks';
 import { GiftedChat, IMessage, Bubble, BubbleProps } from 'react-native-gifted-chat';
-import { InferProps, Validator, Requireable } from 'prop-types';
-import { ViewStyle, StyleProp, TextStyle } from 'react-native';
 import { View } from 'react-native';
+
 import ChatHeader from '../../components/ChatHeader';
 
-export default function Chat(props: { navigation: any  }): JSX.Element {
+export default function Chat(props: { navigation: any, route: any  }): JSX.Element {
   const [messages, setMessages] = useState<Array<IMessage>>([]);
 
   useEffect(() => {
@@ -38,6 +31,10 @@ export default function Chat(props: { navigation: any  }): JSX.Element {
     );
   }, []);
 
+  if (props.route?.params?.chatId) {
+    console.log('chatting with existing chat id', props.route.params.chatId);
+  }
+
   function renderBubble(props: Readonly<BubbleProps<IMessage>>): JSX.Element {
     return (
       <Bubble
@@ -53,7 +50,11 @@ export default function Chat(props: { navigation: any  }): JSX.Element {
 
   return (
     <View style={{ flex: 1 }}>
-      <ChatHeader botName='はなこ' onBack={(): void => props.navigation.navigate('Home')}/>
+      <ChatHeader
+        name='はなこ'
+        nameRomaji='Hanako'
+        onBack={(): void => props.navigation.navigate('Home')}
+      />
       <GiftedChat
         messages={messages}
         renderBubble={renderBubble}

@@ -35,12 +35,45 @@ const accountSlice = createSlice({
         account: action.payload
       };
     },
+    setStudyLanguage(state, action: PayloadAction<string>) {
+      return {
+        isLoggedIn: true,
+        account: {
+          ...state.account,
+          studyLanguage: action.payload
+        }
+      };
+    },
+    setUiLanguage(state, action: PayloadAction<string>) {
+      return {
+        isLoggedIn: true,
+        account: {
+          ...state.account,
+          uiLanguage: action.payload
+        }
+      };
+    },
+    toggleDarkMode(state) {
+      return {
+        isLoggedIn: true,
+        account: {
+          ...state.account,
+          darkMode: !state.account.darkMode
+        }
+      };
+    },
     resetAccount() {
       return initialState;
     }
   }
 });
 
-export const { setAccount, resetAccount } = accountSlice.actions;
+export const {
+  resetAccount,
+  setAccount,
+  setStudyLanguage,
+  setUiLanguage,
+  toggleDarkMode
+} = accountSlice.actions;
 
 export default accountSlice.reducer;

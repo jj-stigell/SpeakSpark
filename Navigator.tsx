@@ -6,6 +6,8 @@ import Register from './pages/auth/Register';
 import Home from './pages/main/Home';
 import Chat from './pages/main/Chat';
 import Settings from './pages/main/Settings';
+import NewChat from './pages/main/SelectBot';
+
 import { RootState } from './redux/store';
 import { useAppSelector } from './redux/hooks';
 
@@ -23,6 +25,7 @@ export default function Navigator(): JSX.Element {
             <Stack.Screen name="Home" component={Home} />
             <Stack.Screen name="Chat" component={Chat} />
             <Stack.Screen name="Settings" component={Settings} />
+            <Stack.Screen name="NewChat" component={NewChat} />
           </React.Fragment>
         ) :
         (
