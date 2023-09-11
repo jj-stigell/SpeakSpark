@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/typedef */
 import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import { persistReducer, persistStore } from 'redux-persist';
-import storage from 'redux-persist/lib/storage';
+//import storage from 'redux-persist/lib/storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import thunk from 'redux-thunk';
 
 import accountReducer from './features/accountSlice';
@@ -10,7 +11,7 @@ import chatReducer from './features/chatSlice';
 
 export const persistConfig = {
   key: 'root',
-  storage,
+  storage: AsyncStorage,
   blacklist: ['notification']
 };
 

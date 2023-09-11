@@ -4,67 +4,64 @@
 import {
   FormControl, VStack, Heading, Input, InputField, ButtonText, Text, Button, Center, ButtonSpinner
 } from '@gluestack-ui/themed';
-import { JSX, useState } from 'react';
-import React from 'react';
+import React, { JSX, useState, useCallback, useEffect } from 'react';
 import { gql, useMutation, DocumentNode } from '@apollo/client';
 import { resetAccount } from '../../redux/features/accountSlice';
 import { useAppDispatch } from '../../redux/hooks';
+import { GiftedChat, IMessage, Bubble, BubbleProps } from 'react-native-gifted-chat';
+import { InferProps, Validator, Requireable } from 'prop-types';
+import { ViewStyle, StyleProp, TextStyle } from 'react-native';
+import { View } from 'react-native';
+import ChatHeader from '../../components/ChatHeader';
 
-const LOGIN: DocumentNode = gql`
-mutation Login($password: String!, $email: String!) {
-  login(password: $password, email: $email) {
-    user {
-      id
-    }
-    token
-  }
-}`;
+export default function Chat(props: { navigation: any  }): JSX.Element {
+  const [messages, setMessages] = useState<Array<IMessage>>([]);
 
-export default function Chat({ navigation }: { navigation: any }): JSX.Element {
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
-  const emailRegex: RegExp = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$/;
-  const dispatch = useAppDispatch();
+  useEffect(() => {
+    setMessages([
+      {
+        _id: 1,
+        text: 'こんにちは、私の名前ははなこです。ゲームセンターや秋葉原が大好きで、日本のポップカルチャーに夢中です。よろしくお願いします。',
+        createdAt: new Date(),
+        user: {
+          _id: 2,
+          name: 'はなこ',
+          avatar: 'https://i.ibb.co/J3gBPyt/DALL-E-2023-09-11-16-27-46.png'
+        }
+      }
+    ]);
+  }, []);
 
+  const onSend = useCallback((messages: Array<IMessage> = []) => {
+    setMessages((previousMessages: Array<IMessage>) =>
+      GiftedChat.append(previousMessages, messages)
+    );
+  }, []);
 
-  const [loginAccount, { data, loading }] = useMutation(LOGIN, {
-    errorPolicy: 'all',
-    onError: (_error: Error) => {
-
-    },
-    onCompleted: () => {
-      console.log(data);
-      console.log('JWT token is', data.login.token);
-      console.log('USER ID is', data.login.user.id);
-    }
-  });
-
-  async function logout(): Promise<void> {
-    dispatch(resetAccount());
+  function renderBubble(props: Readonly<BubbleProps<IMessage>>): JSX.Element {
+    return (
+      <Bubble
+        {...props}
+        wrapperStyle={{
+          right: {
+            backgroundColor: '#7e8bed'
+          }
+        }}
+      />
+    );
   }
 
   return (
-    <FormControl p='$4' marginTop='$32'>
-      <VStack space='xl'>
-        <Center>
-          <Heading lineHeight='$md'>
-            Chat to SpeakSpark
-          </Heading>
-        </Center>
-        <VStack space='xs'>
-          <Text lineHeight='$xs'>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-             incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
-              nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-               Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore
-                eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident,
-                 sunt in culpa qui officia deserunt mollit anim id est laborum.
-          </Text>
-        </VStack>
-        <Button onPress={logout}>
-          <ButtonText color='$white'>logout</ButtonText>
-        </Button>
-      </VStack>
-    </FormControl>
+    <View style={{ flex: 1 }}>
+      <ChatHeader botName='はなこ' onBack={(): void => props.navigation.navigate('Home')}/>
+      <GiftedChat
+        messages={messages}
+        renderBubble={renderBubble}
+        onSend={(messages): void => onSend(messages)}
+        user={{
+          _id: 1
+        }}
+      />
+    </View>
   );
 }

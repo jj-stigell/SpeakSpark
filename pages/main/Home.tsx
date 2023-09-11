@@ -20,7 +20,7 @@ mutation Login($password: String!, $email: String!) {
   }
 }`;
 
-export default function Home({ navigation }: { navigation: any }): JSX.Element {
+export default function Home(props: { navigation: any }): JSX.Element {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const emailRegex: RegExp = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$/;
@@ -61,7 +61,10 @@ export default function Home({ navigation }: { navigation: any }): JSX.Element {
                  sunt in culpa qui officia deserunt mollit anim id est laborum.
           </Text>
         </VStack>
-        <Button marginTop='$64' onPress={(): void => navigation.navigate('Settings')}>
+        <Button onPress={(): void => props.navigation.navigate('Chat')}>
+          <ButtonText color='$white'>Chat</ButtonText>
+        </Button>
+        <Button onPress={(): void => props.navigation.navigate('Settings')}>
           <ButtonText color='$white'>Settings</ButtonText>
         </Button>
       </VStack>

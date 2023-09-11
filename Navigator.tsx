@@ -19,17 +19,17 @@ export default function Navigator(): JSX.Element {
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       { isLoggedIn ?
         (
-          <>
+          <React.Fragment>
             <Stack.Screen name="Home" component={Home} />
             <Stack.Screen name="Chat" component={Chat} />
             <Stack.Screen name="Settings" component={Settings} />
-          </>
+          </React.Fragment>
         ) :
         (
-          <>
+          <React.Fragment>
             <Stack.Screen name="Login" component={Login} />
             <Stack.Screen name="Register" component={Register} />
-          </>
+          </React.Fragment>
         )
       }
     </Stack.Navigator>
