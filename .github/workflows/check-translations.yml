@@ -2,7 +2,7 @@
 
 name: Check Translations
 
-on: 
+on:
   push:
     paths:
       - 'assets/translations/*.json'
