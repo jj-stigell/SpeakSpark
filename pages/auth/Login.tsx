@@ -5,14 +5,12 @@ import {
 } from '@gluestack-ui/themed';
 import { JSX, useState } from 'react';
 import React from 'react';
-import { gql, useMutation, DocumentNode, ApolloError } from '@apollo/client';
+import { gql, useMutation, DocumentNode } from '@apollo/client';
 
 import { useAppDispatch } from '../../redux/hooks';
 import { setAccount } from '../../redux/features/accountSlice';
 import { validEmail } from '../../utils/validators';
 import { saveToStore } from '../../utils/expoStore';
-import Notification from '../../components/Notification';
-import { setNotification } from '../../redux/features/notificationSlice';
 
 const LOGIN: DocumentNode = gql`
 mutation Login($password: String!, $email: String!) {
@@ -34,15 +32,8 @@ export default function Login(props: { navigation: any }): JSX.Element {
 
   const [loginAccount, { data, loading }] = useMutation(LOGIN, {
     errorPolicy: 'all',
-    onError: (error: Error) => {
-      if (error instanceof ApolloError) {
-        dispatch(setNotification({ message: error.graphQLErrors[0].message,severity: 'error' }));
-      } else {
-        dispatch(setNotification({ message: error.message, severity: 'error' }));
-      }
-    },
     onCompleted: () => {
-      saveToStore('jwt', data.login.token);
+      saveToStore('token', data.login.token);
       dispatch(setAccount({
         id: data.login.user.id,
         email,
@@ -59,7 +50,6 @@ export default function Login(props: { navigation: any }): JSX.Element {
 
   return (
     <FormControl p='$4' marginTop='$32'>
-      <Notification />
       <VStack space='xl'>
         <Center>
           <Heading lineHeight='$md'>Login to SpeakSpark</Heading>

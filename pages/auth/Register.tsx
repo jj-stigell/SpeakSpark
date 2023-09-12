@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/typedef */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
@@ -7,14 +6,13 @@ import {
 } from '@gluestack-ui/themed';
 import { JSX, useState } from 'react';
 import React from 'react';
-import { gql, useMutation, DocumentNode, ApolloError } from '@apollo/client';
+import { gql, useMutation, DocumentNode } from '@apollo/client';
 
 import { useAppDispatch } from '../../redux/hooks';
 import { setAccount } from '../../redux/features/accountSlice';
 import { validEmail } from '../../utils/validators';
 import { saveToStore } from '../../utils/expoStore';
 import { setNotification } from '../../redux/features/notificationSlice';
-import Notification from '../../components/Notification';
 
 const CREATE_ACCOUNT: DocumentNode = gql`
 mutation Register($email: String!, $password: String!) {
@@ -37,20 +35,13 @@ export default function Register({ navigation }: { navigation: any }): JSX.Eleme
 
   const [createAccount, { data, loading }] = useMutation(CREATE_ACCOUNT, {
     errorPolicy: 'all',
-    onError: (error: Error) => {
-      if (error instanceof ApolloError) {
-        dispatch(setNotification({ message: error.graphQLErrors[0].message, severity: 'error' }));
-      } else {
-        dispatch(setNotification({ message: error.message, severity: 'error' }));
-      }
-    },
     onCompleted: () => {
       dispatch(setNotification({
         message: 'Account created succesfully. Logging in, please wait...',
         severity: 'success'
       }));
       setTimeout(() => {
-        saveToStore('jwt', data.register.token);
+        saveToStore('token', data.register.token);
         dispatch(setAccount({
           id: data.register.user.id,
           email,
@@ -68,7 +59,6 @@ export default function Register({ navigation }: { navigation: any }): JSX.Eleme
 
   return (
     <FormControl p='$4' marginTop='$32'>
-      <Notification />
       <VStack space='xl'>
         <Center>
           <Heading lineHeight='$md'>Register new account to SpeakSpark</Heading>
@@ -125,9 +115,3 @@ export default function Register({ navigation }: { navigation: any }): JSX.Eleme
     </FormControl>
   );
 }
-
-/*
-        { notification.message.length !== 0 && (
-          <Notification message={notification.message} action={notification.action} />
-        )}
-*/
