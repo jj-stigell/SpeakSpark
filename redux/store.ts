@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/typedef */
 import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import { persistReducer, persistStore } from 'redux-persist';
-//import storage from 'redux-persist/lib/storage';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import thunk from 'redux-thunk';
 
 import accountReducer from './features/accountSlice';
 import botReducer from './features/botSlice';
 import chatReducer from './features/chatSlice';
+import notificationReducer from './features/notificationSlice';
 
 export const persistConfig = {
   key: 'root',
@@ -18,7 +18,8 @@ export const persistConfig = {
 const appReducer = combineReducers({
   account: accountReducer,
   bot: botReducer,
-  chat: chatReducer
+  chat: chatReducer,
+  notification: notificationReducer
 });
 
 const persistedReducer = persistReducer(persistConfig, appReducer);

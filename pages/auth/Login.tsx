@@ -7,11 +7,12 @@ import { JSX, useState } from 'react';
 import React from 'react';
 import { gql, useMutation, DocumentNode, ApolloError } from '@apollo/client';
 
-import Notification, { Action } from './Notification';
 import { useAppDispatch } from '../../redux/hooks';
 import { setAccount } from '../../redux/features/accountSlice';
 import { validEmail } from '../../utils/validators';
 import { saveToStore } from '../../utils/expoStore';
+import Notification from '../../components/Notification';
+import { setNotification } from '../../redux/features/notificationSlice';
 
 const LOGIN: DocumentNode = gql`
 mutation Login($password: String!, $email: String!) {
@@ -30,24 +31,14 @@ export default function Login(props: { navigation: any }): JSX.Element {
   const dispatch = useAppDispatch();
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
-  const [notification, setNotification] = useState<{ message: string, action: Action }>({
-    message: '',
-    action: 'success'
-  });
 
   const [loginAccount, { data, loading }] = useMutation(LOGIN, {
     errorPolicy: 'all',
     onError: (error: Error) => {
       if (error instanceof ApolloError) {
-        setNotification({
-          message: error.graphQLErrors[0].message,
-          action: 'error'
-        });
+        dispatch(setNotification({ message: error.graphQLErrors[0].message,severity: 'error' }));
       } else {
-        setNotification({
-          message: error.message,
-          action: 'error'
-        });
+        dispatch(setNotification({ message: error.message, severity: 'error' }));
       }
     },
     onCompleted: () => {
@@ -68,13 +59,11 @@ export default function Login(props: { navigation: any }): JSX.Element {
 
   return (
     <FormControl p='$4' marginTop='$32'>
+      <Notification />
       <VStack space='xl'>
         <Center>
           <Heading lineHeight='$md'>Login to SpeakSpark</Heading>
         </Center>
-        { notification.message.length !== 0 && (
-          <Notification message={notification.message} action={notification.action} />
-        )}
         <VStack space='xs'>
           <Text lineHeight='$xs'>Email</Text>
           <Input>
