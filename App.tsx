@@ -1,19 +1,40 @@
-import React, { JSX } from 'react';
+import React from 'react';
+import {
+  ApolloClient, ApolloLink, ApolloProvider,
+  createHttpLink, InMemoryCache, NormalizedCacheObject
+} from '@apollo/client';
+import { setContext } from '@apollo/client/link/context';
 import { config, GluestackUIProvider } from '@gluestack-ui/themed';
 import { NavigationContainer } from '@react-navigation/native';
-import { ApolloClient, InMemoryCache, ApolloProvider, NormalizedCacheObject } from '@apollo/client';
-import { PersistGate } from 'redux-persist/integration/react';
 import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
 
 import Navigator from './Navigator';
 import { persistor, store } from './redux/store';
+import { getFromStore } from './utils/expoStore';
+
+const httpLink: ApolloLink = createHttpLink({
+  uri: 'http://10.84.42.168:4000/graphql'
+});
+
+// eslint-disable-next-line @typescript-eslint/typedef
+const authLink: ApolloLink = setContext(async (_, { headers }) => {
+  const token: string | null = await getFromStore('token');
+
+  return {
+    headers: {
+      ...headers,
+      authorization: token ? `Bearer ${token}` : ''
+    }
+  };
+});
 
 const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
-  uri: 'http://192.168.0.12:4000/graphql',
+  link: authLink.concat(httpLink),
   cache: new InMemoryCache()
 });
 
-export default function App(): JSX.Element {
+export default function App(): React.JSX.Element {
   return (
     <NavigationContainer>
       <Provider store={store}>
