@@ -16,10 +16,9 @@ import { ScrollView, View } from 'react-native';
 import { Bot } from '../../redux/features/botSlice';
 
 export default function Home(props: { navigation: any }): React.JSX.Element {
+  const [chats, setChats] = React.useState<Array<Chat>>([]);
   const language: string = useAppSelector(
     (state: RootState) => state.account.account.studyLanguage);
-
-  const [chats, setChats] = React.useState<Array<Chat>>([]);
 
   const { data, loading } = useQuery(GET_LATEST_CHATS, {
     variables: { language },

@@ -10,11 +10,11 @@ export default function Stars({ difficulty }: { difficulty: number }): React.JSX
   return (
     <View style={styles.container}>
       <Text style={styles.difficultyText}>Difficulty: </Text>
-      {Array(difficulty).fill(null).map((_, idx: number) => (
-        <AntDesign key={`star_${idx}`} name="star" size={24} color="black" />
+      {Array(difficulty).fill(null).map((_: number, idx: number) => (
+        <AntDesign key={`star_${idx}`} name="star" size={20} color="#a84432" />
       ))}
-      {Array(remainingStars).fill(null).map((_, idx: number) => (
-        <AntDesign key={`staro_${idx}`} name="staro" size={24} color="black" />
+      {Array(remainingStars).fill(null).map((_: number, idx: number) => (
+        <AntDesign key={`staro_${idx}`} name="staro" size={20} color="#a84432" />
       ))}
     </View>
   );
