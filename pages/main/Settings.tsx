@@ -1,17 +1,19 @@
 import React from 'react';
-import { AnyAction, Dispatch, PayloadAction } from '@reduxjs/toolkit';
 import {
   FormControl, VStack, Heading, ButtonText,
   Text, Button, Center, HStack, Switch
 } from '@gluestack-ui/themed';
+import { AnyAction, Dispatch, PayloadAction } from '@reduxjs/toolkit';
 
-import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { RootState } from '../../redux/store';
-import { deleteFromStore } from '../../utils/expoStore';
 import LanguageSelector from '../../components/LanguageSelector';
 import {
   Account, resetAccount, setUiLanguage, toggleDarkMode
 } from '../../redux/features/accountSlice';
+import { resetBots } from '../../redux/features/botSlice';
+import { resetChats } from '../../redux/features/chatSlice';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { RootState } from '../../redux/store';
+import { deleteFromStore } from '../../utils/expoStore';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default function Settings({ navigation }: { navigation: any }): React.JSX.Element {
@@ -21,6 +23,8 @@ export default function Settings({ navigation }: { navigation: any }): React.JSX
   async function logout(): Promise<void> {
     deleteFromStore('jwt').then(() => {
       dispatch(resetAccount());
+      dispatch(resetBots());
+      dispatch(resetChats());
     });
   }
 

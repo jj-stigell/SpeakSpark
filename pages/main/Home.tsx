@@ -1,50 +1,47 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/typedef */
 import React from 'react';
 import {
-  FormControl, VStack, Heading, ButtonText, Text, Button, Center
+  FormControl, VStack, Heading, ButtonText,
+  Text, Button, Center, ButtonSpinner
 } from '@gluestack-ui/themed';
+import { useQuery } from '@apollo/client';
 
-import Card, { CardData } from '../../components/ChatCard';
+import Card from '../../components/ChatCard';
+import { GET_LATEST_CHATS } from '../../graphql/queries';
+import { useAppSelector } from '../../redux/hooks';
+import { RootState } from '../../redux/store';
+import { Chat } from '../../redux/features/chatSlice';
+import { ScrollView, View } from 'react-native';
+import { Bot } from '../../redux/features/botSlice';
 
-const previousChats: Array<CardData> = [
-  {
-    chatId: '4534534534',
-    name: 'はなこ',
-    nameRomaji: 'Hanako',
-    avatar: 'https://i.ibb.co/J3gBPyt/DALL-E-2023-09-11-16-27-46.png',
-    language: 'jp',
-    updatedAt: new Date('2022-01-01')
-  },
-  {
-    chatId: 'dfgfdgdfgdfg',
-    name: 'みさと',
-    nameRomaji: 'Misato',
-    avatar: 'https://i.ibb.co/PQ4z5KQ/misato.png',
-    language: 'jp',
-    updatedAt: new Date('2022-01-23')
-  },
-  {
-    chatId: 'sd4wtdhghdfgdfg',
-    name: 'たけし',
-    nameRomaji: 'Takeshi',
-    avatar: 'https://i.ibb.co/LrRJGh2/takeshi.png',
-    language: 'jp',
-    updatedAt: new Date('2022-12-01')
-  },
-  {
-    chatId: 'fgdfjgds98gsd0',
-    name: '정은',
-    nameRomaji: 'Jung-Eun',
-    avatar: 'https://i.ibb.co/h7DJ1M3/jung-eun.png',
-    language: 'ko',
-    updatedAt: new Date('2023-12-01')
-  }
-];
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default function Home(props: { navigation: any }): React.JSX.Element {
+  const language: string = useAppSelector(
+    (state: RootState) => state.account.account.studyLanguage);
 
-  function navigateToChatId(chatId: string): void {
-    props.navigation.navigate('Chat', { chatId });
+  const [chats, setChats] = React.useState<Array<Chat>>([]);
+
+  const { data, loading } = useQuery(GET_LATEST_CHATS, {
+    variables: { language },
+    fetchPolicy: 'no-cache',
+    errorPolicy: 'all',
+    onCompleted: () => {
+      setChats(data.chats);
+    }
+  });
+
+  function navigateToChatId(bot: Bot, chatId: string): void {
+    props.navigation.navigate('Chat', { bot, chatId });
+
+  }
+
+  if (loading) {
+    return (
+      <View style={{ marginTop: 90, alignItems: 'center' }}>
+        <ButtonSpinner mr="$2" />
+        <Text style={{ marginTop: 20 }}>Loading previous chats</Text>
+      </View>
+    );
   }
 
   return (
@@ -54,19 +51,21 @@ export default function Home(props: { navigation: any }): React.JSX.Element {
           <Heading lineHeight='$md'>SpeakSpark</Heading>
         </Center>
         <VStack space='xs'>
-          <Text marginTop='$2'>Previous chats</Text>
-          { previousChats.map((data: CardData) => (
-            <Card
-              key={data.chatId}
-              chatId={data.chatId}
-              name={data.name}
-              nameRomaji={data.nameRomaji}
-              avatar={data.avatar}
-              language={data.language}
-              updatedAt={data.updatedAt}
-              onPress={navigateToChatId}
-            />
-          ))}
+          <Text marginTop='$2'>Latest Chats</Text>
+          <ScrollView>
+            { chats.length === 0 ?
+              <Text>No previous chats found for the language</Text>
+              :
+              chats.map((data: Chat) => (
+                <Card
+                  key={data.id}
+                  chatId={data.id}
+                  bot={data.bot}
+                  updatedAt={data.updatedAt}
+                  onPress={navigateToChatId}
+                />
+              ))}
+          </ScrollView>
         </VStack>
         <Button onPress={(): void => props.navigation.navigate('NewChat')}>
           <ButtonText color='$white'>New chat</ButtonText>
