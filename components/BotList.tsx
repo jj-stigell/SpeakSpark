@@ -8,6 +8,7 @@ import { Bot } from '../redux/features/botSlice';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { ButtonSpinner } from '@gluestack-ui/themed';
 import { GET_BOTS } from '../graphql/queries';
+import Stars from './Stars';
 
 export default function BotList(props: { navigation: any }): React.JSX.Element {
   const [bots, setBots] = React.useState<Array<Bot>>([]);
@@ -50,6 +51,7 @@ export default function BotList(props: { navigation: any }): React.JSX.Element {
           <Image source={{ uri: bot.profileImage }} style={styles.avatar} />
           <View style={styles.textContainer}>
             <Text style={styles.nameText}>{bot.name} - {bot.nameRomaji}</Text>
+            <Stars difficulty={bot.difficulty} />
             <Text style={styles.languageText}>{bot.welcomeMessage}</Text>
           </View>
         </TouchableOpacity>

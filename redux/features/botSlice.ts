@@ -9,7 +9,8 @@ export interface Bot {
   persona: string,
   language: string,
   welcomeMessage: string,
-  welcomeAudio: string
+  welcomeAudio: string,
+  difficulty: number
 }
 
 export const initialState: Array<Bot> = [];

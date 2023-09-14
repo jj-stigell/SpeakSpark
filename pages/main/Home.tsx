@@ -52,7 +52,7 @@ export default function Home(props: { navigation: any }): React.JSX.Element {
         </Center>
         <VStack space='xs'>
           <Text marginTop='$2'>Latest Chats</Text>
-          <ScrollView>
+          <ScrollView style={{ height: 450 }}>
             { chats.length === 0 ?
               <Text>No previous chats found for the language</Text>
               :

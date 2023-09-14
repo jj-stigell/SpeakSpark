@@ -9,6 +9,7 @@ import LanguageSelector from '../../components/LanguageSelector';
 import { setStudyLanguage } from '../../redux/features/accountSlice';
 import { useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
+import { ScrollView } from 'react-native';
 
 export default function NewChat(props: { navigation: any }): React.JSX.Element {
   const language: string = useAppSelector(
@@ -24,9 +25,11 @@ export default function NewChat(props: { navigation: any }): React.JSX.Element {
           <Text>Chat Language</Text>
           <LanguageSelector language={language} setLanguage={setStudyLanguage} />
           <Text marginTop='$2'>Chat Buddies</Text>
-          <BotList navigation={props.navigation} />
+          <ScrollView style={{ height: 400 }}>
+            <BotList navigation={props.navigation} />
+          </ScrollView>
         </VStack>
-        <Button marginTop='$16' onPress={(): void => props.navigation.navigate('Home')}>
+        <Button marginTop='$2' onPress={(): void => props.navigation.navigate('Home')}>
           <ButtonText color='$white'>Back Home</ButtonText>
         </Button>
       </VStack>

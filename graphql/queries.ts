@@ -11,6 +11,7 @@ query GetBots($language: String!) {
     language
     welcomeMessage
     welcomeAudio
+    difficulty
   }
 }`;
 
@@ -29,6 +30,7 @@ query Chats($language: String!) {
       language
       welcomeMessage
       welcomeAudio
+      difficulty
     }
   }
 }`;
