@@ -13,7 +13,7 @@ import { useAppDispatch } from '../../redux/hooks';
 import { setAccount } from '../../redux/features/accountSlice';
 import { validEmail } from '../../utils/validators';
 import { saveToStore } from '../../utils/expoStore';
-import { setNotification } from '../../redux/features/notificationSlice';
+import { Toast } from 'react-native-toast-notifications';
 
 export default function Register({ navigation }: { navigation: any }): JSX.Element {
   const dispatch = useAppDispatch();
@@ -24,10 +24,7 @@ export default function Register({ navigation }: { navigation: any }): JSX.Eleme
   const [createAccount, { data, loading }] = useMutation(CREATE_ACCOUNT, {
     errorPolicy: 'all',
     onCompleted: () => {
-      dispatch(setNotification({
-        message: 'Account created succesfully. Logging in, please wait...',
-        severity: 'success'
-      }));
+      Toast.show('Account created succesfully. Logging in, please wait...', { type: 'success' });
       setTimeout(() => {
         saveToStore('token', data.register.token);
         dispatch(setAccount({

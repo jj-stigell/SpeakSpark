@@ -1,32 +1,32 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 
+import { Bot } from '../redux/features/botSlice';
+import { customDateFormat } from '../utils';
 import { getLabelForValue } from '../utils/languages';
 
 export interface CardData {
   chatId: string,
-  name: string,
-  nameRomaji: string,
-  avatar: string,
-  language: string,
-  updatedAt: Date
+  bot: Bot,
+  updatedAt: string
 }
 
 interface props extends CardData {
-  onPress: (chatId: string) => void
+  onPress: (bot: Bot, chatId: string) => void
 }
 
 export default function Card(props: props): React.JSX.Element {
   return (
     <TouchableOpacity
       style={styles.cardContainer}
-      onPress={(): void => props.onPress(props.chatId)}
+      onPress={(): void => props.onPress(props.bot, props.chatId)}
     >
-      <Image source={{ uri: props.avatar }} style={styles.avatar} />
+      <Image source={{ uri: props.bot.profileImage }} style={styles.avatar} />
       <View style={styles.textContainer}>
-        <Text style={styles.nameText}>{props.name} - {props.nameRomaji}</Text>
-        <Text style={styles.languageText}>{getLabelForValue(props.language)}</Text>
-        <Text style={styles.dateText}>{props.updatedAt.toLocaleDateString()}</Text>
+        <Text style={styles.nameText}>{props.bot.name} - {props.bot.nameRomaji}</Text>
+        <Text style={styles.languageText}>{getLabelForValue(props.bot.language)}</Text>
+        <Text style={styles.dateText}>{customDateFormat(props.updatedAt)}</Text>
+        <Text style={styles.dateText}>Chat id: {props.chatId}</Text>
       </View>
     </TouchableOpacity>
   );
@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
     borderColor: '#e0e0e0',
     borderRadius: 10,
     marginBottom: 15,
-    backgroundColor: '#f5f5f5', // subtle background color
+    backgroundColor: '#f5f5f5',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,

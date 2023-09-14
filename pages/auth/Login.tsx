@@ -107,3 +107,37 @@ export default function Login(props: { navigation: any }): JSX.Element {
     </FormControl>
   );
 }
+
+
+/*
+
+        <Button
+          onPress={(): void => console.log('GOOGLEEE')}
+          isDisabled={loading}
+          bgColor='#4285F4' // Google blue color
+          flexDirection="row" // Ensure contents of the button are in a row
+          justifyContent="space-between"
+          alignItems="center" // Vertically center the logo and text
+        >
+          <View
+            style={{
+              backgroundColor: '#FFFFFF',
+              padding: 4, // Adjust as necessary
+              borderRadius: 8 // Rounded corners, adjust as desired
+            }}
+          >
+            <Image
+              source={GoogleLogo}
+              alt="Google Logo"
+              width={24}
+              height={24}
+              //mr="$2"
+              style={{ width: 20, height: 20, marginRight: 8 }} // Adjusted size and spacing
+            />
+          </View>
+          <ButtonText color='$white'>
+                    Login with Google
+          </ButtonText>
+        </Button>
+
+*/

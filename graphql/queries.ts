@@ -32,3 +32,14 @@ query Chats($language: String!) {
     }
   }
 }`;
+
+export const GET_MESSAGES: DocumentNode = gql`
+query GetMessages($chatId: String!) {
+  getMessages(chatId: $chatId) {
+    id
+    createdAt
+    message
+    role
+    audio
+  }
+}`;

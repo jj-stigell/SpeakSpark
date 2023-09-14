@@ -16,8 +16,8 @@ export interface Chat {
   id: string,
   bot: Bot,
   messages: Array<Message>,
-  createdAt: Date,
-  updatedAt: Date
+  createdAt: string,
+  updatedAt: string
 }
 
 export const initialState: Array<Chat> = [];
