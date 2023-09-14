@@ -1,10 +1,12 @@
+/* eslint-disable max-len */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/typedef */
 import React, { useState, useCallback } from 'react';
 import { GiftedChat, IMessage, Bubble, BubbleProps, User } from 'react-native-gifted-chat';
-import { Text, View } from 'react-native';
+import { Image, Text, View, TouchableOpacity } from 'react-native';
 import { Toast as notification } from 'react-native-toast-notifications';
+import { Audio } from 'expo-av';
 
 import ChatHeader from '../../components/ChatHeader';
 import { NEW_CHAT, POST_MESSAGE } from '../../graphql/mutations';
@@ -12,7 +14,7 @@ import { ButtonSpinner } from '@gluestack-ui/themed';
 import { useLazyQuery, useMutation } from '@apollo/client';
 import { Bot } from '../../redux/features/botSlice';
 import { Message } from '../../redux/features/chatSlice';
-import { GET_MESSAGES } from '../../graphql/queries';
+import { GET_AUDIO, GET_MESSAGES } from '../../graphql/queries';
 import { Account } from '../../redux/features/accountSlice';
 import { RootState } from '../../redux/store';
 import { useAppSelector } from '../../redux/hooks';
@@ -97,11 +99,18 @@ export default function Chat(props: { navigation: any, route: any  }): React.JSX
             }
           };
         });
-        setMessages((previousMessages: Array<IMessage>) =>
-          GiftedChat.append(previousMessages, formattedMessages)
-        );
+        setMessages(GiftedChat.append([], formattedMessages));
       }
       setLoading(false);
+    }
+  });
+
+  const [getAudio] = useLazyQuery(GET_AUDIO, {
+    fetchPolicy: 'no-cache',
+    errorPolicy: 'all',
+    onCompleted: async (data) => {
+      const { sound } = await Audio.Sound.createAsync({ uri: data.getAudio.audio });
+      await sound.playAsync();
     }
   });
 
@@ -131,16 +140,63 @@ export default function Chat(props: { navigation: any, route: any  }): React.JSX
     setIstyping(false);
   }, []);
 
+
+  async function playAudio(messageId: string | number | undefined): Promise<void> {
+    if (!messageId) {
+      return;
+    }
+    console.log('fetching audio', messageId);
+    getAudio({ variables: { messageId: String(messageId) } });
+  }
+
   function renderBubble(props: Readonly<BubbleProps<IMessage>>): JSX.Element {
+    //console.log(props.currentMessage?._id);
     return (
-      <Bubble
-        {...props}
-        wrapperStyle={{
-          right: {
-            backgroundColor: '#7e8bed'
-          }
-        }}
-      />
+      <View
+        style={{ flex: 1, flexDirection: 'row' }}>
+        <Bubble
+          {...props}
+          wrapperStyle={{
+            right: {
+              backgroundColor: '#7e8bed'
+            },
+            left: {
+              backgroundColor: '#ffe6a1'
+            }
+          }}
+        />
+        { props.currentMessage?.user._id != account.id && (
+          <View style={{ flexDirection: 'column', marginLeft: 0 }}>
+            <TouchableOpacity onPress={(): void => console.log('GRMMAR')}>
+              <Image
+                style={{
+                  width: 30,
+                  height: 30,
+                  marginTop: 'auto',
+                  marginBottom: 10,  // spacing between the buttons
+                  bottom: 0
+                }}
+                source={{
+                  uri: 'https://cdn-icons-png.flaticon.com/512/5387/5387375.png'
+                }}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={(): Promise<void> => playAudio(props.currentMessage?._id)}>
+              <Image
+                style={{
+                  width: 30,
+                  height: 30,
+                  marginTop: 'auto',
+                  bottom: 0
+                }}
+                source={{
+                  uri: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/Speaker_Icon.svg/1024px-Speaker_Icon.svg.png'
+                }}
+              />
+            </TouchableOpacity>
+          </View>
+        ) }
+      </View>
     );
   }
 
@@ -166,6 +222,7 @@ export default function Chat(props: { navigation: any, route: any  }): React.JSX
         renderBubble={renderBubble}
         onSend={(messages): Promise<void> => onSend(messages)}
         isTyping={isTyping}
+        scrollToBottom={true}
       />
     </View>
   );
