@@ -1,21 +1,20 @@
 /* eslint-disable @typescript-eslint/typedef */
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import React, { useState } from 'react';
+import { useMutation } from '@apollo/client';
 import {
   FormControl, VStack, Heading, Input, InputField,
   ButtonText, Text, Button, Center, ButtonSpinner
 } from '@gluestack-ui/themed';
-import { JSX, useState } from 'react';
-import React from 'react';
-import { useMutation } from '@apollo/client';
+import { Toast as notification } from 'react-native-toast-notifications';
 
 import { CREATE_ACCOUNT } from '../../graphql/mutations';
 import { useAppDispatch } from '../../redux/hooks';
 import { setAccount } from '../../redux/features/accountSlice';
 import { validEmail } from '../../utils/validators';
 import { saveToStore } from '../../utils/expoStore';
-import { Toast } from 'react-native-toast-notifications';
 
-export default function Register({ navigation }: { navigation: any }): JSX.Element {
+export default function Register({ navigation }: { navigation: any }): React.JSX.Element {
   const dispatch = useAppDispatch();
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
@@ -24,7 +23,9 @@ export default function Register({ navigation }: { navigation: any }): JSX.Eleme
   const [createAccount, { data, loading }] = useMutation(CREATE_ACCOUNT, {
     errorPolicy: 'all',
     onCompleted: () => {
-      Toast.show('Account created succesfully. Logging in, please wait...', { type: 'success' });
+      notification.show(
+        'Account created succesfully. Logging in, please wait...', { type: 'success' }
+      );
       setTimeout(() => {
         saveToStore('token', data.register.token);
         dispatch(setAccount({

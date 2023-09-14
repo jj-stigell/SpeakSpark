@@ -7,19 +7,17 @@ import thunk from 'redux-thunk';
 import accountReducer from './features/accountSlice';
 import botReducer from './features/botSlice';
 import chatReducer from './features/chatSlice';
-import notificationReducer from './features/notificationSlice';
 
 export const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
-  blacklist: ['notification']
+  blacklist: ['']
 };
 
 const appReducer = combineReducers({
   account: accountReducer,
   bot: botReducer,
-  chat: chatReducer,
-  notification: notificationReducer
+  chat: chatReducer
 });
 
 const persistedReducer = persistReducer(persistConfig, appReducer);
@@ -34,4 +32,4 @@ export const persistor = persistStore(store);
 
 export type RootState = ReturnType<typeof store.getState>
 
-export type AppDispatch = typeof store.dispatch
+export type AppDispatch = typeof store.dispatch;

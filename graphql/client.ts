@@ -5,13 +5,13 @@ import {
 } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 import { onError } from '@apollo/client/link/error';
-import { Toast } from 'react-native-toast-notifications';
+import { Toast as notification } from 'react-native-toast-notifications';
 
 import { getFromStore } from '../utils/expoStore';
 
 // More info on links: https://www.apollographql.com/docs/react/api/link/introduction
 const httpLink: ApolloLink = createHttpLink({
-  uri: 'http://10.18.34.20:4000/graphql' //'http://192.168.0.12:4000/graphql'
+  uri: 'http://192.168.0.12:4000/graphql'
 });
 
 const errorLink: ApolloLink = onError(({ graphQLErrors, networkError }) => {
@@ -24,7 +24,7 @@ const errorLink: ApolloLink = onError(({ graphQLErrors, networkError }) => {
     message = networkError.message;
   }
 
-  Toast.show(message, { type: 'warning' });
+  notification.show(message, { type: 'warning' });
 });
 
 const authLink: ApolloLink = setContext(async (_, { headers }) => {
