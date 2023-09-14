@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/typedef */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { Bot } from './botSlice';
 
 export type ChatRole = 'USER' | 'BOT';
 
@@ -13,7 +14,7 @@ export interface Message {
 
 export interface Chat {
   id: string,
-  botId: string,
+  bot: Bot,
   messages: Array<Message>,
   createdAt: Date,
   updatedAt: Date

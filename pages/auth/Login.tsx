@@ -5,25 +5,13 @@ import {
 } from '@gluestack-ui/themed';
 import { JSX, useState } from 'react';
 import React from 'react';
-import { gql, useMutation, DocumentNode } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 
+import { LOGIN } from '../../graphql/mutations';
 import { useAppDispatch } from '../../redux/hooks';
 import { setAccount } from '../../redux/features/accountSlice';
 import { validEmail } from '../../utils/validators';
 import { saveToStore } from '../../utils/expoStore';
-
-const LOGIN: DocumentNode = gql`
-mutation Login($password: String!, $email: String!) {
-  login(password: $password, email: $email) {
-    user {
-      id
-      darkMode
-      uiLanguage
-      studyLanguage
-    }
-    token
-  }
-}`;
 
 export default function Login(props: { navigation: any }): JSX.Element {
   const dispatch = useAppDispatch();
