@@ -45,3 +45,10 @@ query GetMessages($chatId: String!) {
     audio
   }
 }`;
+
+export const GET_AUDIO: DocumentNode = gql`
+query GetAudio($messageId: String!) {
+  getAudio(messageId: $messageId) {
+    audio
+  }
+}`;
