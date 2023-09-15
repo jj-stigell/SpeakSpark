@@ -1,15 +1,15 @@
 import React, { useRef, useEffect } from 'react';
-import { View, Text, Animated, StyleSheet } from 'react-native';
+import { Animated, StyleSheet, Text, View } from 'react-native';
 
-export default function Loading(): React.JSX.Element {
+export default function Loader(props: { loadingText: string }): React.JSX.Element {
   const spinValue: Animated.Value = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     Animated.loop(
       Animated.timing(spinValue, {
         toValue: 1,
-        duration: 2000,  // Reduced from 4000ms to 2000ms for faster spinning
-        useNativeDriver: true  // Use native animations
+        duration: 4000,
+        useNativeDriver: true
       })
     ).start();
   }, []);
@@ -23,9 +23,9 @@ export default function Loading(): React.JSX.Element {
     <View style={styles.container}>
       <Animated.Image
         style={[styles.image, { transform: [{ rotate: spin }] }]}
-        source={require('../image/logo.png')}
+        source={require('../assets/image/logo.png')}
       />
-      <Text style={styles.loadingText}>Loading</Text>
+      <Text style={styles.loadingText}>{props.loadingText}</Text>
     </View>
   );
 }
@@ -39,13 +39,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#F5FCFF'
   },
   loadingText: {
-    fontSize: 20,
+    fontSize: 18,
     textAlign: 'center',
-    marginTop: 10
+    marginTop: 120
   },
   image: {
-    position: 'absolute', // Make sure the image doesn't push the text
-    width: 100,
-    height: 100
+    position: 'absolute', // Make sure the image doesn't push the text.
+    width: 80,
+    height: 80
   }
 });

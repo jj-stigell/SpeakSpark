@@ -53,7 +53,7 @@ export default function Register({ navigation }: { navigation: any }): React.JSX
         </Center>
         <VStack space='xs'>
           <Text lineHeight='$xs'>Email</Text>
-          <Input>
+          <Input isDisabled={loading}>
             <InputField
               type="text"
               defaultValue={email}
@@ -63,7 +63,7 @@ export default function Register({ navigation }: { navigation: any }): React.JSX
         </VStack>
         <VStack space='xs'>
           <Text lineHeight='$xs'>Password</Text>
-          <Input>
+          <Input isDisabled={loading}>
             <InputField
               type='password'
               defaultValue={password}
@@ -73,7 +73,7 @@ export default function Register({ navigation }: { navigation: any }): React.JSX
         </VStack>
         <VStack space='xs'>
           <Text lineHeight='$xs'>Confirm Password</Text>
-          <Input>
+          <Input isDisabled={loading}>
             <InputField
               type='password'
               defaultValue={confirmPassword}

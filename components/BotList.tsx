@@ -6,9 +6,9 @@ import { RootState } from '../redux/store';
 import { useQuery } from '@apollo/client';
 import { Bot } from '../redux/features/botSlice';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { ButtonSpinner } from '@gluestack-ui/themed';
 import { GET_BOTS } from '../graphql/queries';
 import Stars from './Stars';
+import Loader from './Loader';
 
 export default function BotList(props: { navigation: any }): React.JSX.Element {
   const [bots, setBots] = React.useState<Array<Bot>>([]);
@@ -29,13 +29,18 @@ export default function BotList(props: { navigation: any }): React.JSX.Element {
     }
   });
 
-  if (loading || bots.length === 0) {
+  if (loading) {
     return (
       <View style={{ marginTop: 90, alignItems: 'center' }}>
-        { loading && <ButtonSpinner mr="$2" /> }
-        <Text style={{ marginTop: 20 }}>
-          {loading ? 'Loading bots' : 'No bots found for selected language' }
-        </Text>
+        <Loader loadingText='Loading bots...' />
+      </View>
+    );
+  }
+
+  if (bots.length === 0) {
+    return (
+      <View style={{ marginTop: 90, alignItems: 'center' }}>
+        <Text style={{ marginTop: 20 }}>No bots found for selected language</Text>
       </View>
     );
   }
@@ -70,7 +75,7 @@ const styles = StyleSheet.create({
     borderColor: '#e0e0e0',
     borderRadius: 10,
     marginBottom: 5,
-    backgroundColor: '#e6f0ec', // subtle background color
+    backgroundColor: '#c3e1f7',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,

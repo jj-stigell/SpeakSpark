@@ -2,10 +2,11 @@
 /* eslint-disable @typescript-eslint/typedef */
 import React from 'react';
 import { ScrollView, View } from 'react-native';
-import { Text, ButtonSpinner } from '@gluestack-ui/themed';
+import { Text } from '@gluestack-ui/themed';
 import { useQuery } from '@apollo/client';
 
 import Card from '../components/ChatCard';
+import Loader from './Loader';
 import { GET_LATEST_CHATS } from '../graphql/queries';
 import { useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
@@ -32,9 +33,8 @@ export default function PreviousChats(props: { navigation: any }): React.JSX.Ele
 
   if (loading) {
     return (
-      <View style={{ marginTop: 90, alignItems: 'center' }}>
-        <ButtonSpinner mr="$2" />
-        <Text style={{ marginTop: 20 }}>Loading previous chats</Text>
+      <View style={{ marginTop: 90, marginBottom: 200, alignItems: 'center' }}>
+        <Loader loadingText='Loading previous chats'/>
       </View>
     );
   }

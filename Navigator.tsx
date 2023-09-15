@@ -18,7 +18,10 @@ export default function Navigator(): JSX.Element {
   const isLoggedIn: boolean = useAppSelector((state: RootState) => state.account.isLoggedIn);
 
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
+    <Stack.Navigator screenOptions={{
+      headerShown: false,
+      contentStyle: { backgroundColor:'#F5FCFF' }
+    }}>
       { isLoggedIn ?
         (
           <React.Fragment>

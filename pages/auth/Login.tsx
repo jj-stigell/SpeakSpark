@@ -74,7 +74,7 @@ export default function Login(props: { navigation: any }): JSX.Element {
         </Center>
         <VStack space='xs'>
           <Text lineHeight='$xs'>Email</Text>
-          <Input>
+          <Input isDisabled={loading}>
             <InputField
               type="text"
               defaultValue={email}
@@ -84,7 +84,7 @@ export default function Login(props: { navigation: any }): JSX.Element {
         </VStack>
         <VStack space='xs'>
           <Text lineHeight='$xs'>Password</Text>
-          <Input>
+          <Input isDisabled={loading}>
             <InputField
               type='password'
               defaultValue={password}

@@ -9,7 +9,12 @@ export default function MainHeader(): React.JSX.Element {
       paddingTop={StatusBar.currentHeight ? StatusBar.currentHeight + 10 : 10}
     >
       <Heading lineHeight={30} fontSize={24} fontWeight="bold" marginTop={5}>SpeakSpark</Heading>
-      <Image source={require('../image/logo.png')} alt="SpeakSpark Logo" width={35} height={35} />
+      <Image
+        source={require('../assets/image/logo.png')}
+        alt="SpeakSpark Logo"
+        width={35}
+        height={35}
+      />
     </HStack>
   );
 }
