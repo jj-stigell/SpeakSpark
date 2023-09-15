@@ -13,6 +13,7 @@ import { useAppDispatch } from '../../redux/hooks';
 import { setAccount } from '../../redux/features/accountSlice';
 import { validEmail } from '../../utils/validators';
 import { saveToStore } from '../../utils/expoStore';
+import MainHeader from '../../components/MainHeader';
 
 export default function Register({ navigation }: { navigation: any }): React.JSX.Element {
   const dispatch = useAppDispatch();
@@ -44,10 +45,11 @@ export default function Register({ navigation }: { navigation: any }): React.JSX
   }
 
   return (
-    <FormControl p='$4' marginTop='$32'>
+    <FormControl p='$4' marginTop='$12'>
       <VStack space='xl'>
         <Center>
-          <Heading lineHeight='$md'>Register new account to SpeakSpark</Heading>
+          <MainHeader/>
+          <Heading lineHeight='$md' marginTop='$8'>Register new account to SpeakSpark</Heading>
         </Center>
         <VStack space='xs'>
           <Text lineHeight='$xs'>Email</Text>
@@ -85,6 +87,7 @@ export default function Register({ navigation }: { navigation: any }): React.JSX
             loading || password !== confirmPassword
           }
           onPress={register}
+          bgColor='#3342b3'
         >
           {loading && <ButtonSpinner mr="$2" />}
           <ButtonText color='$white'>
@@ -93,7 +96,7 @@ export default function Register({ navigation }: { navigation: any }): React.JSX
         </Button>
         <Button
           onPress={(): void => navigation.navigate('Login')}
-          bgColor='#5adbb5'
+          bgColor='#467af8'
         >
           <ButtonText color='$white'>Already have an account?</ButtonText>
         </Button>
