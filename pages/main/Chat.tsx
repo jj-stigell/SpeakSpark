@@ -14,14 +14,17 @@ import { ButtonSpinner } from '@gluestack-ui/themed';
 import { useLazyQuery, useMutation } from '@apollo/client';
 import { Bot } from '../../redux/features/botSlice';
 import { Message } from '../../redux/features/chatSlice';
-import { GET_AUDIO, GET_MESSAGES } from '../../graphql/queries';
+import { GET_MESSAGE, GET_MESSAGES } from '../../graphql/queries';
 import { Account } from '../../redux/features/accountSlice';
 import { RootState } from '../../redux/store';
 import { useAppSelector } from '../../redux/hooks';
+import GrammarModal from '../../components/GrammarModal';
 
 export default function Chat(props: { navigation: any, route: any  }): React.JSX.Element {
   const [loading, setLoading] = React.useState<boolean>(true);
+  const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [isTyping, setIstyping] = React.useState<boolean>(false);
+  const [message, setMessage] = React.useState<IMessage | undefined>(undefined);
   const [chatId, setChatId] = React.useState<string>('');
   const [messages, setMessages] = useState<Array<IMessage>>([]);
   const account: Account = useAppSelector(
@@ -105,13 +108,15 @@ export default function Chat(props: { navigation: any, route: any  }): React.JSX
     }
   });
 
-  const [getAudio] = useLazyQuery(GET_AUDIO, {
+  const [getMessage] = useLazyQuery(GET_MESSAGE, {
     fetchPolicy: 'no-cache',
-    errorPolicy: 'all',
+    errorPolicy: 'all'
+    /*
     onCompleted: async (data) => {
-      const { sound } = await Audio.Sound.createAsync({ uri: data.getAudio.audio });
+      const { sound } = await Audio.Sound.createAsync({ uri: data.getMessage.audio });
       await sound.playAsync();
     }
+    */
   });
 
   React.useEffect(() => {
@@ -140,13 +145,30 @@ export default function Chat(props: { navigation: any, route: any  }): React.JSX
     setIstyping(false);
   }, []);
 
-
   async function playAudio(messageId: string | number | undefined): Promise<void> {
     if (!messageId) {
       return;
     }
     console.log('fetching audio', messageId);
-    getAudio({ variables: { messageId: String(messageId) } });
+    // Wrap the query in a promise
+    const fetchMessage = new Promise((resolve, reject) => {
+      getMessage({
+        variables: { messageId: String(messageId) },
+        onCompleted: (data) => resolve(data.getMessage),
+        onError: (error) => reject(error)
+      });
+    });
+
+    try {
+      const message: Message = await fetchMessage as Message;
+      console.log('playing audio', messageId);
+      if (message && message.audio) {
+        const { sound } = await Audio.Sound.createAsync({ uri: message.audio });
+        await sound.playAsync();
+      }
+    } catch (error) {
+      console.error('Error fetching or playing audio:', error);
+    }
   }
 
   function renderBubble(props: Readonly<BubbleProps<IMessage>>): JSX.Element {
@@ -158,16 +180,21 @@ export default function Chat(props: { navigation: any, route: any  }): React.JSX
           {...props}
           wrapperStyle={{
             right: {
-              backgroundColor: '#7e8bed'
+              backgroundColor: '#7e8bed' // User bubble color.
             },
             left: {
-              backgroundColor: '#ffe6a1'
+              backgroundColor: '#ffe6a1' // Bot bubble color.
             }
           }}
         />
         { props.currentMessage?.user._id != account.id && (
           <View style={{ flexDirection: 'column', marginLeft: 0 }}>
-            <TouchableOpacity onPress={(): void => console.log('GRMMAR')}>
+            <TouchableOpacity onPress={(): void => {
+              if (props.currentMessage && props.currentMessage._id) {
+                setMessage(message);
+                setModalVisible(true);
+              }
+            }}>
               <Image
                 style={{
                   width: 30,
@@ -211,6 +238,11 @@ export default function Chat(props: { navigation: any, route: any  }): React.JSX
 
   return (
     <View style={{ flex: 1 }}>
+      <GrammarModal
+        message={message as IMessage}
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+      />
       <ChatHeader
         name={bot.name}
         nameRomaji={bot.nameRomaji}
