@@ -46,9 +46,10 @@ query GetMessages($chatId: String!) {
   }
 }`;
 
-export const GET_AUDIO: DocumentNode = gql`
-query GetAudio($messageId: String!) {
-  getAudio(messageId: $messageId) {
+export const GET_MESSAGE: DocumentNode = gql`
+query GetMessage($messageId: String!) {
+  getMessage(messageId: $messageId) {
     audio
+    grammarAnalysis
   }
 }`;

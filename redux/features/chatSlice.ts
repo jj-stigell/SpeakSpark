@@ -8,6 +8,7 @@ export interface Message {
     id: string,
     message: string,
     audio: string,
+    grammarAnalysis: string,
     role: ChatRole,
     createdAt: Date
 }
