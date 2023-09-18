@@ -11,11 +11,11 @@ export interface CardData {
   updatedAt: string
 }
 
-interface props extends CardData {
+interface Props extends CardData {
   onPress: (bot: Bot, chatId: string) => void
 }
 
-export default function Card(props: props): React.JSX.Element {
+export default function Card(props: Props): React.JSX.Element {
   return (
     <TouchableOpacity
       style={styles.cardContainer}

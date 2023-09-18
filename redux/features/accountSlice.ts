@@ -6,7 +6,8 @@ export interface Account {
   email: string,
   darkMode: boolean,
   uiLanguage: string,
-  studyLanguage: string
+  studyLanguage: string,
+  notifications: boolean
 }
 
 export interface AccountState {
@@ -21,7 +22,8 @@ const initialState: AccountState = {
     email: '',
     darkMode: false,
     uiLanguage: 'en',
-    studyLanguage: 'jp'
+    studyLanguage: 'jp',
+    notifications: true
   }
 };
 
@@ -62,6 +64,15 @@ const accountSlice = createSlice({
         }
       };
     },
+    toggleNotifications(state) {
+      return {
+        isLoggedIn: true,
+        account: {
+          ...state.account,
+          notifications: !state.account.notifications
+        }
+      };
+    },
     resetAccount() {
       return initialState;
     }
@@ -73,7 +84,8 @@ export const {
   setAccount,
   setStudyLanguage,
   setUiLanguage,
-  toggleDarkMode
+  toggleDarkMode,
+  toggleNotifications
 } = accountSlice.actions;
 
 export default accountSlice.reducer;

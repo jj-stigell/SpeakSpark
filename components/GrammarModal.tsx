@@ -12,6 +12,8 @@ export default function GrammarModal(props: {
   setModalVisible: (value: boolean) => void
 }): React.JSX.Element {
 
+  console.log(props.message?._id);
+
   const { data, loading } = useQuery(GET_MESSAGE, {
     variables: { messageId: props.message?._id ?? '' },
     fetchPolicy: 'no-cache',

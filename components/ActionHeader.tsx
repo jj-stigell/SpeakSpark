@@ -2,6 +2,19 @@ import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, StatusBar } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
+export default function ActionHeader(props: {
+  title: string, onBack: () => void
+}): React.JSX.Element {
+  return (
+    <View style={styles.headerContainer}>
+      <TouchableOpacity onPress={props.onBack}>
+        <Ionicons name="arrow-back" size={24} color="black" />
+      </TouchableOpacity>
+      <Text style={styles.headerText}>{props.title}</Text>
+    </View>
+  );
+}
+
 // eslint-disable-next-line @typescript-eslint/typedef
 const styles = StyleSheet.create({
   headerContainer: {
@@ -19,16 +32,3 @@ const styles = StyleSheet.create({
     flex: 1
   }
 });
-
-export default function ChatHeader(props: {
-  name: string, nameRomaji: string, onBack: () => void
-}): React.JSX.Element {
-  return (
-    <View style={styles.headerContainer}>
-      <TouchableOpacity onPress={props.onBack}>
-        <Ionicons name="arrow-back" size={24} color="black" />
-      </TouchableOpacity>
-      <Text style={styles.headerText}>{props.name} - {props.nameRomaji}</Text>
-    </View>
-  );
-}

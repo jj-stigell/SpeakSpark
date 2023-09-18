@@ -1,13 +1,13 @@
 import React, { JSX } from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import Register from './pages/auth/Register';
-import Login from './pages/auth/Login';
-import TermsAndConditions from './pages/auth/Tos';
-import Home from './pages/main/Home';
-import Chat from './pages/main/Chat';
-import Settings from './pages/main/Settings';
-import NewChat from './pages/main/SelectBot';
+import Register from './screens/auth/Register';
+import Login from './screens/auth/Login';
+import TermsAndConditions from './screens/auth/Tos';
+import Home from './screens/main/Home';
+import Chat from './screens/main/Chat';
+import Settings from './screens/main/Settings';
+import NewChat from './screens/main/SelectBot';
 
 import { RootState } from './redux/store';
 import { useAppSelector } from './redux/hooks';
@@ -19,10 +19,12 @@ export default function Navigator(): JSX.Element {
   const isLoggedIn: boolean = useAppSelector((state: RootState) => state.account.isLoggedIn);
 
   return (
-    <Stack.Navigator screenOptions={{
-      headerShown: false,
-      contentStyle: { backgroundColor:'#F5FCFF' }
-    }}>
+    <Stack.Navigator
+      initialRouteName={isLoggedIn ? 'Home' : 'Login'}
+      screenOptions={{
+        headerShown: false,
+        contentStyle: { backgroundColor:'#F5FCFF' }
+      }}>
       { isLoggedIn ?
         (
           <React.Fragment>

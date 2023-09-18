@@ -1,8 +1,8 @@
-import React, { Dispatch, useState } from 'react';
+import React, { Dispatch } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import {
-  StyleSheet, View, TouchableOpacity, Modal,
-  Text, Switch, SafeAreaView, Image, Pressable
+  StyleSheet, View, TouchableOpacity, Text,
+  Switch, SafeAreaView, Image, Linking
 } from 'react-native';
 import ChatHeader from '../../components/ActionHeader';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
@@ -16,136 +16,10 @@ import { RootState } from '../../redux/store';
 import { deleteFromStore } from '../../utils/expoStore';
 import LanguageSelector from '../../components/LanguageSelector';
 
-
-
-
-
-//https://forms.gle/hgnTbty7y8ApUQcUA
-
-
-
-
-function LangModal(props: {
-  modalVisible: boolean,
-  setModalVisible: (value: boolean) => void,
-  language: string
-}): React.JSX.Element {
-  return (
-    <Modal
-      animationType="fade"
-      transparent={true}
-      visible={props.modalVisible}
-      onRequestClose={(): void => {
-        props.setModalVisible(!props.modalVisible);
-      }}>
-      <View style={styless.centeredView}>
-        <View style={styless.modalView}>
-          <View>
-            <LanguageSelector language={props.language} setLanguage={setUiLanguage} />
-            <Pressable
-              style={[styless.button, styless.buttonClose]}
-              onPress={(): void => props.setModalVisible(!props.modalVisible)}>
-              <Text style={styless.textStyle}>Close</Text>
-            </Pressable>
-          </View>
-        </View>
-      </View>
-    </Modal>
-  );
-}
-
-// eslint-disable-next-line @typescript-eslint/typedef
-const styless = StyleSheet.create({
-  centeredView: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  modalView: {
-    width: '90%',          // 90% of screen width
-    maxWidth: 400,         // won't exceed 400 units (e.g., pixels) in width
-    marginHorizontal: 10, // 10 units margin on the left and right
-    backgroundColor: 'white',
-    borderRadius: 20,
-    padding: 35,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5
-  },
-  button: {
-    borderRadius: 20,
-    padding: 10,
-    elevation: 2
-  },
-  buttonOpen: {
-    backgroundColor: '#F194FF'
-  },
-  buttonClose: {
-    backgroundColor: '#2196F3'
-  },
-  textStyle: {
-    color: 'white',
-    fontWeight: 'bold',
-    textAlign: 'center'
-  },
-  modalText: {
-    marginBottom: 15,
-    textAlign: 'center'
-  },
-  messageText: {
-    fontSize: 18,        // Larger font size for the message text
-    marginBottom: 10    // Some margin to create space between text and line
-  },
-  grammarAnalysis: {
-    fontSize: 14        // Smaller font size for the grammar analysis
-  },
-  horizontalLine: {
-    height: 10,          // Thin horizontal line
-    backgroundColor: '#D3D3D3',   // Light gray color
-    marginVertical: 10 // Margin to separate from both top and bottom content
-  }
-});
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default function Settings({ navigation }: { navigation: any }): React.JSX.Element {
   const dispatch: Dispatch<AnyAction> = useAppDispatch();
   const account: Account = useAppSelector((state: RootState) => state.account.account);
-  const [modalVisible, setModalVisible] = useState<boolean>(false);
 
   async function logout(): Promise<void> {
     deleteFromStore('jwt').then(() => {
@@ -157,11 +31,6 @@ export default function Settings({ navigation }: { navigation: any }): React.JSX
 
   return (
     <SafeAreaView style={styles.container}>
-      <LangModal
-        modalVisible={modalVisible}
-        setModalVisible={setModalVisible}
-        language={account.uiLanguage}
-      />
       <ChatHeader title={'Settings'} onBack={(): void => navigation.navigate('Home')}/>
       <View style={styles.section}>
         <View style={styles.sectionHeader}>
@@ -185,8 +54,7 @@ export default function Settings({ navigation }: { navigation: any }): React.JSX
         <View style={styles.sectionBody}>
           <View
             style={[styles.rowWrapper, { borderTopWidth: 0 }, styles.rowFirst]}>
-            <TouchableOpacity
-              onPress={(): void => setModalVisible(false)}>
+            <TouchableOpacity>
               <View style={styles.row}>
                 <Ionicons
                   name='language'
@@ -248,7 +116,7 @@ export default function Settings({ navigation }: { navigation: any }): React.JSX
           <View
             style={[styles.rowWrapper, { borderTopWidth: 0 }, styles.rowFirst]}>
             <TouchableOpacity
-              onPress={(): void => console.log('bugggg')}>
+              onPress={(): Promise<void> => Linking.openURL('https://forms.gle/9WuAZyxK33fzZchDA')}>
               <View style={styles.row}>
                 <Ionicons
                   name='bug'
@@ -263,7 +131,7 @@ export default function Settings({ navigation }: { navigation: any }): React.JSX
           </View>
           <View style={[styles.rowWrapper, styles.rowLast]}>
             <TouchableOpacity
-              onPress={(): void => console.log('mailmailmailmail')}>
+              onPress={(): Promise<void> => Linking.openURL('https://forms.gle/hgnTbty7y8ApUQcUA')}>
               <View style={styles.row}>
                 <Ionicons
                   name='mail'

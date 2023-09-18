@@ -5,68 +5,52 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import Checkbox from 'expo-checkbox';
 import { Center } from '@gluestack-ui/themed';
+import { Toast as notification } from 'react-native-toast-notifications';
 import { useMutation } from '@apollo/client';
 
 import Button from '../../components/Button';
 import MainHeader from '../../components/MainHeader';
 import { COLORS } from '../../components/constants/colors';
 import { useAppDispatch } from '../../redux/hooks';
-import { deleteFromStore, getFromStore, saveToStore } from '../../utils/expoStore';
-import { LOGIN } from '../../graphql/mutations';
+import { saveToStore } from '../../utils/expoStore';
+import { CREATE_ACCOUNT } from '../../graphql/mutations';
 import { setAccount } from '../../redux/features/accountSlice';
 import { validEmail } from '../../utils/validators';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export default function Login({ navigation }: { navigation: any }): React.JSX.Element {
+export default function Register({ navigation }: { navigation: any }): React.JSX.Element {
   const dispatch = useAppDispatch();
 
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
+  const [confirmPassword, setConfirmPassword] = useState<string>('');
   const [showPassword, setShowPassword] = useState(false);
-  const [isChecked, setIsChecked] = useState(Boolean(getFromStore('rememberMe')));
+  const [showPasswordConfirmation, setShowPasswordConfirmation] = useState(false);
+  const [isChecked, setIsChecked] = useState(false);
 
-  const [loginAccount, { data, loading }] = useMutation(LOGIN, {
+  const [createAccount, { data, loading }] = useMutation(CREATE_ACCOUNT, {
     errorPolicy: 'all',
     onCompleted: () => {
-      saveToStore('token', data.login.token);
-      dispatch(setAccount({
-        id: data.login.user.id,
-        email,
-        darkMode: data.login.user.darkMode,
-        uiLanguage: data.login.user.uiLanguage,
-        studyLanguage: data.login.user.studyLanguage
-      }));
+      notification.show(
+        'Account created succesfully. Logging in, please wait...', { type: 'success' }
+      );
+      setTimeout(() => {
+        saveToStore('token', data.register.token);
+        dispatch(setAccount({
+          id: data.register.user.id,
+          email,
+          darkMode: data.login.user.darkMode,
+          uiLanguage: data.login.user.uiLanguage,
+          studyLanguage: data.login.user.studyLanguage,
+          notifications: true
+        }));
+      }, 1000);
     }
   });
 
-  async function login(): Promise<void> {
-    if (isChecked) {
-      await saveToStore('email', email);
-      await saveToStore('password', password);
-      await saveToStore('rememberMe', 'true');
-    } else {
-      await deleteFromStore('email');
-      await deleteFromStore('password');
-      await deleteFromStore('rememberMe');
-    }
-    await loginAccount({ variables: { email, password } });
+  async function register(): Promise<void> {
+    await createAccount({ variables: { email, password } });
   }
-
-  React.useEffect(() => {
-    // eslint-disable-next-line func-style
-    const setCreds = async (): Promise<void> => {
-      if (isChecked) {
-        const email: string | null = await getFromStore('email');
-        const password: string | null = await getFromStore('password');
-
-        if (email)
-          setEmail(email);
-        if (password)
-          setPassword(password);
-      }
-    };
-    setCreds();
-  }, []);
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: 'F5FCFF' }}>
@@ -79,7 +63,7 @@ export default function Login({ navigation }: { navigation: any }): React.JSX.El
             <Text style={{
               fontSize: 17,
               color: COLORS.black
-            }}>Login to existing account</Text>
+            }}>Create New Account</Text>
           </Center>
         </View>
         <View style={{ marginBottom: 12 }}>
@@ -151,6 +135,47 @@ export default function Login({ navigation }: { navigation: any }): React.JSX.El
             </TouchableOpacity>
           </View>
         </View>
+        <View style={{ marginBottom: 12 }}>
+          <Text style={{
+            fontSize: 16,
+            fontWeight: '400',
+            marginVertical: 8
+          }}>Confirm Password</Text>
+          <View style={{
+            width: '100%',
+            height: 48,
+            borderColor: COLORS.black,
+            borderWidth: 1,
+            borderRadius: 8,
+            alignItems: 'center',
+            justifyContent: 'center',
+            paddingLeft: 22
+          }}>
+            <TextInput
+              placeholder='Confirm your password'
+              placeholderTextColor={COLORS.black}
+              onChangeText={setConfirmPassword}
+              value={confirmPassword}
+              secureTextEntry={!showPasswordConfirmation}
+              style={{
+                width: '100%'
+              }}
+            />
+            <TouchableOpacity
+              onPress={(): void => setShowPasswordConfirmation(!showPasswordConfirmation)}
+              style={{
+                position: 'absolute',
+                right: 12
+              }}
+            >
+              {
+                !showPasswordConfirmation ?
+                  (<Ionicons name="eye-off" size={24} color={COLORS.black}/>) :
+                  (<Ionicons name="eye" size={24} color={COLORS.black}/>)
+              }
+            </TouchableOpacity>
+          </View>
+        </View>
         <View style={{
           flexDirection: 'row',
           marginVertical: 6
@@ -161,12 +186,17 @@ export default function Login({ navigation }: { navigation: any }): React.JSX.El
             onValueChange={setIsChecked}
             color={isChecked ? COLORS.primary : undefined}
           />
-          <Text>Remember me</Text>
+          <Text>I agree to the </Text>
+          <TouchableOpacity onPress={(): void => navigation.navigate('Tos')}>
+            <Text style={{ color: COLORS.primary, textDecorationLine: 'underline' }}>
+              terms and conditions
+            </Text>
+          </TouchableOpacity>
         </View>
         <Button
-          title={loading ? 'Logging in, please wait...' : 'Login'}
-          onPress={login}
-          disabled={loading || password.length === 0 || !validEmail(email)}
+          title={loading ? 'Registering, please wait...' : 'Sign Up'}
+          onPress={register}
+          disabled={!isChecked || loading || password !== confirmPassword || !validEmail(email)}
           filled
           style={{
             marginTop: 18,
@@ -182,7 +212,7 @@ export default function Login({ navigation }: { navigation: any }): React.JSX.El
               marginHorizontal: 10
             }}
           />
-          <Text style={{ fontSize: 14 }}>Or Login with</Text>
+          <Text style={{ fontSize: 14 }}>Or Sign up with</Text>
           <View
             style={{
               flex: 1,
@@ -252,16 +282,14 @@ export default function Login({ navigation }: { navigation: any }): React.JSX.El
           justifyContent: 'center',
           marginVertical: 22
         }}>
-          <Text style={{ fontSize: 16, color: COLORS.black }}>Don't have an account?</Text>
-          <Pressable
-            onPress={(): void => navigation.navigate('Register')}
-          >
+          <Text style={{ fontSize: 16, color: COLORS.black }}>Already have an account</Text>
+          <Pressable onPress={(): void => navigation.navigate('Login')}>
             <Text style={{
               fontSize: 16,
               color: COLORS.primary,
               fontWeight: 'bold',
               marginLeft: 6
-            }}>Register</Text>
+            }}>Login</Text>
           </Pressable>
         </View>
       </View>
