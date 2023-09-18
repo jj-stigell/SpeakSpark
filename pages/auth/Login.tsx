@@ -1,27 +1,29 @@
-/* eslint-disable max-len */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/typedef */
-import {
-  FormControl, VStack, Input, InputField,
-  ButtonText, Text, Button, Center, ButtonSpinner
-} from '@gluestack-ui/themed';
-import { JSX, useState } from 'react';
-import React from 'react';
+import React, { useState } from 'react';
+import { View, Text, Image, Pressable, TextInput, TouchableOpacity } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { Ionicons } from '@expo/vector-icons';
+import Checkbox from 'expo-checkbox';
+import { Center } from '@gluestack-ui/themed';
 import { useMutation } from '@apollo/client';
-import BouncyCheckbox from 'react-native-bouncy-checkbox';
 
+import Button from '../../components/Button';
 import MainHeader from '../../components/MainHeader';
-import { LOGIN } from '../../graphql/mutations';
+import { COLORS } from '../../components/constants/colors';
 import { useAppDispatch } from '../../redux/hooks';
+import { deleteFromStore, getFromStore, saveToStore } from '../../utils/expoStore';
+import { LOGIN } from '../../graphql/mutations';
 import { setAccount } from '../../redux/features/accountSlice';
 import { validEmail } from '../../utils/validators';
-import { deleteFromStore, getFromStore, saveToStore } from '../../utils/expoStore';
 
-export default function Login(props: { navigation: any }): JSX.Element {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export default function Login({ navigation }: { navigation: any }): React.JSX.Element {
   const dispatch = useAppDispatch();
+
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
-  const [rememberMe, setRememberMe] = useState<boolean>(Boolean(getFromStore('rememberMe')));
+  const [showPassword, setShowPassword] = useState(false);
+  const [isChecked, setIsChecked] = useState(Boolean(getFromStore('rememberMe')));
 
   const [loginAccount, { data, loading }] = useMutation(LOGIN, {
     errorPolicy: 'all',
@@ -38,7 +40,7 @@ export default function Login(props: { navigation: any }): JSX.Element {
   });
 
   async function login(): Promise<void> {
-    if (rememberMe) {
+    if (isChecked) {
       await saveToStore('email', email);
       await saveToStore('password', password);
       await saveToStore('rememberMe', 'true');
@@ -53,7 +55,7 @@ export default function Login(props: { navigation: any }): JSX.Element {
   React.useEffect(() => {
     // eslint-disable-next-line func-style
     const setCreds = async (): Promise<void> => {
-      if (rememberMe) {
+      if (isChecked) {
         const email: string | null = await getFromStore('email');
         const password: string | null = await getFromStore('password');
 
@@ -67,75 +69,202 @@ export default function Login(props: { navigation: any }): JSX.Element {
   }, []);
 
   return (
-    <FormControl p='$4' marginTop='$12'>
-      <VStack space='xl'>
-        <Center>
-          <MainHeader/>
-        </Center>
-        <VStack space='xs'>
-          <Text lineHeight='$xs'>Email</Text>
-          <Input isDisabled={loading}>
-            <InputField
-              type="text"
-              defaultValue={email}
+    <SafeAreaView style={{ flex: 1, backgroundColor: 'F5FCFF' }}>
+      <Center>
+        <MainHeader/>
+      </Center>
+      <View style={{ flex: 1, marginHorizontal: 22 }}>
+        <View style={{ marginVertical: 22 }}>
+          <Center>
+            <Text style={{
+              fontSize: 17,
+              color: COLORS.black
+            }}>Login to existing account</Text>
+          </Center>
+        </View>
+        <View style={{ marginBottom: 12 }}>
+          <Text style={{
+            fontSize: 16,
+            fontWeight: '400',
+            marginVertical: 8
+          }}>Email address</Text>
+          <View style={{
+            width: '100%',
+            height: 48,
+            borderColor: COLORS.black,
+            borderWidth: 1,
+            borderRadius: 8,
+            alignItems: 'center',
+            justifyContent: 'center',
+            paddingLeft: 22
+          }}>
+            <TextInput
+              placeholder='Enter your email address'
+              placeholderTextColor={COLORS.black}
               onChangeText={setEmail}
+              value={email}
+              keyboardType='email-address'
+              style={{
+                width: '100%'
+              }}
             />
-          </Input>
-        </VStack>
-        <VStack space='xs'>
-          <Text lineHeight='$xs'>Password</Text>
-          <Input isDisabled={loading}>
-            <InputField
-              type='password'
-              defaultValue={password}
+          </View>
+        </View>
+        <View style={{ marginBottom: 12 }}>
+          <Text style={{
+            fontSize: 16,
+            fontWeight: '400',
+            marginVertical: 8
+          }}>Password</Text>
+          <View style={{
+            width: '100%',
+            height: 48,
+            borderColor: COLORS.black,
+            borderWidth: 1,
+            borderRadius: 8,
+            alignItems: 'center',
+            justifyContent: 'center',
+            paddingLeft: 22
+          }}>
+            <TextInput
+              placeholder='Enter your password'
+              placeholderTextColor={COLORS.black}
               onChangeText={setPassword}
+              value={password}
+              secureTextEntry={!showPassword}
+              style={{
+                width: '100%'
+              }}
             />
-          </Input>
-        </VStack>
-        <BouncyCheckbox
-          size={30}
-          fillColor="green"
-          text="Remember Me"
-          isChecked={rememberMe}
-          textStyle={{
-            textDecorationLine: 'none'
-          }}
-          onPress={(isChecked: boolean): void => {
-            setRememberMe(isChecked);
+            <TouchableOpacity
+              onPress={(): void => setShowPassword(!showPassword)}
+              style={{
+                position: 'absolute',
+                right: 12
+              }}
+            >
+              {
+                !showPassword ?
+                  (<Ionicons name="eye-off" size={24} color={COLORS.black}/>) :
+                  (<Ionicons name="eye" size={24} color={COLORS.black}/>)
+              }
+            </TouchableOpacity>
+          </View>
+        </View>
+        <View style={{
+          flexDirection: 'row',
+          marginVertical: 6
+        }}>
+          <Checkbox
+            style={{ marginRight: 8 }}
+            value={isChecked}
+            onValueChange={setIsChecked}
+            color={isChecked ? COLORS.primary : undefined}
+          />
+          <Text>Remember me</Text>
+        </View>
+        <Button
+          title={loading ? 'Logging in, please wait...' : 'Login'}
+          onPress={login}
+          disabled={loading || password.length === 0 || !validEmail(email)}
+          filled
+          style={{
+            marginTop: 18,
+            marginBottom: 4
           }}
         />
-        <Button
-          isDisabled={!validEmail(email) || password.length == 0 || loading}
-          onPress={login}
-          bgColor='#3342b3'
-        >
-          {loading && <ButtonSpinner mr="$2" />}
-          <ButtonText color='$white'>
-            {loading ? 'Please wait' : 'Login'}
-          </ButtonText>
-        </Button>
-        <Button
-          onPress={(): void => props.navigation.navigate('Register')}
-          isDisabled={loading}
-          bgColor='#467af8'
-        >
-          <ButtonText color='$white'>Register new account</ButtonText>
-        </Button>
-        <Button
-          onPress={(): void => console.log('GOOGLEEE')}
-          isDisabled={loading}
-          bgColor='#EA4335'
-        >
-          <ButtonText color='$white'>Login with Google</ButtonText>
-        </Button>
-        <Button
-          onPress={(): void => console.log('FACEBOOOOK')}
-          isDisabled={loading}
-          bgColor='#1877F2'
-        >
-          <ButtonText color='$white'>Login with Facebook</ButtonText>
-        </Button>
-      </VStack>
-    </FormControl>
+        <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 20 }}>
+          <View
+            style={{
+              flex: 1,
+              height: 1,
+              backgroundColor: COLORS.grey,
+              marginHorizontal: 10
+            }}
+          />
+          <Text style={{ fontSize: 14 }}>Or Login with</Text>
+          <View
+            style={{
+              flex: 1,
+              height: 1,
+              backgroundColor: COLORS.grey,
+              marginHorizontal: 10
+            }}
+          />
+        </View>
+        <View style={{
+          flexDirection: 'row',
+          justifyContent: 'center'
+        }}>
+          <TouchableOpacity
+            onPress={(): void => console.log('Facebook Pressed')}
+            style={{
+              flex: 1,
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexDirection: 'row',
+              height: 52,
+              borderWidth: 1,
+              borderColor: COLORS.grey,
+              marginRight: 4,
+              borderRadius: 10
+            }}
+          >
+            <Image
+              source={require('../../assets/image/facebook.png')}
+              style={{
+                height: 36,
+                width: 36,
+                marginRight: 8
+              }}
+              resizeMode='contain'
+            />
+            <Text>Facebook</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={(): void => console.log('Google Pressed')}
+            style={{
+              flex: 1,
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexDirection: 'row',
+              height: 52,
+              borderWidth: 1,
+              borderColor: COLORS.grey,
+              marginRight: 4,
+              borderRadius: 10
+            }}
+          >
+            <Image
+              source={require('../../assets/image/google.png')}
+              style={{
+                height: 36,
+                width: 36,
+                marginRight: 8
+              }}
+              resizeMode='contain'
+            />
+            <Text>Google</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={{
+          flexDirection: 'row',
+          justifyContent: 'center',
+          marginVertical: 22
+        }}>
+          <Text style={{ fontSize: 16, color: COLORS.black }}>Don't have an account?</Text>
+          <Pressable
+            onPress={(): void => navigation.navigate('Register')}
+          >
+            <Text style={{
+              fontSize: 16,
+              color: COLORS.primary,
+              fontWeight: 'bold',
+              marginLeft: 6
+            }}>Register</Text>
+          </Pressable>
+        </View>
+      </View>
+    </SafeAreaView>
   );
 }

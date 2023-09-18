@@ -6,7 +6,7 @@ export default function MainHeader(): React.JSX.Element {
   return (
     <HStack
       alignItems="center"
-      paddingTop={StatusBar.currentHeight ? StatusBar.currentHeight + 10 : 10}
+      marginTop={StatusBar.currentHeight ? StatusBar.currentHeight + 5 : 10}
     >
       <Heading lineHeight={30} fontSize={24} fontWeight="bold" marginTop={5}>SpeakSpark</Heading>
       <Image

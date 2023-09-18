@@ -1,8 +1,9 @@
 import React, { JSX } from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import Login from './pages/auth/Login';
 import Register from './pages/auth/Register';
+import Login from './pages/auth/Login';
+import TermsAndConditions from './pages/auth/Tos';
 import Home from './pages/main/Home';
 import Chat from './pages/main/Chat';
 import Settings from './pages/main/Settings';
@@ -25,16 +26,17 @@ export default function Navigator(): JSX.Element {
       { isLoggedIn ?
         (
           <React.Fragment>
-            <Stack.Screen name="Home" component={Home} />
-            <Stack.Screen name="Chat" component={Chat} />
-            <Stack.Screen name="Settings" component={Settings} />
-            <Stack.Screen name="NewChat" component={NewChat} />
+            <Stack.Screen name="Home" component={Home}/>
+            <Stack.Screen name="Chat" component={Chat}/>
+            <Stack.Screen name="Settings" component={Settings}/>
+            <Stack.Screen name="NewChat" component={NewChat}/>
           </React.Fragment>
         ) :
         (
           <React.Fragment>
-            <Stack.Screen name="Login" component={Login} />
-            <Stack.Screen name="Register" component={Register} />
+            <Stack.Screen name="Login" component={Login}/>
+            <Stack.Screen name="Register" component={Register}/>
+            <Stack.Screen name="Tos" component={TermsAndConditions}/>
           </React.Fragment>
         )
       }

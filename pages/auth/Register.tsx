@@ -1,25 +1,32 @@
 /* eslint-disable @typescript-eslint/typedef */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from 'react';
-import { useMutation } from '@apollo/client';
-import {
-  FormControl, VStack, Heading, Input, InputField,
-  ButtonText, Text, Button, Center, ButtonSpinner
-} from '@gluestack-ui/themed';
+import { View, Text, Image, Pressable, TextInput, TouchableOpacity } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { Ionicons } from '@expo/vector-icons';
+import Checkbox from 'expo-checkbox';
+import { Center } from '@gluestack-ui/themed';
 import { Toast as notification } from 'react-native-toast-notifications';
+import { useMutation } from '@apollo/client';
 
-import { CREATE_ACCOUNT } from '../../graphql/mutations';
+import Button from '../../components/Button';
+import MainHeader from '../../components/MainHeader';
+import { COLORS } from '../../components/constants/colors';
 import { useAppDispatch } from '../../redux/hooks';
+import { saveToStore } from '../../utils/expoStore';
+import { CREATE_ACCOUNT } from '../../graphql/mutations';
 import { setAccount } from '../../redux/features/accountSlice';
 import { validEmail } from '../../utils/validators';
-import { saveToStore } from '../../utils/expoStore';
-import MainHeader from '../../components/MainHeader';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default function Register({ navigation }: { navigation: any }): React.JSX.Element {
   const dispatch = useAppDispatch();
+
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [confirmPassword, setConfirmPassword] = useState<string>('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [showPasswordConfirmation, setShowPasswordConfirmation] = useState(false);
+  const [isChecked, setIsChecked] = useState(false);
 
   const [createAccount, { data, loading }] = useMutation(CREATE_ACCOUNT, {
     errorPolicy: 'all',
@@ -45,62 +52,246 @@ export default function Register({ navigation }: { navigation: any }): React.JSX
   }
 
   return (
-    <FormControl p='$4' marginTop='$12'>
-      <VStack space='xl'>
-        <Center>
-          <MainHeader/>
-          <Heading lineHeight='$md' marginTop='$8'>Register new account to SpeakSpark</Heading>
-        </Center>
-        <VStack space='xs'>
-          <Text lineHeight='$xs'>Email</Text>
-          <Input isDisabled={loading}>
-            <InputField
-              type="text"
-              defaultValue={email}
+    <SafeAreaView style={{ flex: 1, backgroundColor: 'F5FCFF' }}>
+      <Center>
+        <MainHeader/>
+      </Center>
+      <View style={{ flex: 1, marginHorizontal: 22 }}>
+        <View style={{ marginVertical: 22 }}>
+          <Center>
+            <Text style={{
+              fontSize: 17,
+              color: COLORS.black
+            }}>Create New Account</Text>
+          </Center>
+        </View>
+        <View style={{ marginBottom: 12 }}>
+          <Text style={{
+            fontSize: 16,
+            fontWeight: '400',
+            marginVertical: 8
+          }}>Email address</Text>
+          <View style={{
+            width: '100%',
+            height: 48,
+            borderColor: COLORS.black,
+            borderWidth: 1,
+            borderRadius: 8,
+            alignItems: 'center',
+            justifyContent: 'center',
+            paddingLeft: 22
+          }}>
+            <TextInput
+              placeholder='Enter your email address'
+              placeholderTextColor={COLORS.black}
               onChangeText={setEmail}
+              value={email}
+              keyboardType='email-address'
+              style={{
+                width: '100%'
+              }}
             />
-          </Input>
-        </VStack>
-        <VStack space='xs'>
-          <Text lineHeight='$xs'>Password</Text>
-          <Input isDisabled={loading}>
-            <InputField
-              type='password'
-              defaultValue={password}
+          </View>
+        </View>
+        <View style={{ marginBottom: 12 }}>
+          <Text style={{
+            fontSize: 16,
+            fontWeight: '400',
+            marginVertical: 8
+          }}>Password</Text>
+          <View style={{
+            width: '100%',
+            height: 48,
+            borderColor: COLORS.black,
+            borderWidth: 1,
+            borderRadius: 8,
+            alignItems: 'center',
+            justifyContent: 'center',
+            paddingLeft: 22
+          }}>
+            <TextInput
+              placeholder='Enter your password'
+              placeholderTextColor={COLORS.black}
               onChangeText={setPassword}
+              value={password}
+              secureTextEntry={!showPassword}
+              style={{
+                width: '100%'
+              }}
             />
-          </Input>
-        </VStack>
-        <VStack space='xs'>
-          <Text lineHeight='$xs'>Confirm Password</Text>
-          <Input isDisabled={loading}>
-            <InputField
-              type='password'
-              defaultValue={confirmPassword}
+            <TouchableOpacity
+              onPress={(): void => setShowPassword(!showPassword)}
+              style={{
+                position: 'absolute',
+                right: 12
+              }}
+            >
+              {
+                !showPassword ?
+                  (<Ionicons name="eye-off" size={24} color={COLORS.black}/>) :
+                  (<Ionicons name="eye" size={24} color={COLORS.black}/>)
+              }
+            </TouchableOpacity>
+          </View>
+        </View>
+        <View style={{ marginBottom: 12 }}>
+          <Text style={{
+            fontSize: 16,
+            fontWeight: '400',
+            marginVertical: 8
+          }}>Confirm Password</Text>
+          <View style={{
+            width: '100%',
+            height: 48,
+            borderColor: COLORS.black,
+            borderWidth: 1,
+            borderRadius: 8,
+            alignItems: 'center',
+            justifyContent: 'center',
+            paddingLeft: 22
+          }}>
+            <TextInput
+              placeholder='Confirm your password'
+              placeholderTextColor={COLORS.black}
               onChangeText={setConfirmPassword}
+              value={confirmPassword}
+              secureTextEntry={!showPasswordConfirmation}
+              style={{
+                width: '100%'
+              }}
             />
-          </Input>
-        </VStack>
+            <TouchableOpacity
+              onPress={(): void => setShowPasswordConfirmation(!showPasswordConfirmation)}
+              style={{
+                position: 'absolute',
+                right: 12
+              }}
+            >
+              {
+                !showPasswordConfirmation ?
+                  (<Ionicons name="eye-off" size={24} color={COLORS.black}/>) :
+                  (<Ionicons name="eye" size={24} color={COLORS.black}/>)
+              }
+            </TouchableOpacity>
+          </View>
+        </View>
+        <View style={{
+          flexDirection: 'row',
+          marginVertical: 6
+        }}>
+          <Checkbox
+            style={{ marginRight: 8 }}
+            value={isChecked}
+            onValueChange={setIsChecked}
+            color={isChecked ? COLORS.primary : undefined}
+          />
+          <Text>I agree to the </Text>
+          <TouchableOpacity onPress={(): void => navigation.navigate('Tos')}>
+            <Text style={{ color: COLORS.primary, textDecorationLine: 'underline' }}>
+              terms and conditions
+            </Text>
+          </TouchableOpacity>
+        </View>
         <Button
-          isDisabled={
-            !validEmail(email) || password.length == 0 ||
-            loading || password !== confirmPassword
-          }
+          title={loading ? 'Registering, please wait...' : 'Sign Up'}
           onPress={register}
-          bgColor='#3342b3'
-        >
-          {loading && <ButtonSpinner mr="$2" />}
-          <ButtonText color='$white'>
-            {loading ? 'Please wait' : 'Register'}
-          </ButtonText>
-        </Button>
-        <Button
-          onPress={(): void => navigation.navigate('Login')}
-          bgColor='#467af8'
-        >
-          <ButtonText color='$white'>Already have an account?</ButtonText>
-        </Button>
-      </VStack>
-    </FormControl>
+          disabled={!isChecked || loading || password !== confirmPassword || !validEmail(email)}
+          filled
+          style={{
+            marginTop: 18,
+            marginBottom: 4
+          }}
+        />
+        <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 20 }}>
+          <View
+            style={{
+              flex: 1,
+              height: 1,
+              backgroundColor: COLORS.grey,
+              marginHorizontal: 10
+            }}
+          />
+          <Text style={{ fontSize: 14 }}>Or Sign up with</Text>
+          <View
+            style={{
+              flex: 1,
+              height: 1,
+              backgroundColor: COLORS.grey,
+              marginHorizontal: 10
+            }}
+          />
+        </View>
+        <View style={{
+          flexDirection: 'row',
+          justifyContent: 'center'
+        }}>
+          <TouchableOpacity
+            onPress={(): void => console.log('Facebook Pressed')}
+            style={{
+              flex: 1,
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexDirection: 'row',
+              height: 52,
+              borderWidth: 1,
+              borderColor: COLORS.grey,
+              marginRight: 4,
+              borderRadius: 10
+            }}
+          >
+            <Image
+              source={require('../../assets/image/facebook.png')}
+              style={{
+                height: 36,
+                width: 36,
+                marginRight: 8
+              }}
+              resizeMode='contain'
+            />
+            <Text>Facebook</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={(): void => console.log('Google Pressed')}
+            style={{
+              flex: 1,
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexDirection: 'row',
+              height: 52,
+              borderWidth: 1,
+              borderColor: COLORS.grey,
+              marginRight: 4,
+              borderRadius: 10
+            }}
+          >
+            <Image
+              source={require('../../assets/image/google.png')}
+              style={{
+                height: 36,
+                width: 36,
+                marginRight: 8
+              }}
+              resizeMode='contain'
+            />
+            <Text>Google</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={{
+          flexDirection: 'row',
+          justifyContent: 'center',
+          marginVertical: 22
+        }}>
+          <Text style={{ fontSize: 16, color: COLORS.black }}>Already have an account</Text>
+          <Pressable onPress={(): void => navigation.navigate('Login')}>
+            <Text style={{
+              fontSize: 16,
+              color: COLORS.primary,
+              fontWeight: 'bold',
+              marginLeft: 6
+            }}>Login</Text>
+          </Pressable>
+        </View>
+      </View>
+    </SafeAreaView>
   );
 }
