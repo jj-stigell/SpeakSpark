@@ -1,60 +1,151 @@
-import React, { Dispatch } from 'react';
+import React, { Dispatch, useState } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import {
-  StyleSheet, View, TouchableOpacity,
-  Text, Switch, SafeAreaView, Image
+  StyleSheet, View, TouchableOpacity, Modal,
+  Text, Switch, SafeAreaView, Image, Pressable
 } from 'react-native';
-import ChatHeader from '../../components/ChatHeader';
+import ChatHeader from '../../components/ActionHeader';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { AnyAction } from '@reduxjs/toolkit';
-import { Account, resetAccount } from '../../redux/features/accountSlice';
+import {
+  Account, resetAccount, setUiLanguage, toggleDarkMode, toggleNotifications
+} from '../../redux/features/accountSlice';
 import { resetBots } from '../../redux/features/botSlice';
 import { resetChats } from '../../redux/features/chatSlice';
 import { RootState } from '../../redux/store';
 import { deleteFromStore } from '../../utils/expoStore';
+import LanguageSelector from '../../components/LanguageSelector';
 
-interface Item {
-  icon: string,
-  label: string,
-  value?: string | boolean,
-  type: string,
-  index?: number
+
+
+
+
+//https://forms.gle/hgnTbty7y8ApUQcUA
+
+
+
+
+function LangModal(props: {
+  modalVisible: boolean,
+  setModalVisible: (value: boolean) => void,
+  language: string
+}): React.JSX.Element {
+  return (
+    <Modal
+      animationType="fade"
+      transparent={true}
+      visible={props.modalVisible}
+      onRequestClose={(): void => {
+        props.setModalVisible(!props.modalVisible);
+      }}>
+      <View style={styless.centeredView}>
+        <View style={styless.modalView}>
+          <View>
+            <LanguageSelector language={props.language} setLanguage={setUiLanguage} />
+            <Pressable
+              style={[styless.button, styless.buttonClose]}
+              onPress={(): void => props.setModalVisible(!props.modalVisible)}>
+              <Text style={styless.textStyle}>Close</Text>
+            </Pressable>
+          </View>
+        </View>
+      </View>
+    </Modal>
+  );
 }
 
-interface Section {
-  header: string,
-  items: Array<Item>
-}
-
-const SECTIONS: Array<Section> = [
-  {
-    header: 'Preferences',
-    items: [
-      { icon: 'language', label: 'Language', value: 'English', type: 'input' },
-      { icon: 'moon', label: 'Dark Mode', value: false, type: 'boolean' },
-      { icon: 'notifications', label: 'Notifications', value: false, type: 'boolean' }
-    ]
+// eslint-disable-next-line @typescript-eslint/typedef
+const styless = StyleSheet.create({
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
   },
-  {
-    header: 'Help',
-    items: [
-      { icon: 'bug', label: 'Report Bug', type: 'link' },
-      { icon: 'mail', label: 'Contact Us', type: 'link' }
-    ]
+  modalView: {
+    width: '90%',          // 90% of screen width
+    maxWidth: 400,         // won't exceed 400 units (e.g., pixels) in width
+    marginHorizontal: 10, // 10 units margin on the left and right
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5
   },
-  {
-    header: 'Other',
-    items: [
-      { icon: 'save', label: 'Logout', type: 'link' }
-    ]
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2
+  },
+  buttonOpen: {
+    backgroundColor: '#F194FF'
+  },
+  buttonClose: {
+    backgroundColor: '#2196F3'
+  },
+  textStyle: {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center'
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: 'center'
+  },
+  messageText: {
+    fontSize: 18,        // Larger font size for the message text
+    marginBottom: 10    // Some margin to create space between text and line
+  },
+  grammarAnalysis: {
+    fontSize: 14        // Smaller font size for the grammar analysis
+  },
+  horizontalLine: {
+    height: 10,          // Thin horizontal line
+    backgroundColor: '#D3D3D3',   // Light gray color
+    marginVertical: 10 // Margin to separate from both top and bottom content
   }
-];
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default function Settings({ navigation }: { navigation: any }): React.JSX.Element {
   const dispatch: Dispatch<AnyAction> = useAppDispatch();
   const account: Account = useAppSelector((state: RootState) => state.account.account);
+  const [modalVisible, setModalVisible] = useState<boolean>(false);
 
   async function logout(): Promise<void> {
     deleteFromStore('jwt').then(() => {
@@ -66,6 +157,11 @@ export default function Settings({ navigation }: { navigation: any }): React.JSX
 
   return (
     <SafeAreaView style={styles.container}>
+      <LangModal
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+        language={account.uiLanguage}
+      />
       <ChatHeader title={'Settings'} onBack={(): void => navigation.navigate('Home')}/>
       <View style={styles.section}>
         <View style={styles.sectionHeader}>
@@ -74,7 +170,7 @@ export default function Settings({ navigation }: { navigation: any }): React.JSX
         <View style={styles.profile}>
           <Image
             alt="profile-photo"
-            source={require('../../assets/image/facebook.png')}
+            source={require('../../assets/image/profile.png')}
             style={styles.profileAvatar}
           />
           <View>
@@ -82,53 +178,128 @@ export default function Settings({ navigation }: { navigation: any }): React.JSX
           </View>
         </View>
       </View>
-
-      {SECTIONS.map(({ header, items }) => (
-        <View style={styles.section} key={header}>
-          <View style={styles.sectionHeader}>
-            <Text style={styles.sectionHeaderText}>{header}</Text>
+      <View style={styles.section}>
+        <View style={styles.sectionHeader}>
+          <Text style={styles.sectionHeaderText}>Preferences</Text>
+        </View>
+        <View style={styles.sectionBody}>
+          <View
+            style={[styles.rowWrapper, { borderTopWidth: 0 }, styles.rowFirst]}>
+            <TouchableOpacity
+              onPress={(): void => setModalVisible(false)}>
+              <View style={styles.row}>
+                <Ionicons
+                  name='language'
+                  style={styles.icon}
+                  size={styles.icon.size}
+                  color={styles.icon.color}
+                />
+                <Text style={styles.rowLabel}>Language</Text>
+                <View style={styles.rowSpacer}/>
+                <LanguageSelector language={account.uiLanguage} setLanguage={setUiLanguage} half />
+              </View>
+            </TouchableOpacity>
           </View>
-          <View style={styles.sectionBody}>
-            {items.map(({ label, type, value, icon }: Item, index: number) => {
-              const isFirst = index === 0;
-              const isLast = index === items.length - 1;
-              return (
-                <View
-                  key={index}
-                  style={[
-                    styles.rowWrapper,
-                    index === 0 && { borderTopWidth: 0 },
-                    isFirst && styles.rowFirst,
-                    isLast && styles.rowLast
-                  ]}>
-                  <TouchableOpacity
-                    onPress={(): void => {
-                      // handle onPress
-                      console.log(label, type, value);
-                    }}>
-                    <View style={styles.row}>
-                      <Ionicons
-                        name={icon as keyof typeof Ionicons.glyphMap}
-                        style={{ paddingRight: 8 }}
-                        size={20} color="black"
-                      />
-                      <Text style={styles.rowLabel}>{label}</Text>
-
-                      <View style={styles.rowSpacer} />
-
-                      {type === 'input' && (
-                        <Text style={styles.rowValue}>{value}</Text>
-                      )}
-
-                      {type === 'boolean' && <Switch value={true} />}
-                    </View>
-                  </TouchableOpacity>
-                </View>
-              );
-            })}
+          <View style={[styles.rowWrapper]}>
+            <TouchableOpacity
+              onPress={(): void => dispatch(toggleDarkMode())}>
+              <View style={styles.row}>
+                <Ionicons
+                  name='moon'
+                  style={styles.icon}
+                  size={styles.icon.size}
+                  color={styles.icon.color}
+                />
+                <Text style={styles.rowLabel}>Dark Mode</Text>
+                <View style={styles.rowSpacer}/>
+                <Switch
+                  value={account.darkMode}
+                  onValueChange={(): void => dispatch(toggleDarkMode())}
+                />
+              </View>
+            </TouchableOpacity>
+          </View>
+          <View style={[styles.rowWrapper, styles.rowLast]}>
+            <TouchableOpacity
+              onPress={(): void => dispatch(toggleNotifications())}>
+              <View style={styles.row}>
+                <Ionicons
+                  name='notifications'
+                  style={styles.icon}
+                  size={styles.icon.size}
+                  color={styles.icon.color}
+                />
+                <Text style={styles.rowLabel}>Notifications</Text>
+                <View style={styles.rowSpacer}/>
+                <Switch
+                  value={account.notifications}
+                  onValueChange={(): void => dispatch(toggleNotifications())}
+                />
+              </View>
+            </TouchableOpacity>
           </View>
         </View>
-      ))}
+      </View>
+      <View style={styles.section}>
+        <View style={styles.sectionHeader}>
+          <Text style={styles.sectionHeaderText}>Help</Text>
+        </View>
+        <View style={styles.sectionBody}>
+          <View
+            style={[styles.rowWrapper, { borderTopWidth: 0 }, styles.rowFirst]}>
+            <TouchableOpacity
+              onPress={(): void => console.log('bugggg')}>
+              <View style={styles.row}>
+                <Ionicons
+                  name='bug'
+                  style={styles.icon}
+                  size={styles.icon.size}
+                  color={styles.icon.color}
+                />
+                <Text style={styles.rowLabel}>Report Bug</Text>
+                <View style={styles.rowSpacer}/>
+              </View>
+            </TouchableOpacity>
+          </View>
+          <View style={[styles.rowWrapper, styles.rowLast]}>
+            <TouchableOpacity
+              onPress={(): void => console.log('mailmailmailmail')}>
+              <View style={styles.row}>
+                <Ionicons
+                  name='mail'
+                  style={styles.icon}
+                  size={styles.icon.size}
+                  color={styles.icon.color}
+                />
+                <Text style={styles.rowLabel}>Contact Us</Text>
+                <View style={styles.rowSpacer}/>
+              </View>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </View>
+      <View style={styles.section}>
+        <View style={styles.sectionHeader}>
+          <Text style={styles.sectionHeaderText}>Other</Text>
+        </View>
+        <View style={styles.sectionBody}>
+          <View
+            style={[styles.rowWrapper, { borderTopWidth: 0 }, styles.rowFirst]}>
+            <TouchableOpacity onPress={logout}>
+              <View style={styles.row}>
+                <Ionicons
+                  name='md-log-out'
+                  style={styles.icon}
+                  size={styles.icon.size}
+                  color={styles.icon.color}
+                />
+                <Text style={styles.rowLabel}>Logout</Text>
+                <View style={styles.rowSpacer}/>
+              </View>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </View>
     </SafeAreaView>
   );
 }
@@ -136,7 +307,7 @@ export default function Settings({ navigation }: { navigation: any }): React.JSX
 // eslint-disable-next-line @typescript-eslint/typedef
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#f8f8f8',
+    backgroundColor: '#F5FCFF',
     flex: 1
   },
   title: {
@@ -185,29 +356,8 @@ const styles = StyleSheet.create({
   profileName: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#292929'
-  },
-  profileHandle: {
-    marginTop: 2,
-    fontSize: 16,
-    fontWeight: '400',
-    color: '#858585'
-  },
-  profileAction: {
-    marginTop: 16,
-    paddingVertical: 10,
-    paddingHorizontal: 16,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#007bff',
-    borderRadius: 12
-  },
-  profileActionText: {
-    marginRight: 8,
-    fontSize: 15,
-    fontWeight: '600',
-    color: '#fff'
+    color: '#292929',
+    paddingLeft: 4
   },
   row: {
     flexDirection: 'row',
@@ -244,5 +394,10 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     flexShrink: 1,
     flexBasis: 0
+  },
+  icon: {
+    paddingRight: 8,
+    size: 20,
+    color: 'black'
   }
 });
