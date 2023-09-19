@@ -1,16 +1,25 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, StatusBar } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { View, Text, TouchableOpacity, StyleSheet, StatusBar } from 'react-native';
 
-export default function ActionHeader(props: {
-  title: string, onBack: () => void
-}): React.JSX.Element {
+import { RootState } from '../redux/store';
+import { useAppSelector } from '../redux/hooks';
+import { System } from '../redux/features/systemSlice';
+
+interface Props {
+  title: string,
+  onBack: () => void
+}
+
+export default function ActionHeader(props: Props): React.JSX.Element {
+  const system: System = useAppSelector((state: RootState) => state.system);
+
   return (
-    <View style={styles.headerContainer}>
+    <View style={[styles.headerContainer, { backgroundColor: system.theme.background.secondary }]}>
       <TouchableOpacity onPress={props.onBack}>
-        <Ionicons name="arrow-back" size={24} color="black" />
+        <Ionicons name="arrow-back" size={24} color={system.darkMode ? 'white' : 'black'} />
       </TouchableOpacity>
-      <Text style={styles.headerText}>{props.title}</Text>
+      <Text style={[styles.headerText, { color: system.theme.font.primary }]}>{props.title}</Text>
     </View>
   );
 }

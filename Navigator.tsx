@@ -11,19 +11,23 @@ import NewChat from './screens/main/SelectBot';
 
 import { RootState } from './redux/store';
 import { useAppSelector } from './redux/hooks';
+import { ColorScheme } from './redux/features/systemSlice';
 
 // eslint-disable-next-line @typescript-eslint/typedef
 const Stack = createNativeStackNavigator();
 
 export default function Navigator(): JSX.Element {
   const isLoggedIn: boolean = useAppSelector((state: RootState) => state.account.isLoggedIn);
+  const theme: ColorScheme = useAppSelector((state: RootState) => state.system.theme);
 
   return (
     <Stack.Navigator
       initialRouteName={isLoggedIn ? 'Home' : 'Login'}
       screenOptions={{
         headerShown: false,
-        contentStyle: { backgroundColor:'#F5FCFF' }
+        contentStyle: {
+          backgroundColor: theme.background.primary
+        }
       }}>
       { isLoggedIn ?
         (

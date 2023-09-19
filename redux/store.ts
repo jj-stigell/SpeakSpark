@@ -7,6 +7,7 @@ import thunk from 'redux-thunk';
 import accountReducer from './features/accountSlice';
 import botReducer from './features/botSlice';
 import chatReducer from './features/chatSlice';
+import systemReducer from './features/systemSlice';
 
 export const persistConfig = {
   key: 'root',
@@ -17,7 +18,8 @@ export const persistConfig = {
 const appReducer = combineReducers({
   account: accountReducer,
   bot: botReducer,
-  chat: chatReducer
+  chat: chatReducer,
+  system: systemReducer
 });
 
 const persistedReducer = persistReducer(persistConfig, appReducer);

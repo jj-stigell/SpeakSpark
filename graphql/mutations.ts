@@ -5,7 +5,6 @@ mutation Register($email: String!, $password: String!) {
   register(email: $email, password: $password) {
     user {
       id
-      darkMode
       uiLanguage
       studyLanguage
     }
@@ -18,7 +17,6 @@ mutation Login($password: String!, $email: String!) {
   login(password: $password, email: $email) {
     user {
       id
-      darkMode
       uiLanguage
       studyLanguage
     }
