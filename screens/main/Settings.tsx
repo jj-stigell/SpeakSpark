@@ -7,19 +7,21 @@ import {
 import ChatHeader from '../../components/ActionHeader';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { AnyAction } from '@reduxjs/toolkit';
-import {
-  Account, resetAccount, setUiLanguage, toggleDarkMode, toggleNotifications
-} from '../../redux/features/accountSlice';
+import { Account, resetAccount, setUiLanguage } from '../../redux/features/accountSlice';
 import { resetBots } from '../../redux/features/botSlice';
 import { resetChats } from '../../redux/features/chatSlice';
 import { RootState } from '../../redux/store';
 import { deleteFromStore } from '../../utils/expoStore';
 import LanguageSelector from '../../components/LanguageSelector';
+import { System, toggleDarkMode, toggleNotifications } from '../../redux/features/systemSlice';
+import { ColorScheme } from '../../utils/colors';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default function Settings({ navigation }: { navigation: any }): React.JSX.Element {
   const dispatch: Dispatch<AnyAction> = useAppDispatch();
   const account: Account = useAppSelector((state: RootState) => state.account.account);
+  const system: System = useAppSelector((state: RootState) => state.system);
+  const theme: ColorScheme = useAppSelector((state: RootState) => state.system.theme);
 
   async function logout(): Promise<void> {
     deleteFromStore('jwt').then(() => {
@@ -36,14 +38,16 @@ export default function Settings({ navigation }: { navigation: any }): React.JSX
         <View style={styles.sectionHeader}>
           <Text style={styles.sectionHeaderText}>Account</Text>
         </View>
-        <View style={styles.profile}>
+        <View style={[styles.profile, { backgroundColor: theme.container.primary }]}>
           <Image
             alt="profile-photo"
             source={require('../../assets/image/profile.png')}
             style={styles.profileAvatar}
           />
           <View>
-            <Text style={styles.profileName}>{account.email}</Text>
+            <Text style={[styles.profileName, { color: theme.font.primary }]}>
+              {account.email}
+            </Text>
           </View>
         </View>
       </View>
@@ -53,54 +57,77 @@ export default function Settings({ navigation }: { navigation: any }): React.JSX
         </View>
         <View style={styles.sectionBody}>
           <View
-            style={[styles.rowWrapper, { borderTopWidth: 0 }, styles.rowFirst]}>
+            style={[
+              styles.rowWrapper,
+              styles.rowFirst,
+              { borderTopWidth: 0, backgroundColor: theme.container.primary }
+            ]}>
             <TouchableOpacity>
               <View style={styles.row}>
                 <Ionicons
                   name='language'
-                  style={styles.icon}
-                  size={styles.icon.size}
-                  color={styles.icon.color}
+                  style={{
+                    paddingRight: 8,
+                    color: system.darkMode ? 'white' : 'black'
+                  }}
+                  size={20}
                 />
-                <Text style={styles.rowLabel}>Language</Text>
+                <Text style={[styles.rowLabel, { color: theme.font.primary }]}>
+                  Language
+                </Text>
                 <View style={styles.rowSpacer}/>
                 <LanguageSelector language={account.uiLanguage} setLanguage={setUiLanguage} half />
               </View>
             </TouchableOpacity>
           </View>
-          <View style={[styles.rowWrapper]}>
+          <View style={[styles.rowWrapper, { backgroundColor: theme.container.primary }]}>
             <TouchableOpacity
               onPress={(): void => dispatch(toggleDarkMode())}>
-              <View style={styles.row}>
+              <View style={[
+                styles.row,
+                { backgroundColor: theme.container.primary }
+              ]}>
                 <Ionicons
                   name='moon'
-                  style={styles.icon}
-                  size={styles.icon.size}
-                  color={styles.icon.color}
+                  style={{
+                    paddingRight: 8,
+                    color: system.darkMode ? 'white' : 'black'
+                  }}
+                  size={20}
                 />
-                <Text style={styles.rowLabel}>Dark Mode</Text>
+                <Text style={[styles.rowLabel, { color: theme.font.primary }]}>
+                  Dark Mode
+                </Text>
                 <View style={styles.rowSpacer}/>
                 <Switch
-                  value={account.darkMode}
+                  value={system.darkMode}
                   onValueChange={(): void => dispatch(toggleDarkMode())}
                 />
               </View>
             </TouchableOpacity>
           </View>
-          <View style={[styles.rowWrapper, styles.rowLast]}>
+          <View style={[
+            styles.rowWrapper,
+            styles.rowLast,
+            { backgroundColor: theme.container.primary }
+          ]}>
             <TouchableOpacity
               onPress={(): void => dispatch(toggleNotifications())}>
               <View style={styles.row}>
                 <Ionicons
                   name='notifications'
-                  style={styles.icon}
-                  size={styles.icon.size}
-                  color={styles.icon.color}
+                  style={{
+                    paddingRight: 8,
+                    color: system.darkMode ? 'white' : 'black'
+                  }}
+                  size={20}
                 />
-                <Text style={styles.rowLabel}>Notifications</Text>
+                <Text style={[styles.rowLabel, { color: theme.font.primary }]}>
+                  Notifications
+                </Text>
                 <View style={styles.rowSpacer}/>
                 <Switch
-                  value={account.notifications}
+                  value={system.notifications}
                   onValueChange={(): void => dispatch(toggleNotifications())}
                 />
               </View>
@@ -114,32 +141,48 @@ export default function Settings({ navigation }: { navigation: any }): React.JSX
         </View>
         <View style={styles.sectionBody}>
           <View
-            style={[styles.rowWrapper, { borderTopWidth: 0 }, styles.rowFirst]}>
+            style={[
+              styles.rowWrapper,
+              styles.rowFirst,
+              { borderTopWidth: 0, backgroundColor: theme.container.primary }
+            ]}>
             <TouchableOpacity
               onPress={(): Promise<void> => Linking.openURL('https://forms.gle/9WuAZyxK33fzZchDA')}>
               <View style={styles.row}>
                 <Ionicons
                   name='bug'
-                  style={styles.icon}
-                  size={styles.icon.size}
-                  color={styles.icon.color}
+                  style={{
+                    paddingRight: 8,
+                    color: system.darkMode ? 'white' : 'black'
+                  }}
+                  size={20}
                 />
-                <Text style={styles.rowLabel}>Report Bug</Text>
+                <Text style={[styles.rowLabel, { color: theme.font.primary }]}>
+                  Report Bug / Feature
+                </Text>
                 <View style={styles.rowSpacer}/>
               </View>
             </TouchableOpacity>
           </View>
-          <View style={[styles.rowWrapper, styles.rowLast]}>
+          <View style={[
+            styles.rowWrapper,
+            styles.rowLast,
+            { backgroundColor: theme.container.primary }
+          ]}>
             <TouchableOpacity
               onPress={(): Promise<void> => Linking.openURL('https://forms.gle/hgnTbty7y8ApUQcUA')}>
               <View style={styles.row}>
                 <Ionicons
                   name='mail'
-                  style={styles.icon}
-                  size={styles.icon.size}
-                  color={styles.icon.color}
+                  style={{
+                    paddingRight: 8,
+                    color: system.darkMode ? 'white' : 'black'
+                  }}
+                  size={20}
                 />
-                <Text style={styles.rowLabel}>Contact Us</Text>
+                <Text style={[styles.rowLabel, { color: theme.font.primary }]}>
+                  Contact Us
+                </Text>
                 <View style={styles.rowSpacer}/>
               </View>
             </TouchableOpacity>
@@ -152,16 +195,24 @@ export default function Settings({ navigation }: { navigation: any }): React.JSX
         </View>
         <View style={styles.sectionBody}>
           <View
-            style={[styles.rowWrapper, { borderTopWidth: 0 }, styles.rowFirst]}>
+            style={[
+              styles.rowWrapper,
+              styles.rowOnly,
+              { borderTopWidth: 0, backgroundColor: theme.container.primary }
+            ]}>
             <TouchableOpacity onPress={logout}>
               <View style={styles.row}>
                 <Ionicons
                   name='md-log-out'
-                  style={styles.icon}
-                  size={styles.icon.size}
-                  color={styles.icon.color}
+                  style={{
+                    paddingRight: 8,
+                    color: system.darkMode ? 'white' : 'black'
+                  }}
+                  size={20}
                 />
-                <Text style={styles.rowLabel}>Logout</Text>
+                <Text style={[styles.rowLabel, { color: theme.font.primary }]}>
+                  Logout
+                </Text>
                 <View style={styles.rowSpacer}/>
               </View>
             </TouchableOpacity>
@@ -175,13 +226,7 @@ export default function Settings({ navigation }: { navigation: any }): React.JSX
 // eslint-disable-next-line @typescript-eslint/typedef
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#F5FCFF',
     flex: 1
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#1f1f1f'
   },
   section: {
     paddingHorizontal: 16,
@@ -209,7 +254,6 @@ const styles = StyleSheet.create({
   },
   profile: {
     padding: 12,
-    backgroundColor: '#fff',
     borderRadius: 12,
     flexDirection: 'row',
     alignItems: 'center',
@@ -224,7 +268,6 @@ const styles = StyleSheet.create({
   profileName: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#292929',
     paddingLeft: 4
   },
   row: {
@@ -241,6 +284,12 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 12
   },
   rowLast: {
+    borderBottomLeftRadius: 12,
+    borderBottomRightRadius: 12
+  },
+  rowOnly: {
+    borderTopLeftRadius: 12,
+    borderTopRightRadius: 12,
     borderBottomLeftRadius: 12,
     borderBottomRightRadius: 12
   },
@@ -262,10 +311,5 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     flexShrink: 1,
     flexBasis: 0
-  },
-  icon: {
-    paddingRight: 8,
-    size: 20,
-    color: 'black'
   }
 });

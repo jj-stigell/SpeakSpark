@@ -10,14 +10,12 @@ import { PersistGate } from 'redux-persist/integration/react';
 import Navigator from './Navigator';
 import { client } from './graphql/client';
 import { persistor, store } from './redux/store';
-import { ColorScheme } from './redux/features/systemSlice';
 
 function ThemedStatusBar(): React.JSX.Element {
-  const theme: ColorScheme = store.getState().system.theme;
   return (
-    <View style={{ height: StatusBar.currentHeight,  backgroundColor: theme.background.secondary }}>
+    <View style={{ height: StatusBar.currentHeight, backgroundColor: '#6e6e6e' }}>
       <SafeAreaView>
-        <StatusBar translucent backgroundColor={theme.background.secondary}/>
+        <StatusBar translucent backgroundColor='#6e6e6e'/>
       </SafeAreaView>
     </View>
   );

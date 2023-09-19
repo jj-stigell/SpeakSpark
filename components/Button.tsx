@@ -1,8 +1,9 @@
 import React from 'react';
 import { Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { ColorScheme } from '../redux/features/systemSlice';
+
 import { useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
+import { ColorScheme } from '../utils/colors';
 
 interface Props {
   title: string,

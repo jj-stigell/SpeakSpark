@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/typedef */
 import React, { useState } from 'react';
-import { View, Text, Image, Pressable, TextInput, TouchableOpacity } from 'react-native';
+import { View, Text, Pressable, TextInput, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import Checkbox from 'expo-checkbox';
@@ -10,16 +10,19 @@ import { useMutation } from '@apollo/client';
 
 import Button from '../../components/Button';
 import MainHeader from '../../components/MainHeader';
-import { COLORS } from '../../components/constants/colors';
-import { useAppDispatch } from '../../redux/hooks';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { saveToStore } from '../../utils/expoStore';
 import { CREATE_ACCOUNT } from '../../graphql/mutations';
 import { setAccount } from '../../redux/features/accountSlice';
 import { validEmail } from '../../utils/validators';
+import { RootState } from '../../redux/store';
+import { ColorScheme } from '../../utils/colors';
+import ThirdPartyButton from '../../components/ThirdPartyButton';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default function Register({ navigation }: { navigation: any }): React.JSX.Element {
   const dispatch = useAppDispatch();
+  const theme: ColorScheme = useAppSelector((state: RootState) => state.system.theme);
 
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
@@ -39,10 +42,8 @@ export default function Register({ navigation }: { navigation: any }): React.JSX
         dispatch(setAccount({
           id: data.register.user.id,
           email,
-          darkMode: data.login.user.darkMode,
           uiLanguage: data.login.user.uiLanguage,
-          studyLanguage: data.login.user.studyLanguage,
-          notifications: true
+          studyLanguage: data.login.user.studyLanguage
         }));
       }, 1000);
     }
@@ -53,7 +54,7 @@ export default function Register({ navigation }: { navigation: any }): React.JSX
   }
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: 'F5FCFF' }}>
+    <SafeAreaView style={{ flex: 1 }}>
       <Center>
         <MainHeader/>
       </Center>
@@ -62,7 +63,7 @@ export default function Register({ navigation }: { navigation: any }): React.JSX
           <Center>
             <Text style={{
               fontSize: 17,
-              color: COLORS.black
+              color: theme.font.primary
             }}>Create New Account</Text>
           </Center>
         </View>
@@ -70,12 +71,13 @@ export default function Register({ navigation }: { navigation: any }): React.JSX
           <Text style={{
             fontSize: 16,
             fontWeight: '400',
-            marginVertical: 8
+            marginVertical: 8,
+            color: theme.font.primary
           }}>Email address</Text>
           <View style={{
             width: '100%',
             height: 48,
-            borderColor: COLORS.black,
+            borderColor: theme.container.border,
             borderWidth: 1,
             borderRadius: 8,
             alignItems: 'center',
@@ -84,12 +86,13 @@ export default function Register({ navigation }: { navigation: any }): React.JSX
           }}>
             <TextInput
               placeholder='Enter your email address'
-              placeholderTextColor={COLORS.black}
+              placeholderTextColor={theme.disabled}
               onChangeText={setEmail}
               value={email}
               keyboardType='email-address'
               style={{
-                width: '100%'
+                width: '100%',
+                color: theme.font.primary
               }}
             />
           </View>
@@ -98,12 +101,13 @@ export default function Register({ navigation }: { navigation: any }): React.JSX
           <Text style={{
             fontSize: 16,
             fontWeight: '400',
-            marginVertical: 8
+            marginVertical: 8,
+            color: theme.font.primary
           }}>Password</Text>
           <View style={{
             width: '100%',
             height: 48,
-            borderColor: COLORS.black,
+            borderColor: theme.container.border,
             borderWidth: 1,
             borderRadius: 8,
             alignItems: 'center',
@@ -112,12 +116,13 @@ export default function Register({ navigation }: { navigation: any }): React.JSX
           }}>
             <TextInput
               placeholder='Enter your password'
-              placeholderTextColor={COLORS.black}
+              placeholderTextColor={theme.disabled}
               onChangeText={setPassword}
               value={password}
               secureTextEntry={!showPassword}
               style={{
-                width: '100%'
+                width: '100%',
+                color: theme.font.primary
               }}
             />
             <TouchableOpacity
@@ -129,8 +134,8 @@ export default function Register({ navigation }: { navigation: any }): React.JSX
             >
               {
                 !showPassword ?
-                  (<Ionicons name="eye-off" size={24} color={COLORS.black}/>) :
-                  (<Ionicons name="eye" size={24} color={COLORS.black}/>)
+                  (<Ionicons name="eye-off" size={24} color={theme.font.primary}/>) :
+                  (<Ionicons name="eye" size={24} color={theme.font.primary}/>)
               }
             </TouchableOpacity>
           </View>
@@ -139,12 +144,13 @@ export default function Register({ navigation }: { navigation: any }): React.JSX
           <Text style={{
             fontSize: 16,
             fontWeight: '400',
-            marginVertical: 8
+            marginVertical: 8,
+            color: theme.font.primary
           }}>Confirm Password</Text>
           <View style={{
             width: '100%',
             height: 48,
-            borderColor: COLORS.black,
+            borderColor: theme.container.border,
             borderWidth: 1,
             borderRadius: 8,
             alignItems: 'center',
@@ -153,12 +159,13 @@ export default function Register({ navigation }: { navigation: any }): React.JSX
           }}>
             <TextInput
               placeholder='Confirm your password'
-              placeholderTextColor={COLORS.black}
+              placeholderTextColor={theme.disabled}
               onChangeText={setConfirmPassword}
               value={confirmPassword}
               secureTextEntry={!showPasswordConfirmation}
               style={{
-                width: '100%'
+                width: '100%',
+                color: theme.font.primary
               }}
             />
             <TouchableOpacity
@@ -170,8 +177,8 @@ export default function Register({ navigation }: { navigation: any }): React.JSX
             >
               {
                 !showPasswordConfirmation ?
-                  (<Ionicons name="eye-off" size={24} color={COLORS.black}/>) :
-                  (<Ionicons name="eye" size={24} color={COLORS.black}/>)
+                  (<Ionicons name="eye-off" size={24} color={theme.font.primary}/>) :
+                  (<Ionicons name="eye" size={24} color={theme.font.primary}/>)
               }
             </TouchableOpacity>
           </View>
@@ -184,11 +191,11 @@ export default function Register({ navigation }: { navigation: any }): React.JSX
             style={{ marginRight: 8 }}
             value={isChecked}
             onValueChange={setIsChecked}
-            color={isChecked ? COLORS.primary : undefined}
+            color={isChecked ? theme.background.secondary : undefined}
           />
-          <Text>I agree to the </Text>
+          <Text style={{ color: theme.font.primary }}>I agree to the </Text>
           <TouchableOpacity onPress={(): void => navigation.navigate('Tos')}>
-            <Text style={{ color: COLORS.primary, textDecorationLine: 'underline' }}>
+            <Text style={{ color: theme.font.primary, textDecorationLine: 'underline' }}>
               terms and conditions
             </Text>
           </TouchableOpacity>
@@ -197,7 +204,6 @@ export default function Register({ navigation }: { navigation: any }): React.JSX
           title={loading ? 'Registering, please wait...' : 'Sign Up'}
           onPress={register}
           disabled={!isChecked || loading || password !== confirmPassword || !validEmail(email)}
-          filled
           style={{
             marginTop: 18,
             marginBottom: 4
@@ -208,16 +214,16 @@ export default function Register({ navigation }: { navigation: any }): React.JSX
             style={{
               flex: 1,
               height: 1,
-              backgroundColor: COLORS.grey,
+              backgroundColor: theme.font.primary,
               marginHorizontal: 10
             }}
           />
-          <Text style={{ fontSize: 14 }}>Or Sign up with</Text>
+          <Text style={{ fontSize: 14, color: theme.font.primary }}>Or Sign up with</Text>
           <View
             style={{
               flex: 1,
               height: 1,
-              backgroundColor: COLORS.grey,
+              backgroundColor: theme.font.primary,
               marginHorizontal: 10
             }}
           />
@@ -226,67 +232,19 @@ export default function Register({ navigation }: { navigation: any }): React.JSX
           flexDirection: 'row',
           justifyContent: 'center'
         }}>
-          <TouchableOpacity
-            onPress={(): void => console.log('Facebook Pressed')}
-            style={{
-              flex: 1,
-              alignItems: 'center',
-              justifyContent: 'center',
-              flexDirection: 'row',
-              height: 52,
-              borderWidth: 1,
-              borderColor: COLORS.grey,
-              marginRight: 4,
-              borderRadius: 10
-            }}
-          >
-            <Image
-              source={require('../../assets/image/facebook.png')}
-              style={{
-                height: 36,
-                width: 36,
-                marginRight: 8
-              }}
-              resizeMode='contain'
-            />
-            <Text>Facebook</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={(): void => console.log('Google Pressed')}
-            style={{
-              flex: 1,
-              alignItems: 'center',
-              justifyContent: 'center',
-              flexDirection: 'row',
-              height: 52,
-              borderWidth: 1,
-              borderColor: COLORS.grey,
-              marginRight: 4,
-              borderRadius: 10
-            }}
-          >
-            <Image
-              source={require('../../assets/image/google.png')}
-              style={{
-                height: 36,
-                width: 36,
-                marginRight: 8
-              }}
-              resizeMode='contain'
-            />
-            <Text>Google</Text>
-          </TouchableOpacity>
+          <ThirdPartyButton title='Facebook' image={require('../../assets/image/facebook.png')}/>
+          <ThirdPartyButton title='Google' image={require('../../assets/image/google.png')}/>
         </View>
         <View style={{
           flexDirection: 'row',
           justifyContent: 'center',
           marginVertical: 22
         }}>
-          <Text style={{ fontSize: 16, color: COLORS.black }}>Already have an account</Text>
+          <Text style={{ fontSize: 16, color: theme.font.primary }}>Already have an account</Text>
           <Pressable onPress={(): void => navigation.navigate('Login')}>
             <Text style={{
               fontSize: 16,
-              color: COLORS.primary,
+              color: '#007260',
               fontWeight: 'bold',
               marginLeft: 6
             }}>Login</Text>

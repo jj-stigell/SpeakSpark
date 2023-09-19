@@ -1,6 +1,6 @@
 import React from 'react';
 import { Ionicons } from '@expo/vector-icons';
-import { View, Text, TouchableOpacity, StyleSheet, StatusBar } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 
 import { RootState } from '../redux/store';
 import { useAppSelector } from '../redux/hooks';
@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     padding: 10,
-    paddingTop: StatusBar.currentHeight ? StatusBar.currentHeight + 10 : 10,
+    paddingTop: 10,
     borderBottomWidth: 1,
     borderBottomColor: '#e0e0e0'
   },
