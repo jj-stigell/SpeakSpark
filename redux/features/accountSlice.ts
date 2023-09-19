@@ -4,10 +4,8 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 export interface Account {
   id: string,
   email: string,
-  darkMode: boolean,
   uiLanguage: string,
-  studyLanguage: string,
-  notifications: boolean
+  studyLanguage: string
 }
 
 export interface AccountState {
@@ -20,10 +18,8 @@ const initialState: AccountState = {
   account: {
     id: '',
     email: '',
-    darkMode: false,
     uiLanguage: 'en',
-    studyLanguage: 'jp',
-    notifications: true
+    studyLanguage: 'jp'
   }
 };
 
@@ -55,24 +51,6 @@ const accountSlice = createSlice({
         }
       };
     },
-    toggleDarkMode(state) {
-      return {
-        isLoggedIn: true,
-        account: {
-          ...state.account,
-          darkMode: !state.account.darkMode
-        }
-      };
-    },
-    toggleNotifications(state) {
-      return {
-        isLoggedIn: true,
-        account: {
-          ...state.account,
-          notifications: !state.account.notifications
-        }
-      };
-    },
     resetAccount() {
       return initialState;
     }
@@ -83,9 +61,7 @@ export const {
   resetAccount,
   setAccount,
   setStudyLanguage,
-  setUiLanguage,
-  toggleDarkMode,
-  toggleNotifications
+  setUiLanguage
 } = accountSlice.actions;
 
 export default accountSlice.reducer;

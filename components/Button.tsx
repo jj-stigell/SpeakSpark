@@ -1,11 +1,12 @@
 import React from 'react';
 import { Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { COLORS } from './constants/colors';
+import { ColorScheme } from '../redux/features/systemSlice';
+import { useAppSelector } from '../redux/hooks';
+import { RootState } from '../redux/store';
 
 interface Props {
   title: string,
   disabled?: boolean,
-  filled?: boolean,
   color?: string,
   onPress: () => void,
   style?: {
@@ -15,25 +16,23 @@ interface Props {
 }
 
 export default function Button(props: Props): React.JSX.Element {
-  const filledBgColor: string = props.color || COLORS.primary;
-  const outlinedColor: string = COLORS.white;
-  const bgColor: string = props.filled ? filledBgColor : outlinedColor;
-  const textColor: string = props.filled ? COLORS.white : COLORS.primary;
+  const theme: ColorScheme = useAppSelector((state: RootState) => state.system.theme);
+  const color: string = props.color ?? '#007260';
 
   return (
     <TouchableOpacity
       disabled={props.disabled}
       onPress={props.onPress}
-      style={{
-        ...styles.button,
-        ...{
-          backgroundColor: props.disabled ? '#d2d4d3' : bgColor,
-          borderColor: props.disabled ? '#d2d4d3' : bgColor
-        },
-        ...props.style
-      }}
+      style={[
+        styles.button,
+        props.style,
+        {
+          backgroundColor: props.disabled ? theme.disabled : color,
+          borderColor: props.disabled ? theme.disabled : color
+        }
+      ]}
     >
-      <Text style={{ fontSize: 18, ... { color: textColor } }}>{props.title}</Text>
+      <Text style={{ fontSize: 18, color: theme.font.secondary }}>{props.title}</Text>
     </TouchableOpacity>
   );
 }
