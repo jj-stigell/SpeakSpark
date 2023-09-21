@@ -16,13 +16,17 @@ export interface ColorScheme {
     primary: string,
     secondary: string
   },
+  chat: {
+    userBubble: string,
+    botBubble: string
+  },
   disabled: string
 }
 
 export const light: ColorScheme = {
   background: {
     primary: '#F5FCFF',
-    secondary: '#F5FCFF'
+    secondary: '#c3e1f7'
   },
   container: {
     primary: '#fff',
@@ -36,6 +40,10 @@ export const light: ColorScheme = {
   button: {
     primary: '#007260',
     secondary: '#39B68D'
+  },
+  chat: {
+    userBubble: '#7e8bed',
+    botBubble: '#ffe6a1'
   },
   disabled: '#d2d4d3'
 };
@@ -57,6 +65,10 @@ export const dark: ColorScheme = {
   button: {
     primary: '#007260',
     secondary: '#39B68D'
+  },
+  chat: {
+    userBubble: '#7e8bed',
+    botBubble: '#ffe6a1'
   },
   disabled: '#d2d4d3'
 };

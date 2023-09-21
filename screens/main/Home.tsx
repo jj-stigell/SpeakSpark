@@ -10,8 +10,7 @@ import { View } from 'react-native';
 export default function Home(props: { navigation: any }): React.JSX.Element {
   return (
     <View style={{ flex: 1, marginHorizontal: 16 }}>
-
-      <VStack space='xl'>
+      <VStack space='lg'>
         <Center>
           <MainHeader />
         </Center>
@@ -21,12 +20,10 @@ export default function Home(props: { navigation: any }): React.JSX.Element {
         <Button
           title='New chat'
           onPress={(): void => props.navigation.navigate('NewChat')}
-          filled
         />
         <Button
           title='Settings'
           onPress={(): void => props.navigation.navigate('Settings')}
-          filled
         />
       </VStack>
     </View>

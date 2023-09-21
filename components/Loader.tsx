@@ -1,7 +1,12 @@
 import React, { useRef, useEffect } from 'react';
 import { Animated, StyleSheet, Text, View } from 'react-native';
 
+import { useAppSelector } from '../redux/hooks';
+import { RootState } from '../redux/store';
+import { ColorScheme } from '../utils/colors';
+
 export default function Loader(props: { loadingText: string }): React.JSX.Element {
+  const theme: ColorScheme = useAppSelector((state: RootState) => state.system.theme);
   const spinValue: Animated.Value = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
@@ -20,7 +25,7 @@ export default function Loader(props: { loadingText: string }): React.JSX.Elemen
   });
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: theme.background.primary }]}>
       <Animated.Image
         style={[styles.image, { transform: [{ rotate: spin }] }]}
         source={require('../assets/image/logo.png')}
@@ -35,8 +40,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF'
+    alignItems: 'center'
   },
   loadingText: {
     fontSize: 18,

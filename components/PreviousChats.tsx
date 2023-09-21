@@ -18,7 +18,7 @@ export default function PreviousChats(props: { navigation: any }): React.JSX.Ele
   const language: string = useAppSelector(
     (state: RootState) => state.account.account.studyLanguage);
 
-  const { data, loading } = useQuery(GET_LATEST_CHATS, {
+  const { data, loading, error } = useQuery(GET_LATEST_CHATS, {
     variables: { language },
     fetchPolicy: 'no-cache',
     errorPolicy: 'all',
@@ -31,30 +31,30 @@ export default function PreviousChats(props: { navigation: any }): React.JSX.Ele
     props.navigation.navigate('Chat', { bot, chatId });
   }
 
-  if (loading) {
-    return (
-      <View style={{ marginTop: 90, marginBottom: 200, alignItems: 'center' }}>
-        <Loader loadingText='Loading previous chats'/>
-      </View>
-    );
-  }
-
   return (
     <View>
-      <Text marginTop='$2'>Latest Chats</Text>
-      <ScrollView style={{ height: 450 }}>
-        { chats.length === 0 ?
-          <Text>No previous chats found for the language</Text>
+      <Text marginTop='$2' style={{ fontSize: 20, textAlign: 'center' }}>Latest Chats</Text>
+      <ScrollView style={{ height: 440 }}>
+        { loading ?
+          <View style={{ marginTop: 90, alignItems: 'center' }}>
+            <Loader loadingText='Loading previous chats...'/>
+          </View>
           :
-          chats.map((data: Chat) => (
-            <Card
-              key={data.id}
-              chatId={data.id}
-              bot={data.bot}
-              updatedAt={data.updatedAt}
-              onPress={navigateToChatId}
-            />
-          ))}
+          chats.length === 0 || error ?
+            <Text style={{ marginTop: 90, textAlign: 'center' }}>
+              No previous chats found for the language, click "New Chat" button to start a new chat.
+            </Text>
+            :
+            chats.map((data: Chat) => (
+              <Card
+                key={data.id}
+                chatId={data.id}
+                bot={data.bot}
+                updatedAt={data.updatedAt}
+                onPress={navigateToChatId}
+              />
+            ))
+        }
       </ScrollView>
     </View>
   );

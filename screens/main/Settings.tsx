@@ -4,9 +4,10 @@ import {
   StyleSheet, View, TouchableOpacity, Text,
   Switch, SafeAreaView, Image, Linking
 } from 'react-native';
+import { AnyAction } from '@reduxjs/toolkit';
+
 import ChatHeader from '../../components/ActionHeader';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { AnyAction } from '@reduxjs/toolkit';
 import { Account, resetAccount, setUiLanguage } from '../../redux/features/accountSlice';
 import { resetBots } from '../../redux/features/botSlice';
 import { resetChats } from '../../redux/features/chatSlice';
@@ -197,7 +198,28 @@ export default function Settings({ navigation }: { navigation: any }): React.JSX
           <View
             style={[
               styles.rowWrapper,
-              styles.rowOnly,
+              styles.rowFirst,
+              { borderTopWidth: 0, backgroundColor: theme.container.primary }
+            ]}>
+            <View style={styles.row}>
+              <Ionicons
+                name='information-circle'
+                style={{
+                  paddingRight: 8,
+                  color: system.darkMode ? 'white' : 'black'
+                }}
+                size={20}
+              />
+              <Text style={[styles.rowLabel, { color: theme.font.primary }]}>
+                App version: 0.1.23
+              </Text>
+              <View style={styles.rowSpacer}/>
+            </View>
+          </View>
+          <View
+            style={[
+              styles.rowWrapper,
+              styles.rowLast,
               { borderTopWidth: 0, backgroundColor: theme.container.primary }
             ]}>
             <TouchableOpacity onPress={logout}>
@@ -210,9 +232,7 @@ export default function Settings({ navigation }: { navigation: any }): React.JSX
                   }}
                   size={20}
                 />
-                <Text style={[styles.rowLabel, { color: theme.font.primary }]}>
-                  Logout
-                </Text>
+                <Text style={[styles.rowLabel, { color: theme.font.primary }]}>Logout</Text>
                 <View style={styles.rowSpacer}/>
               </View>
             </TouchableOpacity>
@@ -284,12 +304,6 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 12
   },
   rowLast: {
-    borderBottomLeftRadius: 12,
-    borderBottomRightRadius: 12
-  },
-  rowOnly: {
-    borderTopLeftRadius: 12,
-    borderTopRightRadius: 12,
     borderBottomLeftRadius: 12,
     borderBottomRightRadius: 12
   },
