@@ -22,6 +22,7 @@ import { useAppSelector } from '../../redux/hooks';
 import GrammarModal from '../../components/GrammarModal';
 import { System } from '../../redux/features/systemSlice';
 import PlayButton from '../../components/PlayButton';
+import { ColorScheme } from '../../utils/colors';
 
 export interface CustomMessage extends IMessage {
   messageAudio: string
@@ -29,6 +30,7 @@ export interface CustomMessage extends IMessage {
 
 export default function Chat(props: { navigation: any, route: any  }): React.JSX.Element {
   const system: System = useAppSelector((state: RootState) => state.system);
+  const theme: ColorScheme = useAppSelector((state: RootState) => state.system.theme);
   const [loading, setLoading] = React.useState<boolean>(true);
   const [grammarModalVisible, setGrammarModalVisible] = useState<boolean>(false);
   const [isTyping, setIstyping] = React.useState<boolean>(false);
@@ -127,14 +129,14 @@ export default function Chat(props: { navigation: any, route: any  }): React.JSX
     } else if (props.route?.params?.chatId) {
 
       setChatId(props.route.params.chatId);
-      console.log('existing chat id', chatId);
-      console.log('existing chat id', props.route.params.chatId);
+      //console.log('existing chat id', chatId);
+      //console.log('existing chat id', props.route.params.chatId);
 
       getMessages({ variables: { chatId: props.route.params.chatId } });
     } else {
       notification.show('Chat id missing, redirecting to home', { type: 'error' });
       setTimeout(() => {
-        props.navigation.navigate('Register');
+        props.navigation.navigate('Home');
       }, 1000);
     }
   }, []);
@@ -149,7 +151,7 @@ export default function Chat(props: { navigation: any, route: any  }): React.JSX
       GiftedChat.append(previousMessages, messages)
     );
     setIstyping(true);
-    console.log('posting to id', props.route.params.chatId, 'and', chatId);
+    //console.log('posting to id', props.route.params.chatId, 'and', chatId);
 
     await postMessage({ variables: {
       message: messages[0].text,
@@ -167,10 +169,10 @@ export default function Chat(props: { navigation: any, route: any  }): React.JSX
           {...props}
           wrapperStyle={{
             right: {
-              backgroundColor: system.theme.chat.userBubble
+              backgroundColor: '#7e8bed' //theme.chat.userBubble
             },
             left: {
-              backgroundColor: system.theme.chat.botBubble
+              backgroundColor: '#ffe6a1' //theme.chat.botBubble
             }
           }}
         />

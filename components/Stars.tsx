@@ -1,6 +1,6 @@
 import React from 'react';
 import { AntDesign } from '@expo/vector-icons';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 
 export default function Stars({ difficulty }: { difficulty: number }): React.JSX.Element {
   // Ensure difficulty is within the 0 to 4 range.
@@ -9,7 +9,6 @@ export default function Stars({ difficulty }: { difficulty: number }): React.JSX
 
   return (
     <View style={styles.container}>
-      <Text style={styles.difficultyText}>Difficulty: </Text>
       {Array(difficulty).fill(null).map((_: number, idx: number) => (
         <AntDesign key={`star_${idx}`} name="star" size={20} color="#a84432" />
       ))}

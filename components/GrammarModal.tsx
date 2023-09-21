@@ -1,19 +1,19 @@
 /* eslint-disable @typescript-eslint/typedef */
 import { ButtonSpinner } from '@gluestack-ui/themed';
 import React from 'react';
-import { Modal, StyleSheet, Text, Pressable, View, ScrollView } from 'react-native';
-import { GET_MESSAGE } from '../graphql/queries';
 import { useQuery } from '@apollo/client';
+import { Modal, StyleSheet, Text, Pressable, View, ScrollView } from 'react-native';
 import { IMessage } from 'react-native-gifted-chat';
 
-export default function GrammarModal(props: {
+import { GET_MESSAGE } from '../graphql/queries';
+
+interface Props {
   message: IMessage,
   modalVisible: boolean,
   setModalVisible: (value: boolean) => void
-}): React.JSX.Element {
+}
 
-  console.log(props.message?._id);
-
+export default function GrammarModal(props: Props): React.JSX.Element {
   const { data, loading } = useQuery(GET_MESSAGE, {
     variables: { messageId: props.message?._id ?? '' },
     fetchPolicy: 'no-cache',
@@ -41,11 +41,11 @@ export default function GrammarModal(props: {
               )}
               {
                 data?.getMessage && data.getMessage.grammarAnalysis &&
-                <>
+                <React.Fragment>
                   <Text style={styles.messageText}>{props.message.text}</Text>
                   <View style={styles.horizontalLine} />
                   <Text style={styles.grammarAnalysis}>{data.getMessage.grammarAnalysis}</Text>
-                </>
+                </React.Fragment>
               }
             </Text>
             <Pressable
