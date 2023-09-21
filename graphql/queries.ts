@@ -8,6 +8,7 @@ query GetBots($language: String!) {
     nameRomaji
     profileImage
     persona
+    introduction
     language
     welcomeMessage
     welcomeAudio
@@ -27,6 +28,7 @@ query Chats($language: String!) {
       nameRomaji
       profileImage
       persona
+      introduction
       language
       welcomeMessage
       welcomeAudio

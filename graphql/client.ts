@@ -24,6 +24,7 @@ const errorLink: ApolloLink = onError(({ graphQLErrors, networkError }) => {
     message = networkError.message;
   }
 
+  console.log('Apollo Link Error:', message);
   notification.show(message, { type: 'warning' });
 });
 

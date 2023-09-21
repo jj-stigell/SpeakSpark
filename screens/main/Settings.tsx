@@ -2,7 +2,7 @@ import React, { Dispatch } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import {
   StyleSheet, View, TouchableOpacity, Text,
-  Switch, SafeAreaView, Image, Linking
+  Switch, ScrollView, Image, Linking
 } from 'react-native';
 import { AnyAction } from '@reduxjs/toolkit';
 
@@ -33,7 +33,7 @@ export default function Settings({ navigation }: { navigation: any }): React.JSX
   }
 
   return (
-    <SafeAreaView style={styles.container}>
+    <ScrollView style={styles.container}>
       <ChatHeader title={'Settings'} onBack={(): void => navigation.navigate('Home')}/>
       <View style={styles.section}>
         <View style={styles.sectionHeader}>
@@ -239,7 +239,7 @@ export default function Settings({ navigation }: { navigation: any }): React.JSX
           </View>
         </View>
       </View>
-    </SafeAreaView>
+    </ScrollView>
   );
 }
 

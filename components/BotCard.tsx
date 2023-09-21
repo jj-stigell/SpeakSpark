@@ -39,8 +39,8 @@ export default function BotCard(props: Props): React.JSX.Element {
               <Image source={{ uri: props.bot.profileImage }} style={styles.profileImage} />
               <Text style={styles.messageTitle}>{props.bot.name} - {props.bot.nameRomaji}</Text>
               <View style={styles.horizontalLine} />
-              <Text style={styles.titleText}>Persona</Text>
-              <Text style={styles.messageText}>{props.bot.welcomeMessage}</Text>
+              <Text style={styles.titleText}>Introduction</Text>
+              <Text style={styles.messageText}>{props.bot.introduction}</Text>
               <Text style={styles.titleText}>Language</Text>
               <Text style={styles.messageText}>{getLabelForValue(props.bot.language)}</Text>
               <Text style={styles.titleText}>Difficulty</Text>
