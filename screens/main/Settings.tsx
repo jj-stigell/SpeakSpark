@@ -7,15 +7,16 @@ import {
 import { AnyAction } from '@reduxjs/toolkit';
 
 import ChatHeader from '../../components/ActionHeader';
+import LanguageSelector from '../../components/LanguageSelector';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { Account, resetAccount, setUiLanguage } from '../../redux/features/accountSlice';
 import { resetBots } from '../../redux/features/botSlice';
 import { resetChats } from '../../redux/features/chatSlice';
 import { RootState } from '../../redux/store';
 import { deleteFromStore } from '../../utils/expoStore';
-import LanguageSelector from '../../components/LanguageSelector';
 import { System, toggleDarkMode, toggleNotifications } from '../../redux/features/systemSlice';
 import { ColorScheme } from '../../utils/colors';
+import { uiLanguages } from '../../utils/languages';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default function Settings({ navigation }: { navigation: any }): React.JSX.Element {
@@ -77,7 +78,12 @@ export default function Settings({ navigation }: { navigation: any }): React.JSX
                   Language
                 </Text>
                 <View style={styles.rowSpacer}/>
-                <LanguageSelector language={account.uiLanguage} setLanguage={setUiLanguage} half />
+                <LanguageSelector
+                  language={account.uiLanguage}
+                  setLanguage={setUiLanguage}
+                  languageList={uiLanguages}
+                  half
+                />
               </View>
             </TouchableOpacity>
           </View>
@@ -211,7 +217,7 @@ export default function Settings({ navigation }: { navigation: any }): React.JSX
                 size={20}
               />
               <Text style={[styles.rowLabel, { color: theme.font.primary }]}>
-                App version: 0.1.23
+                App version: 0.1.1 (K202309221)
               </Text>
               <View style={styles.rowSpacer}/>
             </View>

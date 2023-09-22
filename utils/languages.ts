@@ -3,26 +3,10 @@ export type LanguageSet = {
   value: string
 }
 
-export const languages: Array<LanguageSet> = [
-  {
-    label: '🇧🇬 Български',
-    value: 'bg'
-  },
-  {
-    label: '🇨🇿 Čeština',
-    value: 'cs'
-  },
-  {
-    label: '🇩🇰 Dansk',
-    value: 'da'
-  },
+export const studyLanguages: Array<LanguageSet> = [
   {
     label: '🇩🇪 Deutsch',
     value: 'de'
-  },
-  {
-    label: '🇬🇷 Ελληνικά',
-    value: 'el'
   },
   {
     label: '🇬🇧 English',
@@ -33,28 +17,8 @@ export const languages: Array<LanguageSet> = [
     value: 'es'
   },
   {
-    label: '🇫🇮 Suomeksi',
-    value: 'fi'
-  },
-  {
     label: '🇫🇷 Français',
     value: 'fr'
-  },
-  {
-    label: '🇭🇷 Hrvatski',
-    value: 'hr'
-  },
-  {
-    label: '🇭🇺 Magyar',
-    value: 'hu'
-  },
-  {
-    label: '🇮🇩 Bahasa Indonesia',
-    value: 'id'
-  },
-  {
-    label: '🇮🇹 Italiano',
-    value: 'it'
   },
   {
     label: '🇯🇵 日本語',
@@ -65,76 +29,35 @@ export const languages: Array<LanguageSet> = [
     value: 'ko'
   },
   {
-    label: '🇱🇻 Latviešu',
-    value: 'lv'
-  },
-  {
-    label: '🇲🇰 Македонски',
-    value: 'mk'
-  },
-  {
-    label: '🇳🇱 Nederlands',
-    value: 'nl'
-  },
-  {
-    label: '🇳🇴 Norsk',
-    value: 'no'
-  },
-  {
-    label: '🇵🇱 Polski',
-    value: 'pl'
-  },
-  {
-    label: '🇵🇹 Português',
-    value: 'pt'
-  },
-  {
-    label: '🇷🇴 Română',
-    value: 'ro'
-  },
-  {
-    label: '🇷🇺 Русский',
-    value: 'ru'
-  },
-  {
-    label: '🇸🇮 Slovenščina',
-    value: 'sl'
-  },
-  {
-    label: '🇸🇰 Slovenčina',
-    value: 'sk'
-  },
-  {
-    label: '🇸🇪 Svenska',
-    value: 'sv'
-  },
-  {
-    label: '🇹🇭 ไทย',
-    value: 'th'
-  },
-  {
-    label: '🇹🇷 Türkçe',
-    value: 'tr'
-  },
-  {
-    label: '🇹🇼 台灣話',
-    value: 'tw'
-  },
-  {
-    label: '🇺🇦 Українська',
-    value: 'uk'
-  },
-  {
-    label: '🇻🇳 Tiếng Việt',
-    value: 'vi'
-  },
-  {
     label: '🇨🇳 中文',
     value: 'zh'
   }
 ];
 
-export function getLabelForValue(value: string): string {
+export const uiLanguages: Array<LanguageSet> = [
+  {
+    label: '🇩🇪 Deutsch',
+    value: 'de'
+  },
+  {
+    label: '🇬🇧 English',
+    value: 'en'
+  },
+  {
+    label: '🇫🇮 Suomeksi',
+    value: 'fi'
+  },
+  {
+    label: '🇯🇵 日本語',
+    value: 'jp'
+  },
+  {
+    label: '🇻🇳 Tiếng Việt',
+    value: 'vi'
+  }
+];
+
+export function getLabelForValue(value: string, languages: Array<LanguageSet>): string {
   const language: LanguageSet | undefined = languages
     .find((lang: LanguageSet) => lang.value === value);
   return language ? language.label : '-';

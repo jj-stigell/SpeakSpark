@@ -165,7 +165,7 @@ export default function Login({ navigation }: { navigation: any }): React.JSX.El
             style={{ marginRight: 8 }}
             value={isChecked}
             onValueChange={setIsChecked}
-            color={isChecked ? theme.background.secondary : undefined}
+            color={isChecked ? theme.checkbox : undefined}
           />
           <Text style={{ color: theme.font.primary }}>Remember me</Text>
         </View>

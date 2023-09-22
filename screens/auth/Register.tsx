@@ -191,7 +191,7 @@ export default function Register({ navigation }: { navigation: any }): React.JSX
             style={{ marginRight: 8 }}
             value={isChecked}
             onValueChange={setIsChecked}
-            color={isChecked ? theme.background.secondary : undefined}
+            color={isChecked ? theme.checkbox : undefined}
           />
           <Text style={{ color: theme.font.primary }}>I agree to the </Text>
           <TouchableOpacity onPress={(): void => navigation.navigate('Tos')}>

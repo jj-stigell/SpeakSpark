@@ -7,9 +7,9 @@ import { ColorScheme } from '../utils/colors';
 
 interface Props {
   title: string,
+  onPress: () => void,
   disabled?: boolean,
   color?: string,
-  onPress: () => void,
   style?: {
     marginTop?: number,
     marginBottom?: number
@@ -18,7 +18,7 @@ interface Props {
 
 export default function Button(props: Props): React.JSX.Element {
   const theme: ColorScheme = useAppSelector((state: RootState) => state.system.theme);
-  const color: string = props.color ?? '#007260';
+  const color: string = props.color ?? theme.button.primary;
 
   return (
     <TouchableOpacity

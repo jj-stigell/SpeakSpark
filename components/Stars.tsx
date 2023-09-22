@@ -2,21 +2,27 @@ import React from 'react';
 import { AntDesign } from '@expo/vector-icons';
 import { View, Text, StyleSheet } from 'react-native';
 
-export default function Stars({ difficulty }: { difficulty: number }): React.JSX.Element {
+interface Props {
+  difficulty: number,
+  starSize: number,
+  renderLabels?: boolean
+}
+
+export default function Stars(props: Props): React.JSX.Element {
   // Ensure difficulty is within the 0 to 4 range.
-  difficulty = Math.min(4, Math.max(0, difficulty));
+  const difficulty: number = Math.min(4, Math.max(0, props.difficulty));
   const remainingStars: number = 4 - difficulty;
 
   return (
     <View style={styles.container}>
-      <Text style={styles.labelText}>Beginner</Text>
-      {Array(difficulty).fill(null).map((_: number, idx: number) => (
-        <AntDesign key={`star_${idx}`} name="star" size={30} color="#a84432" />
+      { props.renderLabels && <Text style={styles.labelText}>Beginner</Text> }
+      {Array(props.difficulty).fill(null).map((_: number, idx: number) => (
+        <AntDesign key={`star_${idx}`} name="star" size={props.starSize} color="#a84432" />
       ))}
       {Array(remainingStars).fill(null).map((_: number, idx: number) => (
-        <AntDesign key={`staro_${idx}`} name="staro" size={30} color="#a84432" />
+        <AntDesign key={`staro_${idx}`} name="staro" size={props.starSize} color="#a84432" />
       ))}
-      <Text style={styles.labelText}>Advanced</Text>
+      { props.renderLabels && <Text style={styles.labelText}>Advanced</Text> }
     </View>
   );
 }

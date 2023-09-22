@@ -3,7 +3,7 @@ import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 
 import { Bot } from '../redux/features/botSlice';
 import { customDateFormat } from '../utils';
-import { getLabelForValue } from '../utils/languages';
+import { getLabelForValue, studyLanguages } from '../utils/languages';
 
 export interface CardData {
   chatId: string,
@@ -24,7 +24,9 @@ export default function Card(props: Props): React.JSX.Element {
       <Image source={{ uri: props.bot.profileImage }} style={styles.avatar} />
       <View style={styles.textContainer}>
         <Text style={styles.nameText}>{props.bot.name} - {props.bot.nameRomaji}</Text>
-        <Text style={styles.languageText}>{getLabelForValue(props.bot.language)}</Text>
+        <Text style={styles.languageText}>
+          {getLabelForValue(props.bot.language, studyLanguages)}
+        </Text>
         <Text style={styles.dateText}>{customDateFormat(props.updatedAt)}</Text>
         <Text style={styles.dateText}>Chat id: {props.chatId}</Text>
       </View>

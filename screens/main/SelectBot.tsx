@@ -9,6 +9,7 @@ import LanguageSelector from '../../components/LanguageSelector';
 import { setStudyLanguage } from '../../redux/features/accountSlice';
 import { useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
+import { studyLanguages } from '../../utils/languages';
 
 export default function NewChat(props: { navigation: any }): React.JSX.Element {
   const language: string = useAppSelector(
@@ -22,7 +23,11 @@ export default function NewChat(props: { navigation: any }): React.JSX.Element {
         </Center>
         <VStack space='xs'>
           <Text marginTop='$2' style={{ fontSize: 20, textAlign: 'center' }}>Chat Language</Text>
-          <LanguageSelector language={language} setLanguage={setStudyLanguage} />
+          <LanguageSelector
+            language={language}
+            setLanguage={setStudyLanguage}
+            languageList={studyLanguages}
+          />
           <Text
             marginTop='$2'
             style={{ fontSize: 20, textAlign: 'center', marginTop: 20 }}>Chat Partners</Text>

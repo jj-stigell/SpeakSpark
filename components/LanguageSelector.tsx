@@ -4,13 +4,16 @@ import { ActionCreatorWithPayload, AnyAction, Dispatch } from '@reduxjs/toolkit'
 
 import { useAppDispatch } from '../redux/hooks';
 import { styles } from '../styles';
-import { LanguageSet, languages } from '../utils/languages';
+import { LanguageSet } from '../utils/languages';
 
-export default function LanguageSelector(props: {
+interface Props {
   language: string,
   setLanguage: ActionCreatorWithPayload<string, string>,
-  half?: boolean
-}): React.JSX.Element {
+  half?: boolean,
+  languageList: Array<LanguageSet>
+}
+
+export default function LanguageSelector(props: Props): React.JSX.Element {
   const dispatch: Dispatch<AnyAction> = useAppDispatch();
   // eslint-disable-next-line @typescript-eslint/typedef
   const [isFocus, setIsFocus] = React.useState<boolean>(false);
@@ -26,7 +29,7 @@ export default function LanguageSelector(props: {
       selectedTextStyle={styles.selectedTextStyle}
       inputSearchStyle={styles.inputSearchStyle}
       iconStyle={styles.iconStyle}
-      data={languages}
+      data={props.languageList}
       search
       maxHeight={300}
       labelField="label"
