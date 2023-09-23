@@ -5,7 +5,12 @@ import { useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 import { ColorScheme } from '../utils/colors';
 
-export default function Loader(props: { loadingText: string }): React.JSX.Element {
+interface Props {
+  loadingText: string,
+  backgroundColor?: string
+}
+
+export default function Loader(props: Props): React.JSX.Element {
   const theme: ColorScheme = useAppSelector((state: RootState) => state.system.theme);
   const spinValue: Animated.Value = useRef(new Animated.Value(0)).current;
 
@@ -25,7 +30,10 @@ export default function Loader(props: { loadingText: string }): React.JSX.Elemen
   });
 
   return (
-    <View style={[styles.container, { backgroundColor: theme.background.primary }]}>
+    <View style={[
+      styles.container,
+      { backgroundColor: props.backgroundColor ?? theme.background.primary }
+    ]}>
       <Animated.Image
         style={[styles.image, { transform: [{ rotate: spin }] }]}
         source={require('../assets/image/logo.png')}

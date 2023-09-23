@@ -42,35 +42,49 @@ export default function GrammarModal(props: Props): React.JSX.Element {
         props.setModalVisible(!props.modalVisible);
       }}>
       <View style={styles.centeredView}>
-        <View style={[styles.modalView, { backgroundColor: theme.background.primary }]}>
+        <View style={[styles.modalView, { backgroundColor: theme.background.secondary }]}>
           <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
-            <Text style={styles.modalText}>
+            <React.Fragment>
               { loading ? (
                 <View style={{ marginTop: 20, alignItems: 'center' }}>
-                  <Loader loadingText='Loading grammar...' />
+                  <Loader
+                    loadingText='Loading grammar...'
+                    backgroundColor={theme.background.secondary}
+                  />
                 </View>
               ) : (
                 data?.getMessage && data.getMessage.grammarAnalysis ? (
                   <React.Fragment>
                     <Text style={styles.messageText}>{props.message.text}</Text>
                     <View style={styles.horizontalLine} />
-                    <Text style={styles.analysisTitle}>Translation</Text>
-                    <Text style={styles.grammarAnalysis}>{data.getMessage.translation}</Text>
-                    <PlayButton message={props.message} />
-                    <Text style={styles.analysisTitle}>Analysis</Text>
-                    <Text style={styles.grammarAnalysis}>{data.getMessage.grammarAnalysis}</Text>
+                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                      <Text style={[styles.subTitle, { flex: 1 }]}>Translation:</Text>
+                      <PlayButton message={props.message} size={40} />
+                    </View>
+                    <Text style={[styles.subContent]}>
+                      {data.getMessage.translation}
+                    </Text>
+                    <Text style={styles.subTitle}>Information:</Text>
+                    <Text style={styles.subContent}>{data.getMessage.grammarAnalysis}</Text>
                   </React.Fragment>
                 ) : (
                   <React.Fragment>
-                    <Text>Something went wrong, please try again or report a bug!</Text>
-                    { error && <Text>Encountered error {error.graphQLErrors[0].message}</Text> }
+                    <Text style={{ textAlign: 'center' }}>
+                      Something went wrong, please try again or report a bug!
+                    </Text>
+                    { error && (
+                      <Text style={{ marginTop: 10, textAlign: 'center' }}>
+                        Encountered GraphQL error: {error.graphQLErrors[0].message}
+                      </Text>
+                    )}
                   </React.Fragment>
                 )
               )}
-            </Text>
+            </React.Fragment>
             <Button
               title='Hide Grammar'
               onPress={(): void => props.setModalVisible(!props.modalVisible)}
+              style={{ marginTop: 20 }}
             />
           </ScrollView>
         </View>
@@ -83,8 +97,7 @@ export default function GrammarModal(props: Props): React.JSX.Element {
 const styles = StyleSheet.create({
   centeredView: {
     justifyContent: 'flex-end', // Change this to 'center' if you want it to be vertically centered.
-    alignItems: 'center',
-    marginTop: 1
+    alignItems: 'center'
   },
   modalView: {
     margin: 20,
@@ -99,34 +112,27 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
-    maxHeight: '80%'
-  },
-  textStyle: {
-    color: 'white',
-    fontWeight: 'bold',
-    textAlign: 'center'
-  },
-  modalText: {
-    marginBottom: 15,
-    textAlign: 'center'
+    maxHeight: '95%'
   },
   messageText: {
-    fontSize: 20,        // Increase the font size for the message text
-    marginBottom: 20    // Increase the margin to create more space
+    fontSize: 24,
+    marginBottom: 20,
+    textAlign: 'center'
   },
-  grammarAnalysis: {
-    fontSize: 14        // Smaller font size for the grammar analysis
+  subTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 10
+  },
+  subContent: {
+    fontSize: 16,
+    marginBottom: 10
   },
   horizontalLine: {
     width: '75%',
-    height: 40,
-    backgroundColor: 'black',
+    height: 2,
+    backgroundColor: '#D3D3D3',
     marginVertical: 10,
     alignSelf: 'center'
-  },
-  analysisTitle: {
-    fontSize: 18,       // Font size for the analysis title
-    fontWeight: 'bold', // Make it bold
-    marginBottom: 10    // Space between title and analysis content
   }
 });

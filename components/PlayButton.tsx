@@ -14,7 +14,8 @@ import { System } from '../redux/features/systemSlice';
 import { CustomMessage } from '../screens/main/Chat';
 
 interface Props {
-  message: CustomMessage
+  message: CustomMessage,
+  size?: number
 }
 
 export default function PlayButton(props: Props): React.JSX.Element {
@@ -92,7 +93,7 @@ export default function PlayButton(props: Props): React.JSX.Element {
       <View style={{ alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
         <Ionicons
           name={playing ? 'stop-circle' : 'play-circle'}
-          size={34}
+          size={props.size ?? 34}
           style={{
             paddingRight: 8,
             color: system.darkMode ? 'white' : 'black',
