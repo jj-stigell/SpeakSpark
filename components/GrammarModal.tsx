@@ -42,11 +42,14 @@ export default function GrammarModal(props: Props): React.JSX.Element {
         props.setModalVisible(!props.modalVisible);
       }}>
       <View style={styles.centeredView}>
-        <View style={[styles.modalView, { backgroundColor: theme.background.secondary }]}>
+        <View style={[
+          styles.modalView,
+          { backgroundColor: theme.background.secondary, maxHeight: loading ? '60%' : '95%' }
+        ]}>
           <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
             <React.Fragment>
               { loading ? (
-                <View style={{ marginTop: 20, alignItems: 'center' }}>
+                <View style={{ alignItems: 'center' }}>
                   <Loader
                     loadingText='Loading grammar...'
                     backgroundColor={theme.background.secondary}
@@ -82,7 +85,7 @@ export default function GrammarModal(props: Props): React.JSX.Element {
               )}
             </React.Fragment>
             <Button
-              title='Hide Grammar'
+              title='Close'
               onPress={(): void => props.setModalVisible(!props.modalVisible)}
               style={{ marginTop: 20 }}
             />
@@ -105,17 +108,16 @@ const styles = StyleSheet.create({
     padding: 20,
     alignItems: 'center',
     shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2
-    },
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
-    maxHeight: '95%'
+    shadowOffset: {
+      width: 0,
+      height: 2
+    }
   },
   messageText: {
-    fontSize: 24,
+    fontSize: 20,
     marginBottom: 20,
     textAlign: 'center'
   },
