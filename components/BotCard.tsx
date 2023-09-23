@@ -37,7 +37,10 @@ export default function BotCard(props: Props): React.JSX.Element {
           <View style={[styles.modalView, { backgroundColor: theme.background.secondary }]}>
             <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
               <Image source={{ uri: props.bot.profileImage }} style={styles.profileImage} />
-              <Text style={styles.messageTitle}>{props.bot.name} - {props.bot.nameRomaji}</Text>
+              <Text style={styles.messageTitle}>
+                {props.bot.name}
+                {props.bot.nameRomaji !== props.bot.name ? `- ${props.bot.nameRomaji}` : '' }
+              </Text>
               <View style={styles.horizontalLine} />
               <Text style={styles.titleText}>Introduction</Text>
               <Text style={styles.messageText}>{props.bot.introduction}</Text>
@@ -79,7 +82,7 @@ export default function BotCard(props: Props): React.JSX.Element {
                 {props.bot.introduction.substring(0, 100)}...
               </Text>
               <Text style={[styles.languageText, { fontWeight: 'bold' }]}>
-                Press for whole intro
+                Press for whole introduction
               </Text>
             </React.Fragment>
           ) : (
@@ -138,7 +141,7 @@ const styles = StyleSheet.create({
   modalView: {
     margin: 20,
     borderRadius: 20,
-    padding: 35,
+    paddingHorizontal: 25,
     alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: {
@@ -169,7 +172,7 @@ const styles = StyleSheet.create({
   },
   messageTitle: {
     fontSize: 24,
-    marginBottom: 15,
+    marginBottom: 10,
     textAlign: 'center'
   },
   messageText: {
@@ -181,7 +184,7 @@ const styles = StyleSheet.create({
     height: 130,
     borderRadius: 20,
     alignSelf: 'center',
-    marginBottom: 20
+    marginBottom: 15
   },
   titleText: {
     fontSize: 20,

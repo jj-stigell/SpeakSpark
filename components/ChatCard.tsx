@@ -4,32 +4,43 @@ import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { Bot } from '../redux/features/botSlice';
 import { customDateFormat } from '../utils';
 import { getLabelByValue, studyLanguages } from '../utils/languages';
+import { RootState } from '../redux/store';
+import { useAppSelector } from '../redux/hooks';
+import { ColorScheme } from '../utils/colors';
 
-export interface CardData {
+interface Props {
   chatId: string,
   bot: Bot,
-  updatedAt: string
-}
-
-interface Props extends CardData {
+  updatedAt: string,
   onPress: (bot: Bot, chatId: string) => void
 }
 
 export default function Card(props: Props): React.JSX.Element {
+  const theme: ColorScheme = useAppSelector((state: RootState) => state.system.theme);
+
   return (
     <TouchableOpacity
-      style={styles.cardContainer}
       onPress={(): void => props.onPress(props.bot, props.chatId)}
+      style={[
+        styles.cardContainer,
+        { backgroundColor: theme.background.secondary, borderColor: theme.container.border }
+      ]}
     >
       <Image source={{ uri: props.bot.profileImage }} style={styles.avatar} />
       <View style={styles.textContainer}>
-        <Text style={styles.nameText}>{props.bot.name} - {props.bot.nameRomaji}</Text>
-        <Text style={styles.languageText}>
+        <Text style={[styles.nameText, { color: theme.font.primary }]}>
+          {props.bot.name} - {props.bot.nameRomaji}
+        </Text>
+        <Text style={[styles.languageText, { color: theme.font.primary }]}>
           {getLabelByValue(props.bot.language, studyLanguages, 'label') + ' - '}
           {getLabelByValue(props.bot.language, studyLanguages, 'english')}
         </Text>
-        <Text style={styles.dateText}>{customDateFormat(props.updatedAt)}</Text>
-        <Text style={styles.dateText}>Chat id: {props.chatId}</Text>
+        <Text style={[styles.subText, { color: theme.font.primary }]}>
+          {customDateFormat(props.updatedAt)}
+        </Text>
+        <Text style={[styles.subText, { color: theme.font.primary }]}>
+          Chat id: {props.chatId}
+        </Text>
       </View>
     </TouchableOpacity>
   );
@@ -42,11 +53,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 15,
     borderWidth: 1,
-    borderColor: '#e0e0e0',
     borderRadius: 10,
     marginBottom: 15,
-    backgroundColor: '#c3e1f7',
-    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 2
@@ -60,8 +68,7 @@ const styles = StyleSheet.create({
     height: 60,
     borderRadius: 30,
     marginRight: 15,
-    borderWidth: 0.5,
-    borderColor: '#ddd'
+    borderWidth: 0.5
   },
   textContainer: {
     flex: 1
@@ -74,8 +81,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     marginBottom: 4
   },
-  dateText: {
-    color: '#777',
+  subText: {
     fontSize: 14,
     marginBottom: 2
   }

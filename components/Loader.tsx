@@ -30,7 +30,7 @@ export default function Loader(props: { loadingText: string }): React.JSX.Elemen
         style={[styles.image, { transform: [{ rotate: spin }] }]}
         source={require('../assets/image/logo.png')}
       />
-      <Text style={styles.loadingText}>{props.loadingText}</Text>
+      <Text style={[styles.loadingText, { color: theme.font.primary }]}>{props.loadingText}</Text>
     </View>
   );
 }

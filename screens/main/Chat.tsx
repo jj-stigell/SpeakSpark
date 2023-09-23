@@ -199,8 +199,8 @@ export default function Chat(props: { navigation: any, route: any  }): React.JSX
 
   if (loading) {
     return (
-      <View style={{ marginTop: 90, alignItems: 'center' }}>
-        <Loader loadingText='Loading chats..'/>
+      <View style={{ marginTop: 300, alignItems: 'center' }}>
+        <Loader loadingText='Loading chat..'/>
       </View>
     );
   }
@@ -213,7 +213,7 @@ export default function Chat(props: { navigation: any, route: any  }): React.JSX
         setModalVisible={setGrammarModalVisible}
       />
       <ChatHeader
-        title={`${bot.name} - ${bot.nameRomaji}`}
+        title={bot.name === bot.nameRomaji ? bot.name : `${bot.name} - ${bot.nameRomaji}`}
         onBack={(): void => props.navigation.navigate('Home')}
       />
       <GiftedChat
