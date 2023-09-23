@@ -31,7 +31,7 @@ export default function NewChat(props: { navigation: any }): React.JSX.Element {
           <Text
             marginTop='$2'
             style={{ fontSize: 20, textAlign: 'center', marginTop: 20 }}>Chat Partners</Text>
-          <ScrollView style={{ height: 400 }}>
+          <ScrollView style={{ height: 450 }}>
             <BotList navigation={props.navigation} />
           </ScrollView>
         </VStack>

@@ -1,17 +1,18 @@
-/* eslint-disable max-len */
 /* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable max-len */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/typedef */
 import React, { useState, useCallback } from 'react';
 import { GiftedChat, IMessage, Bubble, BubbleProps, User } from 'react-native-gifted-chat';
-import { Image, Text, View, TouchableOpacity } from 'react-native';
+import { View, TouchableOpacity } from 'react-native';
 import { Toast as notification } from 'react-native-toast-notifications';
-import { Audio } from 'expo-av';
 import { Ionicons } from '@expo/vector-icons';
 
 import ChatHeader from '../../components/ActionHeader';
+import Loader from '../../components/Loader';
+import PlayButton from '../../components/PlayButton';
+import GrammarModal from '../../components/GrammarModal';
 import { NEW_CHAT, POST_MESSAGE } from '../../graphql/mutations';
-import { ButtonSpinner } from '@gluestack-ui/themed';
 import { useLazyQuery, useMutation } from '@apollo/client';
 import { Bot } from '../../redux/features/botSlice';
 import { Message } from '../../redux/features/chatSlice';
@@ -19,9 +20,7 @@ import { GET_MESSAGES } from '../../graphql/queries';
 import { Account } from '../../redux/features/accountSlice';
 import { RootState } from '../../redux/store';
 import { useAppSelector } from '../../redux/hooks';
-import GrammarModal from '../../components/GrammarModal';
 import { System } from '../../redux/features/systemSlice';
-import PlayButton from '../../components/PlayButton';
 import { ColorScheme } from '../../utils/colors';
 
 export interface CustomMessage extends IMessage {
@@ -200,9 +199,8 @@ export default function Chat(props: { navigation: any, route: any  }): React.JSX
 
   if (loading) {
     return (
-      <View style={{ marginTop: 150, alignItems: 'center' }}>
-        <ButtonSpinner mr="$2" />
-        <Text style={{ marginTop: 20 }}>Loading chat</Text>
+      <View style={{ marginTop: 90, alignItems: 'center' }}>
+        <Loader loadingText='Loading chats..'/>
       </View>
     );
   }

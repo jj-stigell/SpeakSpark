@@ -6,7 +6,7 @@ import { Image, Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View } fr
 import Button from './Button';
 import Stars from './Stars';
 import { ColorScheme } from '../utils/colors';
-import { getLabelForValue, studyLanguages } from '../utils/languages';
+import { getLabelByValue, studyLanguages } from '../utils/languages';
 import { useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 import { Bot } from '../redux/features/botSlice';
@@ -43,7 +43,8 @@ export default function BotCard(props: Props): React.JSX.Element {
               <Text style={styles.messageText}>{props.bot.introduction}</Text>
               <Text style={styles.titleText}>Language</Text>
               <Text style={styles.messageText}>
-                {getLabelForValue(props.bot.language, studyLanguages)}
+                {getLabelByValue(props.bot.language, studyLanguages, 'label') + ' - '}
+                {getLabelByValue(props.bot.language, studyLanguages, 'english')}
               </Text>
               <Text style={styles.titleText}>Difficulty</Text>
               <Text style={styles.messageText}>
@@ -53,7 +54,7 @@ export default function BotCard(props: Props): React.JSX.Element {
               <Button
                 title={`Start chat with ${props.bot.name}`}
                 onPress={(): void => newChat(props.bot)}
-                style={{ marginTop: 10, marginBottom: 10 }}
+                style={{ marginTop: 10, marginBottom: 15 }}
               />
               <Button
                 title='Close'

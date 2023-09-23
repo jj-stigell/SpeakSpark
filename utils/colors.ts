@@ -39,7 +39,7 @@ export const light: ColorScheme = {
     secondary: '#ffffff' // White
   },
   button: {
-    primary: '#23a1fa',
+    primary: '#0f96f7',
     secondary: '#74c1f7'
   },
   chat: {

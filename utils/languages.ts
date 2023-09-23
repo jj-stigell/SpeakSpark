@@ -1,64 +1,79 @@
 export type LanguageSet = {
   label: string,
-  value: string
+  value: string,
+  english: string
 }
 
 export const studyLanguages: Array<LanguageSet> = [
   {
     label: '🇩🇪 Deutsch',
-    value: 'de'
+    value: 'de',
+    english: 'German'
   },
   {
     label: '🇬🇧 English',
-    value: 'en'
+    value: 'en',
+    english: 'English'
   },
   {
     label: '🇪🇸 Español',
-    value: 'es'
+    value: 'es',
+    english: 'Spanish'
   },
   {
     label: '🇫🇷 Français',
-    value: 'fr'
+    value: 'fr',
+    english: 'French'
   },
   {
     label: '🇯🇵 日本語',
-    value: 'jp'
+    value: 'ja',
+    english: 'Japanese'
   },
   {
     label: '🇰🇷 한국어',
-    value: 'ko'
+    value: 'ko',
+    english: 'Korean'
   },
   {
     label: '🇨🇳 中文',
-    value: 'zh'
+    value: 'zh',
+    english: 'Chinese'
   }
 ];
 
 export const uiLanguages: Array<LanguageSet> = [
   {
     label: '🇩🇪 Deutsch',
-    value: 'de'
+    value: 'de',
+    english: 'German'
   },
   {
     label: '🇬🇧 English',
-    value: 'en'
+    value: 'en',
+    english: 'English'
   },
   {
     label: '🇫🇮 Suomeksi',
-    value: 'fi'
+    value: 'fi',
+    english: 'Finnish'
   },
   {
     label: '🇯🇵 日本語',
-    value: 'jp'
+    value: 'ja',
+    english: 'Japanese'
   },
   {
     label: '🇻🇳 Tiếng Việt',
-    value: 'vi'
+    value: 'vi',
+    english: 'Vietnamese'
   }
 ];
 
-export function getLabelForValue(value: string, languages: Array<LanguageSet>): string {
+export function getLabelByValue(
+  value: string, languages: Array<LanguageSet>, field: 'label' | 'english'
+): string {
   const language: LanguageSet | undefined = languages
     .find((lang: LanguageSet) => lang.value === value);
-  return language ? language.label : '-';
+  return language ? language[field] : '-';
 }

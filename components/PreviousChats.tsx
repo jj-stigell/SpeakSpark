@@ -12,6 +12,7 @@ import { useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 import { Chat } from '../redux/features/chatSlice';
 import { Bot } from '../redux/features/botSlice';
+import { getLabelByValue, studyLanguages } from '../utils/languages';
 
 export default function PreviousChats(props: { navigation: any }): React.JSX.Element {
   const [chats, setChats] = React.useState<Array<Chat>>([]);
@@ -34,6 +35,10 @@ export default function PreviousChats(props: { navigation: any }): React.JSX.Ele
   return (
     <View>
       <Text marginTop='$2' style={{ fontSize: 20, textAlign: 'center' }}>Latest Chats</Text>
+      <Text marginTop='$2' style={{ fontSize: 16, textAlign: 'center' }}>
+        Studying {getLabelByValue(language, studyLanguages, 'label') + ' - '}
+        {getLabelByValue(language, studyLanguages, 'english')}
+      </Text>
       <ScrollView style={{ height: 440 }}>
         { loading ?
           <View style={{ marginTop: 90, alignItems: 'center' }}>
