@@ -49,9 +49,20 @@ query GetMessages($chatId: String!) {
 }`;
 
 export const GET_MESSAGE: DocumentNode = gql`
-query GetMessage($messageId: String!) {
-  getMessage(messageId: $messageId) {
-    audio
+query GetMessage(
+  $generateTranslation: Boolean!,
+  $generateGrammarAnalysis: Boolean!,
+  $generateAudio: Boolean!,
+  $messageId: String!
+) {
+  getMessage(
+    generateTranslation: $generateTranslation,
+    generateGrammarAnalysis: $generateGrammarAnalysis,
+    generateAudio: $generateAudio,
+    messageId: $messageId
+  ) {
+    translation
     grammarAnalysis
+    audio
   }
 }`;

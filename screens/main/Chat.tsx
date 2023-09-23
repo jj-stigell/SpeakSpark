@@ -208,7 +208,7 @@ export default function Chat(props: { navigation: any, route: any  }): React.JSX
   return (
     <View style={{ flex: 1 }}>
       <GrammarModal
-        message={message as IMessage}
+        message={message as CustomMessage}
         modalVisible={grammarModalVisible}
         setModalVisible={setGrammarModalVisible}
       />

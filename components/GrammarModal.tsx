@@ -1,21 +1,33 @@
 /* eslint-disable @typescript-eslint/typedef */
-import { ButtonSpinner } from '@gluestack-ui/themed';
 import React from 'react';
 import { useQuery } from '@apollo/client';
-import { Modal, StyleSheet, Text, Pressable, View, ScrollView } from 'react-native';
-import { IMessage } from 'react-native-gifted-chat';
+import { Modal, StyleSheet, Text, View, ScrollView } from 'react-native';
 
+import Button from './Button';
+import Loader from './Loader';
+import PlayButton from './PlayButton';
+import { useAppSelector } from '../redux/hooks';
+import { RootState } from '../redux/store';
+import { ColorScheme } from '../utils/colors';
+import { CustomMessage } from '../screens/main/Chat';
 import { GET_MESSAGE } from '../graphql/queries';
 
 interface Props {
-  message: IMessage,
+  message: CustomMessage,
   modalVisible: boolean,
   setModalVisible: (value: boolean) => void
 }
 
 export default function GrammarModal(props: Props): React.JSX.Element {
-  const { data, loading } = useQuery(GET_MESSAGE, {
-    variables: { messageId: props.message?._id ?? '' },
+  const theme: ColorScheme = useAppSelector((state: RootState) => state.system.theme);
+
+  const { data, loading, error } = useQuery(GET_MESSAGE, {
+    variables: {
+      messageId: props.message?._id ?? '',
+      generateTranslation: true,
+      generateGrammarAnalysis: true,
+      generateAudio: false
+    },
     fetchPolicy: 'no-cache',
     errorPolicy: 'all',
     skip: !props.modalVisible
@@ -30,29 +42,36 @@ export default function GrammarModal(props: Props): React.JSX.Element {
         props.setModalVisible(!props.modalVisible);
       }}>
       <View style={styles.centeredView}>
-        <View style={styles.modalView}>
+        <View style={[styles.modalView, { backgroundColor: theme.background.primary }]}>
           <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
             <Text style={styles.modalText}>
-              { loading && (
-                <View style={{ alignItems: 'center' }}>
-                  <ButtonSpinner mr="$2" size="large"/>
-                  <Text>Loading grammar...</Text>
+              { loading ? (
+                <View style={{ marginTop: 20, alignItems: 'center' }}>
+                  <Loader loadingText='Loading grammar...' />
                 </View>
+              ) : (
+                data?.getMessage && data.getMessage.grammarAnalysis ? (
+                  <React.Fragment>
+                    <Text style={styles.messageText}>{props.message.text}</Text>
+                    <View style={styles.horizontalLine} />
+                    <Text style={styles.analysisTitle}>Translation</Text>
+                    <Text style={styles.grammarAnalysis}>{data.getMessage.translation}</Text>
+                    <PlayButton message={props.message} />
+                    <Text style={styles.analysisTitle}>Analysis</Text>
+                    <Text style={styles.grammarAnalysis}>{data.getMessage.grammarAnalysis}</Text>
+                  </React.Fragment>
+                ) : (
+                  <React.Fragment>
+                    <Text>Something went wrong, please try again or report a bug!</Text>
+                    { error && <Text>Encountered error {error.graphQLErrors[0].message}</Text> }
+                  </React.Fragment>
+                )
               )}
-              {
-                data?.getMessage && data.getMessage.grammarAnalysis &&
-                <React.Fragment>
-                  <Text style={styles.messageText}>{props.message.text}</Text>
-                  <View style={styles.horizontalLine} />
-                  <Text style={styles.grammarAnalysis}>{data.getMessage.grammarAnalysis}</Text>
-                </React.Fragment>
-              }
             </Text>
-            <Pressable
-              style={[styles.button, styles.buttonClose]}
-              onPress={(): void => props.setModalVisible(!props.modalVisible)}>
-              <Text style={styles.textStyle}>Hide Grammar</Text>
-            </Pressable>
+            <Button
+              title='Hide Grammar'
+              onPress={(): void => props.setModalVisible(!props.modalVisible)}
+            />
           </ScrollView>
         </View>
       </View>
@@ -63,16 +82,14 @@ export default function GrammarModal(props: Props): React.JSX.Element {
 // eslint-disable-next-line @typescript-eslint/typedef
 const styles = StyleSheet.create({
   centeredView: {
-    flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'flex-end', // Change this to 'center' if you want it to be vertically centered.
     alignItems: 'center',
     marginTop: 1
   },
   modalView: {
     margin: 20,
-    backgroundColor: 'white',
     borderRadius: 20,
-    padding: 35,
+    padding: 20,
     alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: {
@@ -81,18 +98,8 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 4,
-    elevation: 5
-  },
-  button: {
-    borderRadius: 20,
-    padding: 10,
-    elevation: 2
-  },
-  buttonOpen: {
-    backgroundColor: '#F194FF'
-  },
-  buttonClose: {
-    backgroundColor: '#2196F3'
+    elevation: 5,
+    maxHeight: '80%'
   },
   textStyle: {
     color: 'white',
@@ -104,15 +111,22 @@ const styles = StyleSheet.create({
     textAlign: 'center'
   },
   messageText: {
-    fontSize: 18,        // Larger font size for the message text
-    marginBottom: 10    // Some margin to create space between text and line
+    fontSize: 20,        // Increase the font size for the message text
+    marginBottom: 20    // Increase the margin to create more space
   },
   grammarAnalysis: {
     fontSize: 14        // Smaller font size for the grammar analysis
   },
   horizontalLine: {
-    height: 10,          // Thin horizontal line
-    backgroundColor: '#D3D3D3',   // Light gray color
-    marginVertical: 10 // Margin to separate from both top and bottom content
+    width: '75%',
+    height: 40,
+    backgroundColor: 'black',
+    marginVertical: 10,
+    alignSelf: 'center'
+  },
+  analysisTitle: {
+    fontSize: 18,       // Font size for the analysis title
+    fontWeight: 'bold', // Make it bold
+    marginBottom: 10    // Space between title and analysis content
   }
 });

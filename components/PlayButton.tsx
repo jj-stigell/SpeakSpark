@@ -41,7 +41,12 @@ export default function PlayButton(props: Props): React.JSX.Element {
     // Wrap the query in a promise
     const fetchMessage = new Promise((resolve, reject) => {
       getMessage({
-        variables: { messageId: String(messageId) },
+        variables: {
+          messageId: String(messageId),
+          generateTranslation: false,
+          generateGrammarAnalysis: false,
+          generateAudio: true
+        },
         onCompleted: (data) => resolve(data.getMessage),
         onError: (error) => reject(error)
       });
