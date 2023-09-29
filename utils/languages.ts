@@ -71,7 +71,7 @@ export const uiLanguages: Array<LanguageSet> = [
 ];
 
 export function getLabelByValue(
-  value: string, languages: Array<LanguageSet>, field: 'label' | 'english'
+  value: string, languages: Array<LanguageSet>, field: keyof LanguageSet
 ): string {
   const language: LanguageSet | undefined = languages
     .find((lang: LanguageSet) => lang.value === value);

@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "SpeakSpark",
-    "slug": "SpeakSpark",
+    "name": "Speak Spark",
+    "slug": "speak-spark",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -21,10 +21,16 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#F5FCFF"
-      }
+      },
+      "package": "com.speakspark"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "351103d4-20ad-4679-bb13-6cc302726a27"
+      }
     }
   }
 }

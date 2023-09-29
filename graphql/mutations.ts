@@ -33,7 +33,6 @@ mutation Mutation($botId: String!) {
       name
       nameRomaji
       profileImage
-      persona
       language
       welcomeMessage
       welcomeAudio

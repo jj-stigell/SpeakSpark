@@ -7,7 +7,6 @@ query GetBots($language: String!) {
     name
     nameRomaji
     profileImage
-    persona
     introduction
     language
     welcomeMessage

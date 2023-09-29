@@ -6,7 +6,6 @@ export interface Bot {
   name: string,
   nameRomaji: string,
   profileImage: string,
-  persona: string,
   introduction: string,
   language: string,
   welcomeMessage: string,
