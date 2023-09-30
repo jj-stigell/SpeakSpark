@@ -102,7 +102,7 @@
         "variableDeclarationIgnoreFunction": true
       }
     ],
-    "@typescript-eslint/explicit-function-return-type": "error",
+    "@typescript-eslint/explicit-function-return-type": "warn",
     "@typescript-eslint/no-inferrable-types": "off",
     "@typescript-eslint/array-type": [
       "error",

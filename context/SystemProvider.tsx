@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/typedef */
 import React, { createContext, Context, useEffect, useState, useCallback } from 'react';
 import { Appearance, ColorSchemeName } from 'react-native';
-import { Theme, dark, light } from '../utils/Theme';
-import { getFromStore } from '../utils/expoStore';
+
+import { Theme, dark, light } from '../utils/theme';
+import { getFromStore, saveToStore } from '../utils/expoStore';
 
 const colorScheme: ColorSchemeName = Appearance.getColorScheme();
 
@@ -10,8 +11,8 @@ const initialState: SystemContextType = {
   darkMode: colorScheme === 'dark',
   notifications: true,
   theme: colorScheme === 'dark' ? dark : light,
-  toggleDarkMode: () => null,
-  toggleNotification: () => null
+  toggleDarkMode: () => {},
+  toggleNotification: () => {}
 };
 
 export interface SystemContextType {
@@ -32,34 +33,28 @@ export default function SystemProvider(props: { children: React.JSX.Element }): 
 
   useEffect(() => {
     (async (): Promise<void> => {
-      const storedTheme: string | null = await getFromStore('theme');
-      if (storedTheme) {
-        setTheme(JSON.parse(storedTheme));
-      }
-
       const storedDarkMode: string | null = await getFromStore('dark');
       if (storedDarkMode) {
-        storedDarkMode === 'true' ? setDarkMode(true) : setDarkMode(false);
+        setDarkMode(storedDarkMode === 'true');
       }
 
       const storedNotification: string | null = await getFromStore('notification');
       if (storedNotification) {
-        storedNotification === 'true' ? setNotifications(true) : setNotifications(false);
+        setNotifications(storedNotification === 'true');
       }
+
+      setTheme(darkMode ? dark : light);
     })();
   }, []);
 
-  const toggleDarkMode = useCallback(() => {
+  function toggleDarkMode(): void {
+    setTheme(darkMode ? light : dark);
     setDarkMode(prevState => !prevState);
-
-    if (darkMode) {
-      setTheme(dark);
-    } else {
-      setTheme(light);
-    }
-  }, []);
+    saveToStore('dark', String(!darkMode));
+  }
 
   const toggleNotification = useCallback(() => {
+    saveToStore('notification', String(notifications));
     setNotifications(prevState => !prevState);
   }, []);
 

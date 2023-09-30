@@ -11,7 +11,7 @@ import { getFromStore } from '../utils/expoStore';
 
 // More info on links: https://www.apollographql.com/docs/react/api/link/introduction
 const httpLink: ApolloLink = createHttpLink({
-  uri: 'https://speak-spark-server.onrender.com'
+  uri: 'http://10.18.253.92:4000/graphql'
 });
 
 const errorLink: ApolloLink = onError(({ graphQLErrors, networkError }) => {

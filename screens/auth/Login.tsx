@@ -4,13 +4,11 @@ import { View, Text, Pressable, TextInput, TouchableOpacity } from 'react-native
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import Checkbox from 'expo-checkbox';
-import { useMutation } from '@apollo/client';
 
 import Button from '../../components/Button';
 import MainHeader from '../../components/MainHeader';
 import ThirdPartyButton from '../../components/ThirdPartyButton';
-import { deleteFromStore, getFromStore, saveToStore } from '../../utils/expoStore';
-import { LOGIN } from '../../graphql/mutations';
+import { getFromStore } from '../../utils/expoStore';
 import { validEmail } from '../../utils/validators';
 import useAuth from '../../hooks/useAuth';
 import { SystemContextType } from '../../context/SystemProvider';
@@ -23,38 +21,14 @@ export default function Login({ navigation }: { navigation: any }): React.JSX.El
   const [password, setPassword] = useState<string>('');
   const [showPassword, setShowPassword] = useState(false);
   const [isChecked, setIsChecked] = useState(Boolean(getFromStore('rememberMe')));
-  const { setAuth } = useAuth();
-
-  const [loginAccount, { data, loading }] = useMutation(LOGIN, {
-    errorPolicy: 'all',
-    onCompleted: () => {
-      saveToStore('token', data.login.token);
-      setAuth(data.login.user);
-    }
-  });
-
-  async function login(): Promise<void> {
-    if (isChecked) {
-      await saveToStore('email', email);
-      await saveToStore('password', password);
-      await saveToStore('rememberMe', 'true');
-    } else {
-      await deleteFromStore('email');
-      await deleteFromStore('password');
-      await deleteFromStore('rememberMe');
-    }
-    await loginAccount({ variables: { email, password } });
-  }
+  const { login, loading } = useAuth();
 
   async function setCredentials(): Promise<void> {
     if (isChecked) {
       const email: string | null = await getFromStore('email');
       const password: string | null = await getFromStore('password');
-
-      if (email)
-        setEmail(email);
-      if (password)
-        setPassword(password);
+      setEmail(email ?? '');
+      setPassword(password ?? '');
     }
   }
 
@@ -159,7 +133,7 @@ export default function Login({ navigation }: { navigation: any }): React.JSX.El
         </View>
         <Button
           title={loading ? 'Logging in, please wait...' : 'Login'}
-          onPress={login}
+          onPress={(): void => login(email, password, isChecked)}
           disabled={loading || password.length === 0 || !validEmail(email)}
           style={{
             marginTop: 18,

@@ -23,8 +23,8 @@ export default function App(): React.JSX.Element {
   return (
     <NavigationContainer>
       <ApolloProvider client={client}>
-        <AuthProvider>
-          <SystemProvider>
+        <SystemProvider>
+          <AuthProvider>
             <React.Fragment>
               <ThemedStatusBar/>
               <ToastProvider
@@ -37,8 +37,8 @@ export default function App(): React.JSX.Element {
                 <Navigator/>
               </ToastProvider>
             </React.Fragment>
-          </SystemProvider>
-        </AuthProvider>
+          </AuthProvider>
+        </SystemProvider>
       </ApolloProvider>
     </NavigationContainer>
   );
