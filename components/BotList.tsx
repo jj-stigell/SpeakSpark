@@ -25,11 +25,7 @@ export default function BotList(props: { navigation: any }): React.JSX.Element {
   });
 
   if (loading) {
-    return (
-      <View style={{ marginTop: 90, alignItems: 'center' }}>
-        <Loader loadingText='Loading chat partners...' />
-      </View>
-    );
+    return (<Loader marginTop={90} loadingText='Loading chat partners...' />);
   }
 
   if (bots.length === 0) {

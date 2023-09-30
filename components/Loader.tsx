@@ -6,7 +6,8 @@ import useSystem from '../hooks/useSystem';
 
 interface Props {
   loadingText: string,
-  backgroundColor?: string
+  backgroundColor?: string,
+  marginTop?: number
 }
 
 export default function Loader(props: Props): React.JSX.Element {
@@ -31,7 +32,10 @@ export default function Loader(props: Props): React.JSX.Element {
   return (
     <View style={[
       styles.container,
-      { backgroundColor: props.backgroundColor ?? theme.background.primary }
+      {
+        backgroundColor: props.backgroundColor ?? theme.background.primary,
+        marginTop: props.marginTop ?? 0
+      }
     ]}>
       <Animated.Image
         style={[styles.image, { transform: [{ rotate: spin }] }]}

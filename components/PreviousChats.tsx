@@ -43,12 +43,10 @@ export default function PreviousChats(props: { navigation: any }): React.JSX.Ele
         {getLabelByValue(auth!.studyLanguage, studyLanguages, 'english')}
       </Text>
       <ScrollView style={{ height: 440, marginTop: 5 }}>
-        { loading ?
-          <View style={{ marginTop: 90, alignItems: 'center' }}>
-            <Loader loadingText='Loading previous chats...'/>
-          </View>
-          :
-          chats.length === 0 || error ?
+        { loading ? (
+          <Loader marginTop={90} loadingText='Loading previous chats...'/>
+        ) : (
+          chats.length === 0 || error ? (
             <React.Fragment>
               <Text style={{ marginTop: 90, textAlign: 'center' }}>
                 No previous chats found for the language, click "New Chat"
@@ -58,7 +56,7 @@ export default function PreviousChats(props: { navigation: any }): React.JSX.Ele
                 <Text style={{ marginTop: 20, textAlign: 'center' }}>Update chats</Text>
               </Pressable>
             </React.Fragment>
-            :
+          ) : (
             chats.map((data: Chat) => (
               <Card
                 key={data.id}
@@ -68,7 +66,8 @@ export default function PreviousChats(props: { navigation: any }): React.JSX.Ele
                 onPress={navigateToChatId}
               />
             ))
-        }
+          )
+        )}
       </ScrollView>
     </View>
   );

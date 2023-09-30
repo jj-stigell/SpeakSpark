@@ -48,20 +48,18 @@ export default function GrammarModal(props: Props): React.JSX.Element {
           <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
             <React.Fragment>
               { loading ? (
-                <View style={{ alignItems: 'center' }}>
-                  <Loader
-                    loadingText='Loading grammar...'
-                    backgroundColor={theme.background.secondary}
-                  />
-                </View>
+                <Loader
+                  loadingText='Loading grammar...'
+                  backgroundColor={theme.background.secondary}
+                />
               ) : (
                 data?.getMessage && data.getMessage.grammarAnalysis ? (
                   <React.Fragment>
                     <Text style={styles.messageText}>{props.message.text}</Text>
+                    <PlayButton message={props.message} size={40} />
                     <View style={styles.horizontalLine} />
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                       <Text style={[styles.subTitle, { flex: 1 }]}>Translation:</Text>
-                      <PlayButton message={props.message} size={40} />
                     </View>
                     <Text style={[styles.subContent]}>
                       {data.getMessage.translation}
@@ -72,13 +70,11 @@ export default function GrammarModal(props: Props): React.JSX.Element {
                 ) : (
                   <React.Fragment>
                     <Text style={{ textAlign: 'center' }}>
-                      Something went wrong, please try again or report a bug!
+                      {error ?
+                        `Encountered GraphQL error: ${error.graphQLErrors[0].message}` :
+                        'Something went wrong, please try again or report a bug!'
+                      }
                     </Text>
-                    { error && (
-                      <Text style={{ marginTop: 10, textAlign: 'center' }}>
-                        Encountered GraphQL error: {error.graphQLErrors[0].message}
-                      </Text>
-                    )}
                   </React.Fragment>
                 )
               )}
