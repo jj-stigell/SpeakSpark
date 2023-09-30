@@ -1,31 +1,41 @@
 import React from 'react';
-import { HStack, Heading, Image } from '@gluestack-ui/themed';
-import { StatusBar } from 'react-native';
-import { RootState } from '../redux/store';
-import { ColorScheme } from '../redux/features/systemSlice';
-import { useAppSelector } from '../redux/hooks';
+import { View, Text, Image, StyleSheet, StatusBar } from 'react-native';
+
+import { SystemContextType } from '../context/SystemProvider';
+import useSystem from '../hooks/useSystem';
 
 export default function MainHeader(): React.JSX.Element {
-  const theme: ColorScheme = useAppSelector((state: RootState) => state.system.theme);
+  const { theme }: SystemContextType = useSystem();
 
   return (
-    <HStack
-      alignItems="center"
-      marginTop={StatusBar.currentHeight ? StatusBar.currentHeight + 5 : 10}
-    >
-      <Heading
-        lineHeight={30}
-        fontSize={24}
-        marginTop={5}
-        color={theme.font.primary}
-        fontWeight="bold"
-      >SpeakSpark</Heading>
+    <View style={styles.container}>
+      <Text style={{ ...styles.heading, color: theme.font.primary }}>
+        SpeakSpark
+      </Text>
       <Image
         source={require('../assets/image/logo.png')}
-        alt="SpeakSpark Logo"
-        width={35}
-        height={35}
+        style={styles.logo}
       />
-    </HStack>
+    </View>
   );
 }
+
+// eslint-disable-next-line @typescript-eslint/typedef
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: StatusBar.currentHeight ? StatusBar.currentHeight + 5 : 10
+  },
+  heading: {
+    lineHeight: 30,
+    fontSize: 24,
+    marginTop: 5,
+    fontWeight: 'bold'
+  },
+  logo: {
+    width: 35,
+    height: 35,
+    marginLeft: 10 // You can adjust this as per your design needs
+  }
+});

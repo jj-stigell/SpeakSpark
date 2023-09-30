@@ -1,4 +1,4 @@
-import React, { JSX } from 'react';
+import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import Register from './screens/auth/Register';
@@ -9,27 +9,28 @@ import Chat from './screens/main/Chat';
 import Settings from './screens/main/Settings';
 import NewChat from './screens/main/SelectBot';
 
-import { RootState } from './redux/store';
-import { useAppSelector } from './redux/hooks';
-import { ColorScheme } from './redux/features/systemSlice';
+import { AuthContextType } from './context/AuthProvider';
+import useAuth from './hooks/useAuth';
+import { SystemContextType } from './context/SystemProvider';
+import useSystem from './hooks/useSystem';
 
 // eslint-disable-next-line @typescript-eslint/typedef
 const Stack = createNativeStackNavigator();
 
-export default function Navigator(): JSX.Element {
-  const isLoggedIn: boolean = useAppSelector((state: RootState) => state.account.isLoggedIn);
-  const theme: ColorScheme = useAppSelector((state: RootState) => state.system.theme);
+export default function Navigator(): React.JSX.Element {
+  const { theme }: SystemContextType = useSystem();
+  const { auth }: AuthContextType = useAuth();
 
   return (
     <Stack.Navigator
-      initialRouteName={isLoggedIn ? 'Home' : 'Login'}
+      initialRouteName={auth ? 'Home' : 'Login'}
       screenOptions={{
         headerShown: false,
         contentStyle: {
           backgroundColor: theme.background.primary
         }
       }}>
-      { isLoggedIn ?
+      { auth ?
         (
           <React.Fragment>
             <Stack.Screen name="Home" component={Home}/>

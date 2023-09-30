@@ -1,12 +1,11 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 
-import { Bot } from '../redux/features/botSlice';
 import { customDateFormat } from '../utils';
 import { getLabelByValue, studyLanguages } from '../utils/languages';
-import { RootState } from '../redux/store';
-import { useAppSelector } from '../redux/hooks';
-import { ColorScheme } from '../utils/colors';
+import { SystemContextType } from '../context/SystemProvider';
+import useSystem from '../hooks/useSystem';
+import { Bot } from '../type';
 
 interface Props {
   chatId: string,
@@ -16,7 +15,7 @@ interface Props {
 }
 
 export default function Card(props: Props): React.JSX.Element {
-  const theme: ColorScheme = useAppSelector((state: RootState) => state.system.theme);
+  const { theme }: SystemContextType = useSystem();
 
   return (
     <TouchableOpacity

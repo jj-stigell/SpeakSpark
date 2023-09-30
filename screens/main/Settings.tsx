@@ -1,37 +1,25 @@
-import React, { Dispatch } from 'react';
+import React from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import {
   StyleSheet, View, TouchableOpacity, Text,
   Switch, ScrollView, Image, Linking
 } from 'react-native';
-import { AnyAction } from '@reduxjs/toolkit';
 
 import ChatHeader from '../../components/ActionHeader';
 import LanguageSelector from '../../components/LanguageSelector';
-import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { Account, resetAccount, setUiLanguage } from '../../redux/features/accountSlice';
-import { resetBots } from '../../redux/features/botSlice';
-import { resetChats } from '../../redux/features/chatSlice';
-import { RootState } from '../../redux/store';
-import { deleteFromStore } from '../../utils/expoStore';
-import { System, toggleDarkMode, toggleNotifications } from '../../redux/features/systemSlice';
-import { ColorScheme } from '../../utils/colors';
 import { uiLanguages } from '../../utils/languages';
+import { AuthContextType } from '../../context/AuthProvider';
+import { SystemContextType } from '../../context/SystemProvider';
+import useAuth from '../../hooks/useAuth';
+import useSystem from '../../hooks/useSystem';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default function Settings({ navigation }: { navigation: any }): React.JSX.Element {
-  const dispatch: Dispatch<AnyAction> = useAppDispatch();
-  const account: Account = useAppSelector((state: RootState) => state.account.account);
-  const system: System = useAppSelector((state: RootState) => state.system);
-  const theme: ColorScheme = useAppSelector((state: RootState) => state.system.theme);
-
-  async function logout(): Promise<void> {
-    deleteFromStore('jwt').then(() => {
-      dispatch(resetAccount());
-      dispatch(resetBots());
-      dispatch(resetChats());
-    });
-  }
+  const { auth, logout, setUILanguage }: AuthContextType = useAuth();
+  const {
+    theme, darkMode, notifications,
+    toggleNotification, toggleDarkMode
+  }: SystemContextType = useSystem();
 
   return (
     <ScrollView style={styles.container}>
@@ -48,7 +36,7 @@ export default function Settings({ navigation }: { navigation: any }): React.JSX
           />
           <View>
             <Text style={[styles.profileName, { color: theme.font.primary }]}>
-              {account.email}
+              {auth!.email}
             </Text>
           </View>
         </View>
@@ -70,17 +58,15 @@ export default function Settings({ navigation }: { navigation: any }): React.JSX
                   name='language'
                   style={{
                     paddingRight: 8,
-                    color: system.darkMode ? 'white' : 'black'
+                    color: darkMode ? 'white' : 'black'
                   }}
                   size={20}
                 />
-                <Text style={[styles.rowLabel, { color: theme.font.primary }]}>
-                  Language
-                </Text>
+                <Text style={[styles.rowLabel, { color: theme.font.primary }]}>Language</Text>
                 <View style={styles.rowSpacer}/>
                 <LanguageSelector
-                  language={account.uiLanguage}
-                  setLanguage={setUiLanguage}
+                  language={auth!.uiLanguage}
+                  setLanguage={setUILanguage}
                   languageList={uiLanguages}
                   half
                 />
@@ -89,7 +75,7 @@ export default function Settings({ navigation }: { navigation: any }): React.JSX
           </View>
           <View style={[styles.rowWrapper, { backgroundColor: theme.container.primary }]}>
             <TouchableOpacity
-              onPress={(): void => dispatch(toggleDarkMode())}>
+              onPress={(): void => toggleDarkMode()}>
               <View style={[
                 styles.row,
                 { backgroundColor: theme.container.primary }
@@ -98,17 +84,15 @@ export default function Settings({ navigation }: { navigation: any }): React.JSX
                   name='moon'
                   style={{
                     paddingRight: 8,
-                    color: system.darkMode ? 'white' : 'black'
+                    color: darkMode ? 'white' : 'black'
                   }}
                   size={20}
                 />
-                <Text style={[styles.rowLabel, { color: theme.font.primary }]}>
-                  Dark Mode
-                </Text>
+                <Text style={[styles.rowLabel, { color: theme.font.primary }]}>Dark Mode</Text>
                 <View style={styles.rowSpacer}/>
                 <Switch
-                  value={system.darkMode}
-                  onValueChange={(): void => dispatch(toggleDarkMode())}
+                  value={darkMode}
+                  onValueChange={(): void => toggleDarkMode()}
                 />
               </View>
             </TouchableOpacity>
@@ -119,23 +103,21 @@ export default function Settings({ navigation }: { navigation: any }): React.JSX
             { backgroundColor: theme.container.primary }
           ]}>
             <TouchableOpacity
-              onPress={(): void => dispatch(toggleNotifications())}>
+              onPress={(): void => toggleNotification()}>
               <View style={styles.row}>
                 <Ionicons
                   name='notifications'
                   style={{
                     paddingRight: 8,
-                    color: system.darkMode ? 'white' : 'black'
+                    color: darkMode ? 'white' : 'black'
                   }}
                   size={20}
                 />
-                <Text style={[styles.rowLabel, { color: theme.font.primary }]}>
-                  Notifications
-                </Text>
+                <Text style={[styles.rowLabel, { color: theme.font.primary }]}>Notifications</Text>
                 <View style={styles.rowSpacer}/>
                 <Switch
-                  value={system.notifications}
-                  onValueChange={(): void => dispatch(toggleNotifications())}
+                  value={notifications}
+                  onValueChange={(): void => toggleNotification()}
                 />
               </View>
             </TouchableOpacity>
@@ -160,7 +142,7 @@ export default function Settings({ navigation }: { navigation: any }): React.JSX
                   name='bug'
                   style={{
                     paddingRight: 8,
-                    color: system.darkMode ? 'white' : 'black'
+                    color: darkMode ? 'white' : 'black'
                   }}
                   size={20}
                 />
@@ -183,13 +165,11 @@ export default function Settings({ navigation }: { navigation: any }): React.JSX
                   name='mail'
                   style={{
                     paddingRight: 8,
-                    color: system.darkMode ? 'white' : 'black'
+                    color: darkMode ? 'white' : 'black'
                   }}
                   size={20}
                 />
-                <Text style={[styles.rowLabel, { color: theme.font.primary }]}>
-                  Contact Us
-                </Text>
+                <Text style={[styles.rowLabel, { color: theme.font.primary }]}>Contact Us</Text>
                 <View style={styles.rowSpacer}/>
               </View>
             </TouchableOpacity>
@@ -212,7 +192,7 @@ export default function Settings({ navigation }: { navigation: any }): React.JSX
                 name='information-circle'
                 style={{
                   paddingRight: 8,
-                  color: system.darkMode ? 'white' : 'black'
+                  color: darkMode ? 'white' : 'black'
                 }}
                 size={20}
               />
@@ -234,7 +214,7 @@ export default function Settings({ navigation }: { navigation: any }): React.JSX
                   name='md-log-out'
                   style={{
                     paddingRight: 8,
-                    color: system.darkMode ? 'white' : 'black'
+                    color: darkMode ? 'white' : 'black'
                   }}
                   size={20}
                 />

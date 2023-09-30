@@ -1,9 +1,8 @@
 import React, { useRef, useEffect } from 'react';
 import { Animated, StyleSheet, Text, View } from 'react-native';
 
-import { useAppSelector } from '../redux/hooks';
-import { RootState } from '../redux/store';
-import { ColorScheme } from '../utils/colors';
+import { SystemContextType } from '../context/SystemProvider';
+import useSystem from '../hooks/useSystem';
 
 interface Props {
   loadingText: string,
@@ -11,7 +10,7 @@ interface Props {
 }
 
 export default function Loader(props: Props): React.JSX.Element {
-  const theme: ColorScheme = useAppSelector((state: RootState) => state.system.theme);
+  const { theme }: SystemContextType = useSystem();
   const spinValue: Animated.Value = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {

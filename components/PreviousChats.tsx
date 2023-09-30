@@ -1,26 +1,23 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/typedef */
 import React from 'react';
-import { Pressable, ScrollView, View } from 'react-native';
-import { Text } from '@gluestack-ui/themed';
+import { Pressable, ScrollView, Text, View } from 'react-native';
 import { useQuery } from '@apollo/client';
 
 import Card from '../components/ChatCard';
 import Loader from './Loader';
 import { GET_LATEST_CHATS } from '../graphql/queries';
-import { useAppSelector } from '../redux/hooks';
-import { RootState } from '../redux/store';
-import { Chat } from '../redux/features/chatSlice';
-import { Bot } from '../redux/features/botSlice';
 import { getLabelByValue, studyLanguages } from '../utils/languages';
+import { AuthContextType } from '../context/AuthProvider';
+import useAuth from '../hooks/useAuth';
+import { Bot, Chat } from '../type';
 
 export default function PreviousChats(props: { navigation: any }): React.JSX.Element {
   const [chats, setChats] = React.useState<Array<Chat>>([]);
-  const language: string = useAppSelector(
-    (state: RootState) => state.account.account.studyLanguage);
+  const { auth }: AuthContextType = useAuth();
 
   const { data, loading, error, refetch } = useQuery(GET_LATEST_CHATS, {
-    variables: { language },
+    variables: { language: auth!.studyLanguage },
     fetchPolicy: 'no-cache',
     errorPolicy: 'all',
     onCompleted: () => {
@@ -38,12 +35,12 @@ export default function PreviousChats(props: { navigation: any }): React.JSX.Ele
 
   return (
     <View>
-      <Text marginTop='$2' style={{ fontSize: 18, textAlign: 'center' }}>
+      <Text style={{ marginTop: 2, fontSize: 18, textAlign: 'center' }}>
         Latest Chats - Click to continue chatting
       </Text>
-      <Text marginTop='$2' style={{ fontSize: 16, textAlign: 'center' }}>
-        Studying {getLabelByValue(language, studyLanguages, 'label') + ' - '}
-        {getLabelByValue(language, studyLanguages, 'english')}
+      <Text style={{ marginTop: 2, fontSize: 16, textAlign: 'center' }}>
+        Studying {getLabelByValue(auth!.studyLanguage, studyLanguages, 'label') + ' - '}
+        {getLabelByValue(auth!.studyLanguage, studyLanguages, 'english')}
       </Text>
       <ScrollView style={{ height: 440, marginTop: 5 }}>
         { loading ?
@@ -58,9 +55,7 @@ export default function PreviousChats(props: { navigation: any }): React.JSX.Ele
                 button to start a new chat.
               </Text>
               <Pressable onPress={updateChats}>
-                <Text style={{ marginTop: 20, textAlign: 'center' }}>
-                  Update chats
-                </Text>
+                <Text style={{ marginTop: 20, textAlign: 'center' }}>Update chats</Text>
               </Pressable>
             </React.Fragment>
             :

@@ -6,19 +6,17 @@ import { useQuery } from '@apollo/client';
 
 import BotCard from './BotCard';
 import Loader from './Loader';
-import { useAppSelector } from '../redux/hooks';
-import { RootState } from '../redux/store';
-import { Bot } from '../redux/features/botSlice';
 import { GET_BOTS } from '../graphql/queries';
+import { AuthContextType } from '../context/AuthProvider';
+import useAuth from '../hooks/useAuth';
+import { Bot } from '../type';
 
 export default function BotList(props: { navigation: any }): React.JSX.Element {
+  const { auth }: AuthContextType = useAuth();
   const [bots, setBots] = useState<Array<Bot>>([]);
-  const language: string = useAppSelector(
-    (state: RootState) => state.account.account.studyLanguage);
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/typedef
   const { loading, data } = useQuery(GET_BOTS, {
-    variables: { language },
+    variables: { language: auth!.studyLanguage },
     fetchPolicy: 'no-cache',
     errorPolicy: 'all',
     onCompleted: () => {

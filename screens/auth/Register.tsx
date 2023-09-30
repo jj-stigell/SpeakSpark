@@ -4,32 +4,29 @@ import { View, Text, Pressable, TextInput, TouchableOpacity } from 'react-native
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import Checkbox from 'expo-checkbox';
-import { Center } from '@gluestack-ui/themed';
 import { Toast as notification } from 'react-native-toast-notifications';
 import { useMutation } from '@apollo/client';
 
 import Button from '../../components/Button';
 import MainHeader from '../../components/MainHeader';
-import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import ThirdPartyButton from '../../components/ThirdPartyButton';
 import { saveToStore } from '../../utils/expoStore';
 import { CREATE_ACCOUNT } from '../../graphql/mutations';
-import { setAccount } from '../../redux/features/accountSlice';
 import { validEmail } from '../../utils/validators';
-import { RootState } from '../../redux/store';
-import { ColorScheme } from '../../utils/colors';
-import ThirdPartyButton from '../../components/ThirdPartyButton';
+import useAuth from '../../hooks/useAuth';
+import { SystemContextType } from '../../context/SystemProvider';
+import useSystem from '../../hooks/useSystem';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default function Register({ navigation }: { navigation: any }): React.JSX.Element {
-  const dispatch = useAppDispatch();
-  const theme: ColorScheme = useAppSelector((state: RootState) => state.system.theme);
-
+  const { theme }: SystemContextType = useSystem();
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [confirmPassword, setConfirmPassword] = useState<string>('');
   const [showPassword, setShowPassword] = useState(false);
   const [showPasswordConfirmation, setShowPasswordConfirmation] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
+  const { setAuth } = useAuth();
 
   const [createAccount, { data, loading }] = useMutation(CREATE_ACCOUNT, {
     errorPolicy: 'all',
@@ -39,12 +36,7 @@ export default function Register({ navigation }: { navigation: any }): React.JSX
       );
       setTimeout(() => {
         saveToStore('token', data.register.token);
-        dispatch(setAccount({
-          id: data.register.user.id,
-          email,
-          uiLanguage: data.login.user.uiLanguage,
-          studyLanguage: data.login.user.studyLanguage
-        }));
+        setAuth(data.register.user);
       }, 1000);
     }
   });
@@ -55,17 +47,13 @@ export default function Register({ navigation }: { navigation: any }): React.JSX
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <Center>
-        <MainHeader/>
-      </Center>
+      <MainHeader/>
       <View style={{ flex: 1, marginHorizontal: 22 }}>
         <View style={{ marginVertical: 22 }}>
-          <Center>
-            <Text style={{
-              fontSize: 17,
-              color: theme.font.primary
-            }}>Create New Account</Text>
-          </Center>
+          <Text style={{
+            fontSize: 17,
+            color: theme.font.primary
+          }}>Create New Account</Text>
         </View>
         <View style={{ marginBottom: 12 }}>
           <Text style={{

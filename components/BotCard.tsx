@@ -5,11 +5,10 @@ import { Image, Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View } fr
 
 import Button from './Button';
 import Stars from './Stars';
-import { ColorScheme } from '../utils/colors';
 import { getLabelByValue, studyLanguages } from '../utils/languages';
-import { useAppSelector } from '../redux/hooks';
-import { RootState } from '../redux/store';
-import { Bot } from '../redux/features/botSlice';
+import { Bot } from '../type';
+import { SystemContextType } from '../context/SystemProvider';
+import useSystem from '../hooks/useSystem';
 
 interface Props {
   navigation: any,
@@ -17,7 +16,7 @@ interface Props {
 }
 
 export default function BotCard(props: Props): React.JSX.Element {
-  const theme: ColorScheme = useAppSelector((state: RootState) => state.system.theme);
+  const { theme }: SystemContextType = useSystem();
   const [modalVisible, setModalVisible] = useState<boolean>(false);
 
   function newChat(bot: Bot): void {

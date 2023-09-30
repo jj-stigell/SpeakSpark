@@ -2,9 +2,8 @@ import React from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 
-import { RootState } from '../redux/store';
-import { useAppSelector } from '../redux/hooks';
-import { System } from '../redux/features/systemSlice';
+import useSystem from '../hooks/useSystem';
+import { SystemContextType } from '../context/SystemProvider';
 
 interface Props {
   title: string,
@@ -12,14 +11,14 @@ interface Props {
 }
 
 export default function ActionHeader(props: Props): React.JSX.Element {
-  const system: System = useAppSelector((state: RootState) => state.system);
+  const { theme, darkMode }: SystemContextType = useSystem();
 
   return (
-    <View style={[styles.headerContainer, { backgroundColor: system.theme.background.secondary }]}>
+    <View style={[styles.headerContainer, { backgroundColor: theme.background.secondary }]}>
       <TouchableOpacity onPress={props.onBack}>
-        <Ionicons name="arrow-back" size={24} color={system.darkMode ? 'white' : 'black'} />
+        <Ionicons name="arrow-back" size={24} color={darkMode ? 'white' : 'black'} />
       </TouchableOpacity>
-      <Text style={[styles.headerText, { color: system.theme.font.primary }]}>{props.title}</Text>
+      <Text style={[styles.headerText, { color: theme.font.primary }]}>{props.title}</Text>
     </View>
   );
 }

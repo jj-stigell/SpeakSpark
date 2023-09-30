@@ -1,4 +1,4 @@
-export interface ColorScheme {
+export interface Theme {
   background: {
     primary: string,
     secondary: string
@@ -24,7 +24,7 @@ export interface ColorScheme {
   checkbox: string
 }
 
-export const light: ColorScheme = {
+export const light: Theme = {
   background: {
     primary: '#F5FCFF',
     secondary: '#daebf7'
@@ -50,7 +50,7 @@ export const light: ColorScheme = {
   checkbox: '#012138'
 };
 
-export const dark: ColorScheme = {
+export const dark: Theme = {
   background: {
     primary: '#222222',
     secondary: '#6e6e6e'

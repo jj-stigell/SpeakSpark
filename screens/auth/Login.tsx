@@ -4,40 +4,32 @@ import { View, Text, Pressable, TextInput, TouchableOpacity } from 'react-native
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import Checkbox from 'expo-checkbox';
-import { Center } from '@gluestack-ui/themed';
 import { useMutation } from '@apollo/client';
 
 import Button from '../../components/Button';
 import MainHeader from '../../components/MainHeader';
-import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import ThirdPartyButton from '../../components/ThirdPartyButton';
 import { deleteFromStore, getFromStore, saveToStore } from '../../utils/expoStore';
 import { LOGIN } from '../../graphql/mutations';
-import { setAccount } from '../../redux/features/accountSlice';
 import { validEmail } from '../../utils/validators';
-import { RootState } from '../../redux/store';
-import { ColorScheme } from '../../utils/colors';
-import ThirdPartyButton from '../../components/ThirdPartyButton';
+import useAuth from '../../hooks/useAuth';
+import { SystemContextType } from '../../context/SystemProvider';
+import useSystem from '../../hooks/useSystem';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default function Login({ navigation }: { navigation: any }): React.JSX.Element {
-  const dispatch = useAppDispatch();
-  const theme: ColorScheme = useAppSelector((state: RootState) => state.system.theme);
-
+  const { theme }: SystemContextType = useSystem();
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [showPassword, setShowPassword] = useState(false);
   const [isChecked, setIsChecked] = useState(Boolean(getFromStore('rememberMe')));
+  const { setAuth } = useAuth();
 
   const [loginAccount, { data, loading }] = useMutation(LOGIN, {
     errorPolicy: 'all',
     onCompleted: () => {
       saveToStore('token', data.login.token);
-      dispatch(setAccount({
-        id: data.login.user.id,
-        email,
-        uiLanguage: data.login.user.uiLanguage,
-        studyLanguage: data.login.user.studyLanguage
-      }));
+      setAuth(data.login.user);
     }
   });
 
@@ -54,35 +46,31 @@ export default function Login({ navigation }: { navigation: any }): React.JSX.El
     await loginAccount({ variables: { email, password } });
   }
 
-  React.useEffect(() => {
-    // eslint-disable-next-line func-style
-    const setCreds = async (): Promise<void> => {
-      if (isChecked) {
-        const email: string | null = await getFromStore('email');
-        const password: string | null = await getFromStore('password');
+  async function setCredentials(): Promise<void> {
+    if (isChecked) {
+      const email: string | null = await getFromStore('email');
+      const password: string | null = await getFromStore('password');
 
-        if (email)
-          setEmail(email);
-        if (password)
-          setPassword(password);
-      }
-    };
-    setCreds();
+      if (email)
+        setEmail(email);
+      if (password)
+        setPassword(password);
+    }
+  }
+
+  React.useEffect(() => {
+    setCredentials();
   }, []);
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <Center>
-        <MainHeader/>
-      </Center>
+      <MainHeader/>
       <View style={{ flex: 1, marginHorizontal: 22 }}>
         <View style={{ marginVertical: 22 }}>
-          <Center>
-            <Text style={{
-              fontSize: 17,
-              color: theme.font.primary
-            }}>Login to existing account</Text>
-          </Center>
+          <Text style={{
+            fontSize: 17,
+            color: theme.font.primary
+          }}>Login to existing account</Text>
         </View>
         <View style={{ marginBottom: 12 }}>
           <Text style={{

@@ -14,30 +14,26 @@ import PlayButton from '../../components/PlayButton';
 import GrammarModal from '../../components/GrammarModal';
 import { NEW_CHAT, POST_MESSAGE } from '../../graphql/mutations';
 import { useLazyQuery, useMutation } from '@apollo/client';
-import { Bot } from '../../redux/features/botSlice';
-import { Message } from '../../redux/features/chatSlice';
 import { GET_MESSAGES } from '../../graphql/queries';
-import { Account } from '../../redux/features/accountSlice';
-import { RootState } from '../../redux/store';
-import { useAppSelector } from '../../redux/hooks';
-import { System } from '../../redux/features/systemSlice';
-import { ColorScheme } from '../../utils/colors';
+import { AuthContextType } from '../../context/AuthProvider';
+import useAuth from '../../hooks/useAuth';
+import useSystem from '../../hooks/useSystem';
+import { SystemContextType } from '../../context/SystemProvider';
+import { Bot, Message } from '../../type';
 
 export interface CustomMessage extends IMessage {
   messageAudio: string
 }
 
 export default function Chat(props: { navigation: any, route: any  }): React.JSX.Element {
-  const system: System = useAppSelector((state: RootState) => state.system);
-  const theme: ColorScheme = useAppSelector((state: RootState) => state.system.theme);
+  const { darkMode }: SystemContextType = useSystem();
   const [loading, setLoading] = React.useState<boolean>(true);
   const [grammarModalVisible, setGrammarModalVisible] = useState<boolean>(false);
   const [isTyping, setIstyping] = React.useState<boolean>(false);
   const [message, setMessage] = React.useState<CustomMessage | undefined>(undefined);
   const [chatId, setChatId] = React.useState<string>('');
   const [messages, setMessages] = useState<Array<CustomMessage>>([]);
-  const account: Account = useAppSelector(
-    (state: RootState) => state.account.account);
+  const { auth }: AuthContextType = useAuth();
 
   const bot: Bot = props.route?.params?.bot;
   const botData: User = {
@@ -47,7 +43,7 @@ export default function Chat(props: { navigation: any, route: any  }): React.JSX
   };
 
   const user: User = {
-    _id: account.id
+    _id: auth!.id
   };
 
   const [newChat] = useMutation(NEW_CHAT, {
@@ -111,7 +107,7 @@ export default function Chat(props: { navigation: any, route: any  }): React.JSX
             createdAt: message.createdAt,
             messageAudio: message.audio,
             user: message.role === 'BOT' ? botData : {
-              _id: account.id
+              _id: auth!.id
             }
           };
         });
@@ -175,7 +171,7 @@ export default function Chat(props: { navigation: any, route: any  }): React.JSX
             }
           }}
         />
-        { props.currentMessage?.user._id != account.id && props.currentMessage?._id && (
+        { props.currentMessage?.user._id != auth!.id && props.currentMessage?._id && (
           <View style={{ flexDirection: 'column', marginLeft: 0 }}>
             <TouchableOpacity onPress={(): void => {
               setMessage(props.currentMessage as CustomMessage);
@@ -185,7 +181,7 @@ export default function Chat(props: { navigation: any, route: any  }): React.JSX
                 name='information-circle'
                 style={{
                   paddingRight: 8,
-                  color: system.darkMode ? 'white' : 'black'
+                  color: darkMode ? 'white' : 'black'
                 }}
                 size={34}
               />

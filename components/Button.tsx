@@ -1,9 +1,8 @@
 import React from 'react';
 import { Text, TouchableOpacity, StyleSheet } from 'react-native';
 
-import { useAppSelector } from '../redux/hooks';
-import { RootState } from '../redux/store';
-import { ColorScheme } from '../utils/colors';
+import { SystemContextType } from '../context/SystemProvider';
+import useSystem from '../hooks/useSystem';
 
 interface Props {
   title: string,
@@ -17,7 +16,7 @@ interface Props {
 }
 
 export default function Button(props: Props): React.JSX.Element {
-  const theme: ColorScheme = useAppSelector((state: RootState) => state.system.theme);
+  const { theme }: SystemContextType = useSystem();
   const color: string = props.color ?? theme.button.primary;
 
   return (

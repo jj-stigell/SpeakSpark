@@ -3,13 +3,12 @@ import React from 'react';
 import { View, Text, ScrollView, Dimensions, StyleSheet } from 'react-native';
 
 import Button from '../../components/Button';
-import { ColorScheme } from '../../redux/features/systemSlice';
-import { useAppSelector } from '../../redux/hooks';
-import { RootState } from '../../redux/store';
+import useSystem from '../../hooks/useSystem';
+import { SystemContextType } from '../../context/SystemProvider';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default function TermsAndConditions({ navigation }: { navigation: any }): React.JSX.Element {
-  const theme: ColorScheme = useAppSelector((state: RootState) => state.system.theme);
+  const { theme }: SystemContextType = useSystem();
 
   return (
     <View style={styles.container}>

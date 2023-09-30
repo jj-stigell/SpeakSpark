@@ -6,11 +6,10 @@ import { Modal, StyleSheet, Text, View, ScrollView } from 'react-native';
 import Button from './Button';
 import Loader from './Loader';
 import PlayButton from './PlayButton';
-import { useAppSelector } from '../redux/hooks';
-import { RootState } from '../redux/store';
-import { ColorScheme } from '../utils/colors';
 import { CustomMessage } from '../screens/main/Chat';
 import { GET_MESSAGE } from '../graphql/queries';
+import { SystemContextType } from '../context/SystemProvider';
+import useSystem from '../hooks/useSystem';
 
 interface Props {
   message: CustomMessage,
@@ -19,7 +18,7 @@ interface Props {
 }
 
 export default function GrammarModal(props: Props): React.JSX.Element {
-  const theme: ColorScheme = useAppSelector((state: RootState) => state.system.theme);
+  const { theme }: SystemContextType = useSystem();
 
   const { data, loading, error } = useQuery(GET_MESSAGE, {
     variables: {

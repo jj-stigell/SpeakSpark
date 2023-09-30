@@ -6,12 +6,11 @@ import { Ionicons } from '@expo/vector-icons';
 import { Toast as notification } from 'react-native-toast-notifications';
 import { useLazyQuery } from '@apollo/client';
 
-import { Message } from '../redux/features/chatSlice';
 import { GET_MESSAGE } from '../graphql/queries';
-import { RootState } from '../redux/store';
-import { useAppSelector } from '../redux/hooks';
-import { System } from '../redux/features/systemSlice';
 import { CustomMessage } from '../screens/main/Chat';
+import { SystemContextType } from '../context/SystemProvider';
+import useSystem from '../hooks/useSystem';
+import { Message } from '../type';
 
 interface Props {
   message: CustomMessage,
@@ -19,7 +18,7 @@ interface Props {
 }
 
 export default function PlayButton(props: Props): React.JSX.Element {
-  const system: System = useAppSelector((state: RootState) => state.system);
+  const { darkMode }: SystemContextType = useSystem();
   const [playing, setPlaying] = useState<boolean>(false);
   const [sound, setSound] = useState<Audio.Sound | undefined>();
   const [loading, setLoading] = useState<boolean>(false);
@@ -96,7 +95,7 @@ export default function PlayButton(props: Props): React.JSX.Element {
           size={props.size ?? 34}
           style={{
             paddingRight: 8,
-            color: system.darkMode ? 'white' : 'black',
+            color: darkMode ? 'white' : 'black',
             opacity: loading ? 0.5 : 1
           }}
         />

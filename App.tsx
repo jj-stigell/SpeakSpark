@@ -1,15 +1,13 @@
 import React from 'react';
 import { ApolloProvider } from '@apollo/client';
 import { StatusBar, SafeAreaView, View } from 'react-native';
-import { config, GluestackUIProvider } from '@gluestack-ui/themed';
 import { NavigationContainer } from '@react-navigation/native';
-import { Provider } from 'react-redux';
 import { ToastProvider } from 'react-native-toast-notifications';
-import { PersistGate } from 'redux-persist/integration/react';
 
+import AuthProvider from './context/AuthProvider';
 import Navigator from './Navigator';
+import SystemProvider from './context/SystemProvider';
 import { client } from './graphql/client';
-import { persistor, store } from './redux/store';
 
 function ThemedStatusBar(): React.JSX.Element {
   return (
@@ -24,10 +22,10 @@ function ThemedStatusBar(): React.JSX.Element {
 export default function App(): React.JSX.Element {
   return (
     <NavigationContainer>
-      <Provider store={store}>
-        <PersistGate loading={null} persistor={persistor}>
-          <ApolloProvider client={client}>
-            <GluestackUIProvider config={config.theme}>
+      <ApolloProvider client={client}>
+        <AuthProvider>
+          <SystemProvider>
+            <React.Fragment>
               <ThemedStatusBar/>
               <ToastProvider
                 placement='top'
@@ -38,10 +36,10 @@ export default function App(): React.JSX.Element {
               >
                 <Navigator/>
               </ToastProvider>
-            </GluestackUIProvider>
-          </ApolloProvider>
-        </PersistGate>
-      </Provider>
+            </React.Fragment>
+          </SystemProvider>
+        </AuthProvider>
+      </ApolloProvider>
     </NavigationContainer>
   );
 }

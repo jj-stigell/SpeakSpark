@@ -1,20 +1,17 @@
 import React from 'react';
 import { Dropdown } from 'react-native-element-dropdown';
-import { ActionCreatorWithPayload, AnyAction, Dispatch } from '@reduxjs/toolkit';
 
-import { useAppDispatch } from '../redux/hooks';
 import { styles } from '../styles';
 import { LanguageSet } from '../utils/languages';
 
 interface Props {
   language: string,
-  setLanguage: ActionCreatorWithPayload<string, string>,
+  setLanguage: (language: string) => void,
   half?: boolean,
   languageList: Array<LanguageSet>
 }
 
 export default function LanguageSelector(props: Props): React.JSX.Element {
-  const dispatch: Dispatch<AnyAction> = useAppDispatch();
   // eslint-disable-next-line @typescript-eslint/typedef
   const [isFocus, setIsFocus] = React.useState<boolean>(false);
 
@@ -40,7 +37,7 @@ export default function LanguageSelector(props: Props): React.JSX.Element {
       onFocus={(): void => setIsFocus(true)}
       onBlur={(): void => setIsFocus(false)}
       onChange={(item: LanguageSet): void => {
-        dispatch(props.setLanguage(item.value));
+        props.setLanguage(item.value);
         setIsFocus(false);
       }}
     />
