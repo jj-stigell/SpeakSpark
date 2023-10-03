@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable max-len */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/typedef */
 import React, { useState, useCallback } from 'react';
@@ -124,8 +122,8 @@ export default function Chat(props: { navigation: any, route: any  }): React.JSX
     } else if (props.route?.params?.chatId) {
 
       setChatId(props.route.params.chatId);
-      //console.log('existing chat id', chatId);
-      //console.log('existing chat id', props.route.params.chatId);
+      console.log('existing chat id', chatId);
+      console.log('existing chat id', props.route.params.chatId);
 
       getMessages({ variables: { chatId: props.route.params.chatId } });
     } else {
@@ -139,14 +137,18 @@ export default function Chat(props: { navigation: any, route: any  }): React.JSX
   const onSend = useCallback(async (messages: Array<CustomMessage> = []) => {
 
     if (messages[0].text.length > 160) {
-      notification.show(`Maximum message length is 160, your message is ${messages[0].text.length} characters long`, { type: 'warning' });
+      notification.show(
+        `Maximum message length is 160, your message is ${messages[0].text.length} characters long`,
+        { type: 'warning' }
+      );
+      return;
     }
 
     setMessages((previousMessages: Array<CustomMessage>) =>
       GiftedChat.append(previousMessages, messages)
     );
     setIstyping(true);
-    //console.log('posting to id', props.route.params.chatId, 'and', chatId);
+    console.log('posting to id', props.route.params.chatId, 'and', chatId);
 
     await postMessage({ variables: {
       message: messages[0].text,
@@ -194,11 +196,7 @@ export default function Chat(props: { navigation: any, route: any  }): React.JSX
   }
 
   if (loading) {
-    return (
-      <View style={{ marginTop: 300, alignItems: 'center' }}>
-        <Loader loadingText='Loading chat..'/>
-      </View>
-    );
+    return (<Loader marginTop={300} loadingText='Loading chat..'/>);
   }
 
   return (
