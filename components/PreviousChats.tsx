@@ -53,7 +53,12 @@ export default function PreviousChats(props: { navigation: any }): React.JSX.Ele
                 button to start a new chat.
               </Text>
               <Pressable onPress={updateChats}>
-                <Text style={{ marginTop: 20, textAlign: 'center' }}>Update chats</Text>
+                <Text
+                  style={{
+                    marginTop: 20,
+                    textAlign: 'center',
+                    textDecorationLine: 'underline'
+                  }}>Click to update chats</Text>
               </Pressable>
             </React.Fragment>
           ) : (

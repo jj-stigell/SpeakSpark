@@ -74,22 +74,23 @@ export default function AuthProvider(props: { children: React.JSX.Element }): Re
   }, []);
 
   const setUILanguage = useCallback(async (language: string) => {
-    setAuth({
-      id: auth!.id,
-      email: auth!.email,
-      studyLanguage: auth!.studyLanguage,
+
+    setAuth((previousState: Account | null) => ({
+      id: previousState!.id,
+      email: previousState!.email,
+      studyLanguage: previousState!.studyLanguage,
       uiLanguage: language
-    });
+    }));
     await saveToStore('auth', JSON.stringify({ ...auth, uiLanguage: language }));
   }, []);
 
   const setStudyLanguage = useCallback(async (language: string) => {
-    setAuth({
-      id: auth!.id,
-      email: auth!.email,
+    setAuth((previousState: Account | null) => ({
+      id: previousState!.id,
+      email: previousState!.email,
       studyLanguage: language,
-      uiLanguage: auth!.uiLanguage
-    });
+      uiLanguage: previousState!.uiLanguage
+    }));
     await saveToStore('auth', JSON.stringify({ ...auth, studyLanguage: language }));
   }, []);
 

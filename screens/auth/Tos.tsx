@@ -14,7 +14,7 @@ export default function TermsAndConditions({ navigation }: { navigation: any }):
     <View style={styles.container}>
       <Text style={[styles.title, { color: theme.font.primary }]}>Terms and conditions</Text>
       <ScrollView style={styles.tcContainer}>
-        <Text style={[styles.tcP, { color: theme.font.primary }]}>Welcome to use our application SpeakSpark. If you continue to browse and use this application, you are agreeing to comply with and be bound by the following terms and conditions of use, which together with our privacy policy govern SpeakSpark’s relationship with you in relation to this application. If you disagree with any part of these terms and conditions, please do not use our application.</Text>
+        <Text style={[styles.tcP, { color: theme.font.primary }]}>Welcome to use SpeakSpark. If you continue to browse and use this application, you are agreeing to comply with and be bound by the following terms and conditions of use, which together with our privacy policy govern SpeakSpark’s relationship with you in relation to this application. If you disagree with any part of these terms and conditions, please do not use our application.</Text>
         <Text style={[styles.tcP, { color: theme.font.primary }]}>The term ‘SpeakSpark’ or ‘us’ or ‘we’ refers to the owner of the application. The term ‘you’ refers to the user or viewer of our application.</Text>
         <Text style={[styles.tcP, { color: theme.font.primary }]}>The use of this application is subject to the following terms of use.</Text>
         <Text style={[styles.tcL, { color: theme.font.primary }]}>{'\u2022'} The content of the pages of this application is for your general information and use only. It is subject to change without notice.</Text>
