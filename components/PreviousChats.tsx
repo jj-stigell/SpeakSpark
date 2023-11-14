@@ -3,6 +3,7 @@
 import React from 'react';
 import { Pressable, ScrollView, Text, View } from 'react-native';
 import { useQuery } from '@apollo/client';
+import { Toast as notification } from 'react-native-toast-notifications';
 
 import Card from '../components/ChatCard';
 import Loader from './Loader';
@@ -31,6 +32,7 @@ export default function PreviousChats(props: { navigation: any }): React.JSX.Ele
 
   async function updateChats(): Promise<void> {
     await refetch();
+    notification.show('Chats updated!', { type: 'success' });
   }
 
   return (
@@ -38,11 +40,11 @@ export default function PreviousChats(props: { navigation: any }): React.JSX.Ele
       <Text style={{ marginTop: 2, fontSize: 18, textAlign: 'center' }}>
         Latest Chats - Click to continue chatting
       </Text>
-      <Text style={{ marginTop: 2, fontSize: 16, textAlign: 'center' }}>
+      <Text style={{ marginTop: 5, fontSize: 16, textAlign: 'center' }}>
         Studying {getLabelByValue(auth!.studyLanguage, studyLanguages, 'label') + ' - '}
         {getLabelByValue(auth!.studyLanguage, studyLanguages, 'english')}
       </Text>
-      <ScrollView style={{ height: 440, marginTop: 5 }}>
+      <ScrollView style={{ height: 400, marginTop: 5 }}>
         { loading ? (
           <Loader marginTop={90} loadingText='Loading previous chats...'/>
         ) : (
@@ -58,7 +60,7 @@ export default function PreviousChats(props: { navigation: any }): React.JSX.Ele
                     marginTop: 20,
                     textAlign: 'center',
                     textDecorationLine: 'underline'
-                  }}>Click to update chats</Text>
+                  }}>Click to refetch chats</Text>
               </Pressable>
             </React.Fragment>
           ) : (

@@ -7,7 +7,7 @@ import { SystemContextType } from '../context/SystemProvider';
 
 interface Props {
   title: string,
-  onBack: () => void
+  onTouch: () => void
 }
 
 export default function ActionHeader(props: Props): React.JSX.Element {
@@ -15,7 +15,7 @@ export default function ActionHeader(props: Props): React.JSX.Element {
 
   return (
     <View style={[styles.headerContainer, { backgroundColor: theme.background.secondary }]}>
-      <TouchableOpacity onPress={props.onBack}>
+      <TouchableOpacity onPress={props.onTouch}>
         <Ionicons name="arrow-back" size={24} color={darkMode ? 'white' : 'black'} />
       </TouchableOpacity>
       <Text style={[styles.headerText, { color: theme.font.primary }]}>{props.title}</Text>

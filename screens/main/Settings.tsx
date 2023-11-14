@@ -5,7 +5,7 @@ import {
   Switch, ScrollView, Image, Linking
 } from 'react-native';
 
-import ChatHeader from '../../components/ActionHeader';
+import SettingsHeader from '../../components/ActionHeader';
 import LanguageSelector from '../../components/LanguageSelector';
 import { uiLanguages } from '../../utils/languages';
 import { AuthContextType } from '../../context/AuthProvider';
@@ -23,7 +23,7 @@ export default function Settings({ navigation }: { navigation: any }): React.JSX
 
   return (
     <ScrollView style={styles.container}>
-      <ChatHeader title={'Settings'} onBack={(): void => navigation.navigate('Home')}/>
+      <SettingsHeader title={'Settings'} onTouch={(): void => navigation.navigate('Home')}/>
       <View style={styles.section}>
         <View style={styles.sectionHeader}>
           <Text style={styles.sectionHeaderText}>Account</Text>
@@ -36,7 +36,7 @@ export default function Settings({ navigation }: { navigation: any }): React.JSX
           />
           <View>
             <Text style={[styles.profileName, { color: theme.font.primary }]}>
-              {auth!.email}
+              { auth?.email ?? 'Anonymous' }
             </Text>
           </View>
         </View>
@@ -197,7 +197,7 @@ export default function Settings({ navigation }: { navigation: any }): React.JSX
                 size={20}
               />
               <Text style={[styles.rowLabel, { color: theme.font.primary }]}>
-                App version: 0.1.1 (K202309221)
+                App version: 0.0.1
               </Text>
               <View style={styles.rowSpacer}/>
             </View>

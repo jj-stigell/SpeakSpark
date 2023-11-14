@@ -29,7 +29,7 @@ export const styles = StyleSheet.create({
     fontSize: 14
   },
   placeholderStyle: {
-    fontSize: 16
+    fontSize: 14
   },
   selectedTextStyle: {
     fontSize: 16

@@ -16,19 +16,22 @@ export default function NewChat(props: { navigation: any }): React.JSX.Element {
     <View style={styles.container}>
       <Text style={styles.heading}>Start a New Chat</Text>
       <Text style={styles.textCenter}>Chat Language</Text>
-      <LanguageSelector
-        language={auth!.studyLanguage}
-        setLanguage={setStudyLanguage}
-        languageList={studyLanguages}
-      />
+      <View style={{ flex: 1 }}>
+        <LanguageSelector
+          language={auth!.studyLanguage}
+          setLanguage={setStudyLanguage}
+          languageList={studyLanguages}
+        />
+      </View>
       <Text style={styles.textCenter}>Chat Partners</Text>
-      <ScrollView style={styles.scrollView}>
-        <BotList navigation={props.navigation} />
-      </ScrollView>
-      <Button
-        title='Back Home'
-        onPress={(): void => props.navigation.navigate('Home')}
-      />
+      <View style={styles.scrollView}>
+        <ScrollView>
+          <BotList navigation={props.navigation} />
+        </ScrollView>
+      </View>
+      <View style={{ flex: 1, marginBottom: 10 }}>
+        <Button title='Back Home' onPress={(): void => props.navigation.navigate('Home')} />
+      </View>
     </View>
   );
 }
@@ -36,24 +39,26 @@ export default function NewChat(props: { navigation: any }): React.JSX.Element {
 // eslint-disable-next-line @typescript-eslint/typedef
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     marginHorizontal: 16,
-    marginTop: 50,
-    justifyContent: 'space-between' // To simulate VStack with 'xl' space
+    marginTop: 15,
+    justifyContent: 'space-between'
   },
   heading: {
-    lineHeight: 24, // Adjust as per design needs
-    fontSize: 24, // Adjust as per design needs
-    textAlign: 'center',
-    marginBottom: 20 // Adjust as per design needs
+    flex: 1,
+    fontSize: 24,
+    textAlign: 'center'
   },
   textCenter: {
+    flex: 1,
     marginTop: 2,
     fontSize: 20,
     textAlign: 'center',
-    marginBottom: 10 // Adjust as per design needs
+    marginBottom: 5
   },
   scrollView: {
+    flex: 9,
     height: 450,
-    marginBottom: 20 // Adjust as per design needs
+    marginBottom: 5
   }
 });

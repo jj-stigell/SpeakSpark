@@ -36,6 +36,6 @@ const styles = StyleSheet.create({
   logo: {
     width: 35,
     height: 35,
-    marginLeft: 10 // You can adjust this as per your design needs
+    marginLeft: 10
   }
 });
