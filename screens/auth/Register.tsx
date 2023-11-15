@@ -16,6 +16,7 @@ import { validEmail } from '../../utils/validators';
 import useAuth from '../../hooks/useAuth';
 import { SystemContextType } from '../../context/SystemProvider';
 import useSystem from '../../hooks/useSystem';
+import i18n from '../../i18n';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default function Register({ navigation }: { navigation: any }): React.JSX.Element {
@@ -52,7 +53,9 @@ export default function Register({ navigation }: { navigation: any }): React.JSX
       </View>
       <View style={{ flex: 1, marginHorizontal: 22 }}>
         <View style={{ marginVertical: 22, alignItems: 'center' }}>
-          <Text style={{ fontSize: 17, color: theme.font.primary }}>Create New Account</Text>
+          <Text style={{ fontSize: 17, color: theme.font.primary }}>
+            {i18n.t('auth.registerTitle')}
+          </Text>
         </View>
         <View style={{ marginBottom: 12 }}>
           <Text style={{
@@ -60,7 +63,7 @@ export default function Register({ navigation }: { navigation: any }): React.JSX
             fontWeight: '400',
             marginVertical: 8,
             color: theme.font.primary
-          }}>Email address</Text>
+          }}>{i18n.t('auth.email')}</Text>
           <View style={{
             width: '100%',
             height: 48,
@@ -72,7 +75,7 @@ export default function Register({ navigation }: { navigation: any }): React.JSX
             paddingLeft: 22
           }}>
             <TextInput
-              placeholder='Enter your email address'
+              placeholder={i18n.t('auth.emailField')}
               placeholderTextColor={theme.disabled}
               onChangeText={setEmail}
               value={email}
@@ -90,7 +93,7 @@ export default function Register({ navigation }: { navigation: any }): React.JSX
             fontWeight: '400',
             marginVertical: 8,
             color: theme.font.primary
-          }}>Password</Text>
+          }}>{i18n.t('auth.password')}</Text>
           <View style={{
             width: '100%',
             height: 48,
@@ -102,7 +105,7 @@ export default function Register({ navigation }: { navigation: any }): React.JSX
             paddingLeft: 22
           }}>
             <TextInput
-              placeholder='Enter your password'
+              placeholder={i18n.t('auth.passwordField')}
               placeholderTextColor={theme.disabled}
               onChangeText={setPassword}
               value={password}
@@ -133,7 +136,7 @@ export default function Register({ navigation }: { navigation: any }): React.JSX
             fontWeight: '400',
             marginVertical: 8,
             color: theme.font.primary
-          }}>Confirm Password</Text>
+          }}>{i18n.t('auth.confirmPassword')}</Text>
           <View style={{
             width: '100%',
             height: 48,
@@ -145,7 +148,7 @@ export default function Register({ navigation }: { navigation: any }): React.JSX
             paddingLeft: 22
           }}>
             <TextInput
-              placeholder='Confirm your password'
+              placeholder={i18n.t('auth.confirmPasswordField')}
               placeholderTextColor={theme.disabled}
               onChangeText={setConfirmPassword}
               value={confirmPassword}
@@ -180,15 +183,16 @@ export default function Register({ navigation }: { navigation: any }): React.JSX
             onValueChange={setIsChecked}
             color={isChecked ? theme.checkbox : undefined}
           />
-          <Text style={{ color: theme.font.primary }}>I agree to the </Text>
+          <Text style={{ color: theme.font.primary }}>{i18n.t('auth.agreeTerms')}</Text>
           <TouchableOpacity onPress={(): void => navigation.navigate('Tos')}>
             <Text style={{ color: theme.font.primary, textDecorationLine: 'underline' }}>
-              terms and conditions
+              {i18n.t('auth.tosLink')}
             </Text>
           </TouchableOpacity>
         </View>
         <Button
-          title={loading ? 'Registering, please wait...' : 'Sign Up'}
+          title={loading ?
+            i18n.t('auth.registerProcess') : i18n.t('auth.registerButton')}
           onPress={register}
           disabled={!isChecked || loading || password !== confirmPassword || !validEmail(email)}
           style={{
@@ -205,7 +209,9 @@ export default function Register({ navigation }: { navigation: any }): React.JSX
               marginHorizontal: 10
             }}
           />
-          <Text style={{ fontSize: 14, color: theme.font.primary }}>Or Sign up with</Text>
+          <Text style={{ fontSize: 14, color: theme.font.primary }}>
+            {i18n.t('auth.alternativeSignup')}
+          </Text>
           <View
             style={{
               flex: 1,
@@ -219,22 +225,30 @@ export default function Register({ navigation }: { navigation: any }): React.JSX
           flexDirection: 'row',
           justifyContent: 'center'
         }}>
-          <ThirdPartyButton title='Facebook' image={require('../../assets/image/facebook.png')}/>
-          <ThirdPartyButton title='Google' image={require('../../assets/image/google.png')}/>
+          <ThirdPartyButton
+            title={i18n.t('auth.facebook')}
+            image={require('../../assets/image/facebook.png')}
+          />
+          <ThirdPartyButton
+            title={i18n.t('auth.google')}
+            image={require('../../assets/image/google.png')}
+          />
         </View>
         <View style={{
           flexDirection: 'row',
           justifyContent: 'center',
           marginVertical: 22
         }}>
-          <Text style={{ fontSize: 16, color: theme.font.primary }}>Already have an account</Text>
+          <Text style={{ fontSize: 16, color: theme.font.primary }}>
+            {i18n.t('auth.alreadyAccount')}
+          </Text>
           <Pressable onPress={(): void => navigation.navigate('Login')}>
             <Text style={{
               fontSize: 16,
               color: '#007260',
               fontWeight: 'bold',
               marginLeft: 6
-            }}>Login</Text>
+            }}>{i18n.t('auth.loginLink')}</Text>
           </Pressable>
         </View>
       </View>

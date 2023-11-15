@@ -64,6 +64,11 @@ export const uiLanguages: Array<LanguageSet> = [
     english: 'Japanese'
   },
   {
+    label: '🇰🇷 한국어',
+    value: 'ko',
+    english: 'Korean'
+  },
+  {
     label: '🇻🇳 Tiếng Việt',
     value: 'vi',
     english: 'Vietnamese'

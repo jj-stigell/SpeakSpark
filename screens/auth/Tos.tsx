@@ -5,6 +5,7 @@ import { View, Text, ScrollView, Dimensions, StyleSheet } from 'react-native';
 import Button from '../../components/Button';
 import useSystem from '../../hooks/useSystem';
 import { SystemContextType } from '../../context/SystemProvider';
+import i18n from '../../i18n';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default function TermsAndConditions({ navigation }: { navigation: any }): React.JSX.Element {
@@ -12,7 +13,7 @@ export default function TermsAndConditions({ navigation }: { navigation: any }):
 
   return (
     <View style={styles.container}>
-      <Text style={[styles.title, { color: theme.font.primary }]}>Terms and conditions</Text>
+      <Text style={[styles.title, { color: theme.font.primary }]}>{i18n.t('auth.TermsAndConditions')}</Text>
       <ScrollView style={styles.tcContainer}>
         <Text style={[styles.tcP, { color: theme.font.primary }]}>Welcome to use SpeakSpark. If you continue to browse and use this application, you are agreeing to comply with and be bound by the following terms and conditions of use, which together with our privacy policy govern SpeakSpark’s relationship with you in relation to this application. If you disagree with any part of these terms and conditions, please do not use our application.</Text>
         <Text style={[styles.tcP, { color: theme.font.primary }]}>The term ‘SpeakSpark’ or ‘us’ or ‘we’ refers to the owner of the application. The term ‘you’ refers to the user or viewer of our application.</Text>
@@ -41,7 +42,7 @@ export default function TermsAndConditions({ navigation }: { navigation: any }):
         <Text style={[styles.tcP, { color: theme.font.primary }]}>Last updated: 2023-09-18</Text>
       </ScrollView>
       <Button
-        title={'Go back'}
+        title={i18n.t('auth.returnButton')}
         onPress={(): void => navigation.navigate('Register')}
         style={{ marginTop: 10 }}
       />

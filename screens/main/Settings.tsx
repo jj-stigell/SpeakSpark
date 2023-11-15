@@ -12,10 +12,12 @@ import { AuthContextType } from '../../context/AuthProvider';
 import { SystemContextType } from '../../context/SystemProvider';
 import useAuth from '../../hooks/useAuth';
 import useSystem from '../../hooks/useSystem';
+import i18n from '../../i18n';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default function Settings({ navigation }: { navigation: any }): React.JSX.Element {
-  const { auth, logout, setUILanguage }: AuthContextType = useAuth();
+  const { auth, logout }: AuthContextType = useAuth();
+  const { setUILanguage, uiLanguage }: SystemContextType = useSystem();
   const {
     theme, darkMode, notifications,
     toggleNotification, toggleDarkMode
@@ -23,10 +25,13 @@ export default function Settings({ navigation }: { navigation: any }): React.JSX
 
   return (
     <ScrollView style={styles.container}>
-      <SettingsHeader title={'Settings'} onTouch={(): void => navigation.navigate('Home')}/>
+      <SettingsHeader
+        title={i18n.t('settings.title')}
+        onTouch={(): void => navigation.navigate('Home')}
+      />
       <View style={styles.section}>
         <View style={styles.sectionHeader}>
-          <Text style={styles.sectionHeaderText}>Account</Text>
+          <Text style={styles.sectionHeaderText}>{i18n.t('settings.account')}</Text>
         </View>
         <View style={[styles.profile, { backgroundColor: theme.container.primary }]}>
           <Image
@@ -43,7 +48,7 @@ export default function Settings({ navigation }: { navigation: any }): React.JSX
       </View>
       <View style={styles.section}>
         <View style={styles.sectionHeader}>
-          <Text style={styles.sectionHeaderText}>Preferences</Text>
+          <Text style={styles.sectionHeaderText}>{i18n.t('settings.preferences')}</Text>
         </View>
         <View style={styles.sectionBody}>
           <View
@@ -62,10 +67,12 @@ export default function Settings({ navigation }: { navigation: any }): React.JSX
                   }}
                   size={20}
                 />
-                <Text style={[styles.rowLabel, { color: theme.font.primary }]}>Language</Text>
+                <Text style={[styles.rowLabel, { color: theme.font.primary }]}>{
+                  i18n.t('settings.language')}
+                </Text>
                 <View style={styles.rowSpacer}/>
                 <LanguageSelector
-                  language={auth!.uiLanguage}
+                  language={uiLanguage}
                   setLanguage={setUILanguage}
                   languageList={uiLanguages}
                   half
@@ -88,7 +95,9 @@ export default function Settings({ navigation }: { navigation: any }): React.JSX
                   }}
                   size={20}
                 />
-                <Text style={[styles.rowLabel, { color: theme.font.primary }]}>Dark Mode</Text>
+                <Text style={[styles.rowLabel, { color: theme.font.primary }]}>
+                  {i18n.t('settings.darkMode')}
+                </Text>
                 <View style={styles.rowSpacer}/>
                 <Switch
                   value={darkMode}
@@ -113,7 +122,9 @@ export default function Settings({ navigation }: { navigation: any }): React.JSX
                   }}
                   size={20}
                 />
-                <Text style={[styles.rowLabel, { color: theme.font.primary }]}>Notifications</Text>
+                <Text style={[styles.rowLabel, { color: theme.font.primary }]}>
+                  {i18n.t('settings.notifications')}
+                </Text>
                 <View style={styles.rowSpacer}/>
                 <Switch
                   value={notifications}
@@ -126,7 +137,7 @@ export default function Settings({ navigation }: { navigation: any }): React.JSX
       </View>
       <View style={styles.section}>
         <View style={styles.sectionHeader}>
-          <Text style={styles.sectionHeaderText}>Help</Text>
+          <Text style={styles.sectionHeaderText}>{i18n.t('settings.help')}</Text>
         </View>
         <View style={styles.sectionBody}>
           <View
@@ -147,7 +158,7 @@ export default function Settings({ navigation }: { navigation: any }): React.JSX
                   size={20}
                 />
                 <Text style={[styles.rowLabel, { color: theme.font.primary }]}>
-                  Report Bug / Feature
+                  {i18n.t('settings.report')}
                 </Text>
                 <View style={styles.rowSpacer}/>
               </View>
@@ -169,7 +180,9 @@ export default function Settings({ navigation }: { navigation: any }): React.JSX
                   }}
                   size={20}
                 />
-                <Text style={[styles.rowLabel, { color: theme.font.primary }]}>Contact Us</Text>
+                <Text style={[styles.rowLabel, { color: theme.font.primary }]}>
+                  {i18n.t('settings.contact')}
+                </Text>
                 <View style={styles.rowSpacer}/>
               </View>
             </TouchableOpacity>
@@ -178,7 +191,7 @@ export default function Settings({ navigation }: { navigation: any }): React.JSX
       </View>
       <View style={styles.section}>
         <View style={styles.sectionHeader}>
-          <Text style={styles.sectionHeaderText}>Other</Text>
+          <Text style={styles.sectionHeaderText}>{i18n.t('settings.other')}</Text>
         </View>
         <View style={styles.sectionBody}>
           <View
@@ -197,7 +210,7 @@ export default function Settings({ navigation }: { navigation: any }): React.JSX
                 size={20}
               />
               <Text style={[styles.rowLabel, { color: theme.font.primary }]}>
-                App version: 0.0.1
+                {i18n.t('settings.version')}
               </Text>
               <View style={styles.rowSpacer}/>
             </View>
@@ -218,7 +231,9 @@ export default function Settings({ navigation }: { navigation: any }): React.JSX
                   }}
                   size={20}
                 />
-                <Text style={[styles.rowLabel, { color: theme.font.primary }]}>Logout</Text>
+                <Text style={[styles.rowLabel, { color: theme.font.primary }]}>
+                  {i18n.t('settings.logout')}
+                </Text>
                 <View style={styles.rowSpacer}/>
               </View>
             </TouchableOpacity>

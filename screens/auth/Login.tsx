@@ -13,6 +13,7 @@ import { validEmail } from '../../utils/validators';
 import useAuth from '../../hooks/useAuth';
 import { SystemContextType } from '../../context/SystemProvider';
 import useSystem from '../../hooks/useSystem';
+import i18n from '../../i18n';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default function Login({ navigation }: { navigation: any }): React.JSX.Element {
@@ -43,7 +44,9 @@ export default function Login({ navigation }: { navigation: any }): React.JSX.El
       </View>
       <View style={{ flex: 1, marginHorizontal: 22 }}>
         <View style={{ marginVertical: 22, alignItems: 'center' }}>
-          <Text style={{ fontSize: 17, color: theme.font.primary }}>Login to existing account</Text>
+          <Text style={{ fontSize: 17, color: theme.font.primary }}>
+            {i18n.t('auth.loginTitle')}
+          </Text>
         </View>
         <View style={{ marginBottom: 12 }}>
           <Text style={{
@@ -51,7 +54,7 @@ export default function Login({ navigation }: { navigation: any }): React.JSX.El
             fontWeight: '400',
             marginVertical: 8,
             color: theme.font.primary
-          }}>Email address</Text>
+          }}>{i18n.t('auth.email')}</Text>
           <View style={{
             width: '100%',
             height: 48,
@@ -63,7 +66,7 @@ export default function Login({ navigation }: { navigation: any }): React.JSX.El
             paddingLeft: 22
           }}>
             <TextInput
-              placeholder='Enter your email address'
+              placeholder={i18n.t('auth.emailField')}
               placeholderTextColor={theme.font.primary}
               onChangeText={setEmail}
               value={email}
@@ -81,7 +84,7 @@ export default function Login({ navigation }: { navigation: any }): React.JSX.El
             fontWeight: '400',
             marginVertical: 8,
             color: theme.font.primary
-          }}>Password</Text>
+          }}>{i18n.t('auth.password')}</Text>
           <View style={{
             width: '100%',
             height: 48,
@@ -93,7 +96,7 @@ export default function Login({ navigation }: { navigation: any }): React.JSX.El
             paddingLeft: 22
           }}>
             <TextInput
-              placeholder='Enter your password'
+              placeholder={i18n.t('auth.passwordField')}
               placeholderTextColor={theme.font.primary}
               onChangeText={setPassword}
               value={password}
@@ -128,10 +131,10 @@ export default function Login({ navigation }: { navigation: any }): React.JSX.El
             onValueChange={setIsChecked}
             color={isChecked ? theme.checkbox : undefined}
           />
-          <Text style={{ color: theme.font.primary }}>Remember me</Text>
+          <Text style={{ color: theme.font.primary }}>{i18n.t('auth.remember')}</Text>
         </View>
         <Button
-          title={loading ? 'Logging in, please wait...' : 'Login'}
+          title={loading ? i18n.t('auth.loginProcess') : i18n.t('auth.loginButton')}
           onPress={(): void => login(email, password, isChecked)}
           disabled={loading || password.length === 0 || !validEmail(email)}
           style={{
@@ -148,7 +151,9 @@ export default function Login({ navigation }: { navigation: any }): React.JSX.El
               marginHorizontal: 10
             }}
           />
-          <Text style={{ fontSize: 14, color: theme.font.primary }}>Or Login with</Text>
+          <Text style={{ fontSize: 14, color: theme.font.primary }}>
+            {i18n.t('auth.alternativeLogin')}
+          </Text>
           <View
             style={{
               flex: 1,
@@ -162,15 +167,23 @@ export default function Login({ navigation }: { navigation: any }): React.JSX.El
           flexDirection: 'row',
           justifyContent: 'center'
         }}>
-          <ThirdPartyButton title='Facebook' image={require('../../assets/image/facebook.png')}/>
-          <ThirdPartyButton title='Google' image={require('../../assets/image/google.png')}/>
+          <ThirdPartyButton
+            title={i18n.t('auth.facebook')}
+            image={require('../../assets/image/facebook.png')}
+          />
+          <ThirdPartyButton
+            title={i18n.t('auth.google')}
+            image={require('../../assets/image/google.png')}
+          />
         </View>
         <View style={{
           flexDirection: 'row',
           justifyContent: 'center',
           marginVertical: 22
         }}>
-          <Text style={{ fontSize: 16, color: theme.font.primary }}>Don't have an account?</Text>
+          <Text style={{ fontSize: 16, color: theme.font.primary }}>
+            {i18n.t('auth.noAccount')}
+          </Text>
           <Pressable
             onPress={(): void => navigation.navigate('Register')}
           >
@@ -179,7 +192,7 @@ export default function Login({ navigation }: { navigation: any }): React.JSX.El
               color: '#007260',
               fontWeight: 'bold',
               marginLeft: 6
-            }}>Register</Text>
+            }}>{i18n.t('auth.registerLink')}</Text>
           </Pressable>
         </View>
       </View>

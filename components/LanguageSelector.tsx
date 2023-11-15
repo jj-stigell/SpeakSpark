@@ -3,6 +3,7 @@ import { Dropdown } from 'react-native-element-dropdown';
 
 import { styles } from '../styles';
 import { LanguageSet } from '../utils/languages';
+import i18n from '../i18n';
 
 interface Props {
   language: string,
@@ -31,8 +32,8 @@ export default function LanguageSelector(props: Props): React.JSX.Element {
       maxHeight={300}
       labelField="label"
       valueField="value"
-      placeholder='Select Language'
-      searchPlaceholder="Search..."
+      placeholder={i18n.t('settings.languagePlaceholder')}
+      searchPlaceholder={i18n.t('settings.searchPlaceholder')}
       value={props.language}
       onFocus={(): void => setIsFocus(true)}
       onBlur={(): void => setIsFocus(false)}
