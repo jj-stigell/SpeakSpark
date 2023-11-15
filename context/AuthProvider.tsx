@@ -8,7 +8,6 @@ import { LOGIN } from '../graphql/mutations';
 export interface Account {
   id: string,
   email: string,
-  uiLanguage: string,
   studyLanguage: string
 }
 
@@ -16,7 +15,6 @@ export interface AuthContextType {
   auth: Account | null,
   loading: boolean,
   setAuth: (auth: Account | null) => void,
-  setUILanguage: (language: string) => void,
   setStudyLanguage: (language: string) => void,
   logout: () => void,
   login: (email: string, password: string, saveCreds: boolean) => void
@@ -26,7 +24,6 @@ export const AuthContext: React.Context<AuthContextType> = createContext<AuthCon
   auth: null,
   loading: false,
   setAuth: () => {},
-  setUILanguage: () => {},
   setStudyLanguage: () => {},
   logout: () => {},
   login: () => {}
@@ -73,30 +70,20 @@ export default function AuthProvider(props: { children: React.JSX.Element }): Re
     setAuth(null);
   }, []);
 
-  const setUILanguage = useCallback(async (language: string) => {
 
-    setAuth((previousState: Account | null) => ({
-      id: previousState!.id,
-      email: previousState!.email,
-      studyLanguage: previousState!.studyLanguage,
-      uiLanguage: language
-    }));
-    await saveToStore('auth', JSON.stringify({ ...auth, uiLanguage: language }));
-  }, []);
 
   const setStudyLanguage = useCallback(async (language: string) => {
     setAuth((previousState: Account | null) => ({
       id: previousState!.id,
       email: previousState!.email,
-      studyLanguage: language,
-      uiLanguage: previousState!.uiLanguage
+      studyLanguage: language
     }));
     await saveToStore('auth', JSON.stringify({ ...auth, studyLanguage: language }));
   }, []);
 
   return (
     <AuthContext.Provider value={{
-      auth, setAuth, setUILanguage, loading,
+      auth, setAuth, loading,
       setStudyLanguage, logout, login
     }}>
       {props.children}
