@@ -32,7 +32,7 @@ export default function App(): React.JSX.Element {
                 animationType='slide-in'
                 offsetTop={50}
                 swipeEnabled={true}
-                duration={5000}
+                duration={4000}
               >
                 <Navigator/>
               </ToastProvider>

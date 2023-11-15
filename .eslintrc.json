@@ -20,6 +20,7 @@
     "react",
     "react-native"
   ],
+  "ignorePatterns": ["temp.js", "assets/locales/*.js"],
   "rules": {
     "comma-dangle": ["error", "never"],
     "indent": [
