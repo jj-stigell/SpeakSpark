@@ -38,13 +38,12 @@ export default function Login({ navigation }: { navigation: any }): React.JSX.El
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <MainHeader/>
+      <View style={{ alignItems: 'center', marginTop: 5 }}>
+        <MainHeader/>
+      </View>
       <View style={{ flex: 1, marginHorizontal: 22 }}>
-        <View style={{ marginVertical: 22 }}>
-          <Text style={{
-            fontSize: 17,
-            color: theme.font.primary
-          }}>Login to existing account</Text>
+        <View style={{ marginVertical: 22, alignItems: 'center' }}>
+          <Text style={{ fontSize: 17, color: theme.font.primary }}>Login to existing account</Text>
         </View>
         <View style={{ marginBottom: 12 }}>
           <Text style={{

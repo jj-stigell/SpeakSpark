@@ -52,28 +52,24 @@ export default function TermsAndConditions({ navigation }: { navigation: any }):
 // eslint-disable-next-line @typescript-eslint/typedef
 const styles = StyleSheet.create({
   container:{
-    marginTop: 60,
-    marginLeft: 10,
-    marginRight: 10
+    marginTop: 30,
+    marginHorizontal: 10
   },
   title: {
     fontSize: 22,
     alignSelf: 'center'
   },
+  tcContainer: {
+    marginVertical: 15,
+    height: Dimensions.get('window').height * 0.75
+  },
   tcP: {
-    marginTop: 10,
-    marginBottom: 10,
-    fontSize: 12
+    marginVertical: 10,
+    fontSize: 14
   },
   tcL:{
     marginLeft: 10,
-    marginTop: 10,
-    marginBottom: 10,
+    marginVertical: 10,
     fontSize: 12
-  },
-  tcContainer: {
-    marginTop: 15,
-    marginBottom: 15,
-    height: Dimensions.get('window').height * .7
   }
 });
