@@ -9,6 +9,7 @@ import { getLabelByValue, studyLanguages } from '../utils/languages';
 import { Bot } from '../type';
 import { SystemContextType } from '../context/SystemProvider';
 import useSystem from '../hooks/useSystem';
+import i18n from '../i18n';
 
 interface Props {
   navigation: any,
@@ -41,25 +42,26 @@ export default function BotCard(props: Props): React.JSX.Element {
                 {props.bot.nameRomaji !== props.bot.name ? `- ${props.bot.nameRomaji}` : '' }
               </Text>
               <View style={styles.horizontalLine} />
-              <Text style={styles.titleText}>Introduction</Text>
+              <Text style={styles.titleText}>{i18n.t('card.introduction')}</Text>
               <Text style={styles.messageText}>{props.bot.introduction}</Text>
-              <Text style={styles.titleText}>Language</Text>
+              <Text style={styles.titleText}>{i18n.t('card.language')}</Text>
               <Text style={styles.messageText}>
                 {getLabelByValue(props.bot.language, studyLanguages, 'label') + ' - '}
                 {getLabelByValue(props.bot.language, studyLanguages, 'english')}
               </Text>
-              <Text style={styles.titleText}>Difficulty</Text>
+              <Text style={styles.titleText}>{i18n.t('card.difficulty')}</Text>
               <Text style={styles.messageText}>
                 <Stars difficulty={props.bot.difficulty} renderLabels={true} starSize={30} />
               </Text>
               <View style={styles.horizontalLine} />
               <Button
-                title={`Start chat with ${props.bot.name}`}
+                title={i18n.t('card.startChatButton', { name: props.bot.name })}
+                //{`Start chat with ${props.bot.name}`}
                 onPress={(): void => newChat(props.bot)}
                 style={{ marginTop: 10, marginBottom: 15 }}
               />
               <Button
-                title='Close'
+                title={i18n.t('card.closeButton')}
                 onPress={(): void => setModalVisible(!modalVisible)}
                 color={theme.button.secondary}
               />
@@ -81,7 +83,7 @@ export default function BotCard(props: Props): React.JSX.Element {
                 {props.bot.introduction.substring(0, 100)}...
               </Text>
               <Text style={[styles.languageText, { fontWeight: 'bold' }]}>
-                Press for whole introduction
+                {i18n.t('card.expand')}
               </Text>
             </React.Fragment>
           ) : (

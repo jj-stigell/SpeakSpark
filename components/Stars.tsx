@@ -1,6 +1,7 @@
 import React from 'react';
 import { AntDesign } from '@expo/vector-icons';
 import { View, Text, StyleSheet } from 'react-native';
+import i18n from '../i18n';
 
 interface Props {
   difficulty: number,
@@ -15,14 +16,14 @@ export default function Stars(props: Props): React.JSX.Element {
 
   return (
     <View style={styles.container}>
-      { props.renderLabels && <Text style={styles.labelText}>Beginner</Text> }
+      { props.renderLabels && <Text style={styles.labelText}>{i18n.t('card.beginner')}</Text> }
       {Array(props.difficulty).fill(null).map((_: number, idx: number) => (
         <AntDesign key={`star_${idx}`} name="star" size={props.starSize} color="#a84432" />
       ))}
       {Array(remainingStars).fill(null).map((_: number, idx: number) => (
         <AntDesign key={`staro_${idx}`} name="staro" size={props.starSize} color="#a84432" />
       ))}
-      { props.renderLabels && <Text style={styles.labelText}>Advanced</Text> }
+      { props.renderLabels && <Text style={styles.labelText}>{i18n.t('card.advanced')}</Text> }
     </View>
   );
 }

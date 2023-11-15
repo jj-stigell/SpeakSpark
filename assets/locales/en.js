@@ -1,4 +1,32 @@
 const translations = {
+  home: {
+    newChatButton: 'New Chat',
+    settingsButton: 'Settings'
+  },
+  previousChats: {
+    title: 'Latest Chats - Click to continue chatting',
+    subtitle: 'Studying ',
+    refetch: 'Click to refetch chats',
+    noPreviousChats: 'No previous chats found for the language, click "New Chat" button to start a new chat.',
+    loading: 'Loading chats, please wait...',
+    updated: 'Chats Updated',
+  },
+  newChat: {
+    title: 'Start a New Chat',
+    language: 'Chat Language',
+    listTitle: 'Chat Partners',
+    returnButton: 'Back Home'
+  },
+  card: {
+    introduction: 'Introduction',
+    language: 'Language',
+    difficulty: 'Difficulty',
+    startChatButton: 'Start Chat with %{name}',
+    beginner: 'Beginner',
+    advanced: 'Advanced',
+    closeButton: 'Close',
+    expand: 'Press for whole introduction'
+  },
   settings: {
     title: 'Settings',
     account: 'account',

@@ -12,6 +12,7 @@ import { getLabelByValue, studyLanguages } from '../utils/languages';
 import { AuthContextType } from '../context/AuthProvider';
 import useAuth from '../hooks/useAuth';
 import { Bot, Chat } from '../type';
+import i18n from '../i18n';
 
 export default function PreviousChats(props: { navigation: any }): React.JSX.Element {
   const [chats, setChats] = React.useState<Array<Chat>>([]);
@@ -32,27 +33,27 @@ export default function PreviousChats(props: { navigation: any }): React.JSX.Ele
 
   async function updateChats(): Promise<void> {
     await refetch();
-    notification.show('Chats updated!', { type: 'success' });
+    notification.show(i18n.t('previousChats.updated'), { type: 'success' });
   }
 
   return (
     <View>
       <Text style={{ marginTop: 2, fontSize: 18, textAlign: 'center' }}>
-        Latest Chats - Click to continue chatting
+        {i18n.t('previousChats.title')}
       </Text>
       <Text style={{ marginTop: 5, fontSize: 16, textAlign: 'center' }}>
-        Studying {getLabelByValue(auth!.studyLanguage, studyLanguages, 'label') + ' - '}
+        {i18n.t('previousChats.subtitle')}
+        {getLabelByValue(auth!.studyLanguage, studyLanguages, 'label') + ' - '}
         {getLabelByValue(auth!.studyLanguage, studyLanguages, 'english')}
       </Text>
       <ScrollView style={{ height: 400, marginTop: 5 }}>
         { loading ? (
-          <Loader marginTop={90} loadingText='Loading previous chats...'/>
+          <Loader marginTop={90} loadingText={i18n.t('previousChats.loading')} />
         ) : (
           chats.length === 0 || error ? (
             <React.Fragment>
               <Text style={{ marginTop: 90, textAlign: 'center' }}>
-                No previous chats found for the language, click "New Chat"
-                button to start a new chat.
+                {i18n.t('previousChats.noPreviousChats')}
               </Text>
               <Pressable onPress={updateChats}>
                 <Text
@@ -60,7 +61,7 @@ export default function PreviousChats(props: { navigation: any }): React.JSX.Ele
                     marginTop: 20,
                     textAlign: 'center',
                     textDecorationLine: 'underline'
-                  }}>Click to refetch chats</Text>
+                  }}>{i18n.t('previousChats.refetch')}</Text>
               </Pressable>
             </React.Fragment>
           ) : (

@@ -8,14 +8,15 @@ import LanguageSelector from '../../components/LanguageSelector';
 import { studyLanguages } from '../../utils/languages';
 import { AuthContextType } from '../../context/AuthProvider';
 import useAuth from '../../hooks/useAuth';
+import i18n from '../../i18n';
 
 export default function NewChat(props: { navigation: any }): React.JSX.Element {
   const { auth, setStudyLanguage }: AuthContextType = useAuth();
 
   return (
     <View style={styles.container}>
-      <Text style={styles.heading}>Start a New Chat</Text>
-      <Text style={styles.textCenter}>Chat Language</Text>
+      <Text style={styles.heading}>{i18n.t('newChat.title')}</Text>
+      <Text style={styles.textCenter}>{i18n.t('newChat.language')}</Text>
       <View style={{ flex: 1 }}>
         <LanguageSelector
           language={auth!.studyLanguage}
@@ -23,14 +24,17 @@ export default function NewChat(props: { navigation: any }): React.JSX.Element {
           languageList={studyLanguages}
         />
       </View>
-      <Text style={styles.textCenter}>Chat Partners</Text>
+      <Text style={styles.textCenter}>{i18n.t('newChat.listTitle')}</Text>
       <View style={styles.scrollView}>
         <ScrollView>
           <BotList navigation={props.navigation} />
         </ScrollView>
       </View>
       <View style={{ flex: 1, marginBottom: 10 }}>
-        <Button title='Back Home' onPress={(): void => props.navigation.navigate('Home')} />
+        <Button
+          title={i18n.t('newChat.returnButton')}
+          onPress={(): void => props.navigation.navigate('Home')}
+        />
       </View>
     </View>
   );
