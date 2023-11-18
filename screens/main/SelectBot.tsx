@@ -9,14 +9,19 @@ import { studyLanguages } from '../../utils/languages';
 import { AuthContextType } from '../../context/AuthProvider';
 import useAuth from '../../hooks/useAuth';
 import i18n from '../../i18n';
+import { SystemContextType } from '../../context/SystemProvider';
+import useSystem from '../../hooks/useSystem';
 
 export default function NewChat(props: { navigation: any }): React.JSX.Element {
   const { auth, setStudyLanguage }: AuthContextType = useAuth();
+  const { theme }: SystemContextType = useSystem();
 
   return (
     <View style={styles.container}>
-      <Text style={styles.heading}>{i18n.t('newChat.title')}</Text>
-      <Text style={styles.textCenter}>{i18n.t('newChat.language')}</Text>
+      <Text style={[styles.heading, { color: theme.font.primary }]}>{i18n.t('newChat.title')}</Text>
+      <Text style={[styles.textCenter, { color: theme.font.primary }]}>
+        {i18n.t('newChat.language')}
+      </Text>
       <View style={{ flex: 1 }}>
         <LanguageSelector
           language={auth!.studyLanguage}
@@ -24,7 +29,9 @@ export default function NewChat(props: { navigation: any }): React.JSX.Element {
           languageList={studyLanguages}
         />
       </View>
-      <Text style={styles.textCenter}>{i18n.t('newChat.listTitle')}</Text>
+      <Text style={[styles.textCenter, { color: theme.font.primary }]}>
+        {i18n.t('newChat.listTitle')}
+      </Text>
       <View style={styles.scrollView}>
         <ScrollView>
           <BotList navigation={props.navigation} />

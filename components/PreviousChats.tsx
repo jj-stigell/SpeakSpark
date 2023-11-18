@@ -13,10 +13,13 @@ import { AuthContextType } from '../context/AuthProvider';
 import useAuth from '../hooks/useAuth';
 import { Bot, Chat } from '../type';
 import i18n from '../i18n';
+import { SystemContextType } from '../context/SystemProvider';
+import useSystem from '../hooks/useSystem';
 
 export default function PreviousChats(props: { navigation: any }): React.JSX.Element {
   const [chats, setChats] = React.useState<Array<Chat>>([]);
   const { auth }: AuthContextType = useAuth();
+  const { theme }: SystemContextType = useSystem();
 
   const { data, loading, error, refetch } = useQuery(GET_LATEST_CHATS, {
     variables: { language: auth!.studyLanguage },
@@ -38,10 +41,10 @@ export default function PreviousChats(props: { navigation: any }): React.JSX.Ele
 
   return (
     <View>
-      <Text style={{ marginTop: 2, fontSize: 18, textAlign: 'center' }}>
+      <Text style={{ marginTop: 2, fontSize: 18, textAlign: 'center', color: theme.font.primary }}>
         {i18n.t('previousChats.title')}
       </Text>
-      <Text style={{ marginTop: 5, fontSize: 16, textAlign: 'center' }}>
+      <Text style={{ marginTop: 5, fontSize: 16, textAlign: 'center', color: theme.font.primary  }}>
         {i18n.t('previousChats.subtitle')}
         {getLabelByValue(auth!.studyLanguage, studyLanguages, 'label') + ' - '}
         {getLabelByValue(auth!.studyLanguage, studyLanguages, 'english')}

@@ -16,10 +16,6 @@ export interface Theme {
     primary: string,
     secondary: string
   },
-  chat: {
-    userBubble: string,
-    botBubble: string
-  },
   disabled: string,
   checkbox: string
 }
@@ -42,10 +38,6 @@ export const light: Theme = {
     primary: '#0f96f7',
     secondary: '#74c1f7'
   },
-  chat: {
-    userBubble: '#7e8bed',
-    botBubble: '#ffe6a1'
-  },
   disabled: '#d2d4d3',
   checkbox: '#012138'
 };
@@ -67,10 +59,6 @@ export const dark: Theme = {
   button: {
     primary: '#007260',
     secondary: '#39B68D'
-  },
-  chat: {
-    userBubble: '#7e8bed',
-    botBubble: '#ffe6a1'
   },
   disabled: '#d2d4d3',
   checkbox: '#d3e6f5'

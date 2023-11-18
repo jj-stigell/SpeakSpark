@@ -4,6 +4,8 @@ import { Dropdown } from 'react-native-element-dropdown';
 import { styles } from '../styles';
 import { LanguageSet } from '../utils/languages';
 import i18n from '../i18n';
+import { SystemContextType } from '../context/SystemProvider';
+import useSystem from '../hooks/useSystem';
 
 interface Props {
   language: string,
@@ -15,11 +17,13 @@ interface Props {
 export default function LanguageSelector(props: Props): React.JSX.Element {
   // eslint-disable-next-line @typescript-eslint/typedef
   const [isFocus, setIsFocus] = React.useState<boolean>(false);
+  const { theme }: SystemContextType = useSystem();
 
   return (
     <Dropdown
       style={[
         styles.dropdown,
+        { backgroundColor: theme.background.secondary },
         { width: props.half ? '50%' : '100%' },
         isFocus && { borderColor: 'blue' }
       ]}

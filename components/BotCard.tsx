@@ -37,20 +37,28 @@ export default function BotCard(props: Props): React.JSX.Element {
           <View style={[styles.modalView, { backgroundColor: theme.background.secondary }]}>
             <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
               <Image source={{ uri: props.bot.profileImage }} style={styles.profileImage} />
-              <Text style={styles.messageTitle}>
+              <Text style={[styles.messageTitle, { color: theme.font.primary }]}>
                 {props.bot.name}
                 {props.bot.nameRomaji !== props.bot.name ? `- ${props.bot.nameRomaji}` : '' }
               </Text>
               <View style={styles.horizontalLine} />
-              <Text style={styles.titleText}>{i18n.t('card.introduction')}</Text>
-              <Text style={styles.messageText}>{props.bot.introduction}</Text>
-              <Text style={styles.titleText}>{i18n.t('card.language')}</Text>
-              <Text style={styles.messageText}>
+              <Text style={[styles.titleText, { color: theme.font.secondary }]}>
+                {i18n.t('card.introduction')}
+              </Text>
+              <Text style={[styles.messageText, { color: theme.font.primary }]}>
+                {props.bot.introduction}
+              </Text>
+              <Text style={[styles.titleText, { color: theme.font.secondary }]}>
+                {i18n.t('card.language')}
+              </Text>
+              <Text style={[styles.messageText, { color: theme.font.primary }]}>
                 {getLabelByValue(props.bot.language, studyLanguages, 'label') + ' - '}
                 {getLabelByValue(props.bot.language, studyLanguages, 'english')}
               </Text>
-              <Text style={styles.titleText}>{i18n.t('card.difficulty')}</Text>
-              <Text style={styles.messageText}>
+              <Text style={[styles.titleText, { color: theme.font.secondary }]}>
+                {i18n.t('card.difficulty')}
+              </Text>
+              <Text style={[styles.messageText, { color: theme.font.primary }]}>
                 <Stars difficulty={props.bot.difficulty} renderLabels={true} starSize={30} />
               </Text>
               <View style={styles.horizontalLine} />
@@ -75,16 +83,18 @@ export default function BotCard(props: Props): React.JSX.Element {
       >
         <Image source={{ uri: props.bot.profileImage }} style={styles.avatar} />
         <View style={styles.textContainer}>
-          <Text style={styles.nameText}>{props.bot.nameRomaji}</Text>
+          <Text style={[styles.nameText, { color: theme.font.primary }]}>
+            {props.bot.nameRomaji}
+          </Text>
           <Stars difficulty={props.bot.difficulty} starSize={24} />
           { props.bot.introduction.length > 120 ? (
             <React.Fragment>
-              <Text style={styles.languageText}>
+              <Text style={[styles.languageText, { color: theme.font.primary }]}>
                 {props.bot.introduction.substring(0, 100)}...
               </Text>
-              <Text style={[styles.languageText, { fontWeight: 'bold' }]}>
-                {i18n.t('card.expand')}
-              </Text>
+              <Text
+                style={[styles.languageText, { fontWeight: 'bold', color: theme.font.primary }]
+                }>{i18n.t('card.expand')}</Text>
             </React.Fragment>
           ) : (
             <Text style={styles.languageText}>{props.bot.introduction}</Text>
