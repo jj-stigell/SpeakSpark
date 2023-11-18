@@ -11,6 +11,7 @@ import { CustomMessage } from '../screens/main/Chat';
 import { SystemContextType } from '../context/SystemProvider';
 import useSystem from '../hooks/useSystem';
 import { Message } from '../type';
+import i18n from '../i18n';
 
 interface Props {
   message: CustomMessage,
@@ -81,7 +82,7 @@ export default function PlayButton(props: Props): React.JSX.Element {
       setPlaying(true);
       await newSound.playAsync();
     } catch (error) {
-      notification.show('Error fetching or playing audio!', { type: 'warning' });
+      notification.show(i18n.t('chat.audioError'), { type: 'warning' });
     } finally {
       setLoading(false);
     }

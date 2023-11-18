@@ -33,7 +33,7 @@ export default function Register({ navigation }: { navigation: any }): React.JSX
     errorPolicy: 'all',
     onCompleted: () => {
       notification.show(
-        'Account created succesfully. Logging in, please wait...', { type: 'success' }
+        i18n.t('auth.registerSuccess'), { type: 'success' }
       );
       setTimeout(() => {
         saveToStore('token', data.register.token);

@@ -15,7 +15,23 @@ const translations = {
     title: 'Start a New Chat',
     language: 'Chat Language',
     listTitle: 'Chat Partners',
-    returnButton: 'Back Home'
+    returnButton: 'Back Home',
+    notFound: 'No chatting partners found for selected language',
+    loading: 'Loading chat partners...'
+  },
+  chat: {
+    loading: 'Loading chat..',
+    audioError: 'Error fetching or playing audio!',
+    idMissing: 'Chat id missing, redirecting to home',
+    tooLong: 'Maximum message length is %{max}, your message is %{length} characters long',
+    grammarModal: {
+      translation: 'Translation:',
+      loading: 'Loading grammar, please wait...',
+      information: 'Information:',
+      error: 'Something went wrong, please try again or report a bug!',
+      graphQlError: 'Encountered GraphQL error: %{error}',
+      closeButton: 'Close'
+    }
   },
   card: {
     introduction: 'Introduction',
@@ -64,6 +80,7 @@ const translations = {
     loginProcess: 'Logging in, please wait...',
     registerButton: 'Sign Up',
     registerProcess: 'Registering, please wait...',
+    registerSuccess: 'Account created succesfully. Logging in, please wait...',
     alternativeSignup: 'or sign up with',
     alreadyAccount: 'Already have an account?',
     loginLink: 'Login',

@@ -10,6 +10,7 @@ import { GET_BOTS } from '../graphql/queries';
 import { AuthContextType } from '../context/AuthProvider';
 import useAuth from '../hooks/useAuth';
 import { Bot } from '../type';
+import i18n from '../i18n';
 
 export default function BotList(props: { navigation: any }): React.JSX.Element {
   const { auth }: AuthContextType = useAuth();
@@ -25,13 +26,13 @@ export default function BotList(props: { navigation: any }): React.JSX.Element {
   });
 
   if (loading) {
-    return (<Loader marginTop={90} loadingText='Loading chat partners...' />);
+    return (<Loader marginTop={90} loadingText={i18n.t('newChat.loading')} />);
   }
 
   if (bots.length === 0) {
     return (
       <View style={{ marginTop: 90, alignItems: 'center' }}>
-        <Text style={{ marginTop: 20 }}>No chatting partners found for selected language</Text>
+        <Text style={{ marginTop: 20 }}>{i18n.t('newChat.notFound')}</Text>
       </View>
     );
   }

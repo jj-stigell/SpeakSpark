@@ -10,6 +10,7 @@ import { CustomMessage } from '../screens/main/Chat';
 import { GET_MESSAGE } from '../graphql/queries';
 import { SystemContextType } from '../context/SystemProvider';
 import useSystem from '../hooks/useSystem';
+import i18n from '../i18n';
 
 interface Props {
   message: CustomMessage,
@@ -49,7 +50,7 @@ export default function GrammarModal(props: Props): React.JSX.Element {
             <React.Fragment>
               { loading ? (
                 <Loader
-                  loadingText='Loading grammar...'
+                  loadingText={i18n.t('chat.grammarModal.loading')}
                   backgroundColor={theme.background.secondary}
                 />
               ) : (
@@ -59,20 +60,25 @@ export default function GrammarModal(props: Props): React.JSX.Element {
                     <PlayButton message={props.message} size={40} />
                     <View style={styles.horizontalLine} />
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                      <Text style={[styles.subTitle, { flex: 1 }]}>Translation:</Text>
+                      <Text style={[styles.subTitle, { flex: 1 }]}>
+                        {i18n.t('chat.grammarModal.translation')}
+                      </Text>
                     </View>
                     <Text style={[styles.subContent]}>
                       {data.getMessage.translation}
                     </Text>
-                    <Text style={styles.subTitle}>Information:</Text>
+                    <Text style={styles.subTitle}>{i18n.t('chat.grammarModal.information')}</Text>
                     <Text style={styles.subContent}>{data.getMessage.grammarAnalysis}</Text>
                   </React.Fragment>
                 ) : (
                   <React.Fragment>
                     <Text style={{ textAlign: 'center' }}>
                       {error ?
-                        `Encountered GraphQL error: ${error.graphQLErrors[0].message}` :
-                        'Something went wrong, please try again or report a bug!'
+                        i18n.t(
+                          'chat.grammarModal.graphQlError',
+                          { error: error.graphQLErrors[0].message }
+                        ) :
+                        i18n.t('chat.grammarModal.error')
                       }
                     </Text>
                   </React.Fragment>
@@ -80,7 +86,7 @@ export default function GrammarModal(props: Props): React.JSX.Element {
               )}
             </React.Fragment>
             <Button
-              title='Close'
+              title={i18n.t('chat.grammarModal.closeButton')}
               onPress={(): void => props.setModalVisible(!props.modalVisible)}
               style={{ marginTop: 20 }}
             />
