@@ -21,6 +21,7 @@ const translations = {
   },
   chat: {
     loading: 'Loading chat..',
+    placeholder: 'Type a message...',
     audioError: 'Error fetching or playing audio!',
     idMissing: 'Chat id missing, redirecting to home',
     tooLong: 'Maximum message length is %{max}, your message is %{length} characters long',
@@ -41,7 +42,8 @@ const translations = {
     beginner: 'Beginner',
     advanced: 'Advanced',
     closeButton: 'Close',
-    expand: 'Press for whole introduction'
+    expand: 'Press for whole introduction',
+    chatId: 'Chat id: '
   },
   settings: {
     title: 'Settings',

@@ -18,12 +18,13 @@ import useAuth from '../../hooks/useAuth';
 import useSystem from '../../hooks/useSystem';
 import { SystemContextType } from '../../context/SystemProvider';
 import { Bot, Message } from '../../type';
+import i18n from '../../i18n';
 
 export interface CustomMessage extends IMessage {
   messageAudio: string
 }
 
-export default function Chat(props: { navigation: any, route: any  }): React.JSX.Element {
+export default function Chat(props: { navigation: any, route: any }): React.JSX.Element {
   const { darkMode }: SystemContextType = useSystem();
   const [loading, setLoading] = React.useState<boolean>(true);
   const [grammarModalVisible, setGrammarModalVisible] = useState<boolean>(false);
@@ -47,6 +48,8 @@ export default function Chat(props: { navigation: any, route: any  }): React.JSX
   const [newChat] = useMutation(NEW_CHAT, {
     errorPolicy: 'all',
     onCompleted: (data) => {
+      console.log('new chat started id ', data.newChat.id);
+
       setChatId(data.newChat.id);
       setIstyping(false);
       setMessages([
@@ -127,7 +130,7 @@ export default function Chat(props: { navigation: any, route: any  }): React.JSX
 
       getMessages({ variables: { chatId: props.route.params.chatId } });
     } else {
-      notification.show('Chat id missing, redirecting to home', { type: 'error' });
+      notification.show(i18n.t('chat.idMissing'), { type: 'error' });
       setTimeout(() => {
         props.navigation.navigate('Home');
       }, 1000);
@@ -138,7 +141,7 @@ export default function Chat(props: { navigation: any, route: any  }): React.JSX
 
     if (messages[0].text.length > 160) {
       notification.show(
-        `Maximum message length is 160, your message is ${messages[0].text.length} characters long`,
+        i18n.t('chat.tooLong', { max: 160, length: messages[0].text.length }),
         { type: 'warning' }
       );
       return;
@@ -166,10 +169,10 @@ export default function Chat(props: { navigation: any, route: any  }): React.JSX
           {...props}
           wrapperStyle={{
             right: {
-              backgroundColor: '#7e8bed' //theme.chat.userBubble
+              backgroundColor: '#7e8bed'
             },
             left: {
-              backgroundColor: '#ffe6a1' //theme.chat.botBubble
+              backgroundColor: '#ffe6a1'
             }
           }}
         />
@@ -196,7 +199,7 @@ export default function Chat(props: { navigation: any, route: any  }): React.JSX
   }
 
   if (loading) {
-    return (<Loader marginTop={300} loadingText='Loading chat..'/>);
+    return (<Loader marginTop={300} loadingText={i18n.t('chat.loading')}/>);
   }
 
   return (
@@ -208,7 +211,7 @@ export default function Chat(props: { navigation: any, route: any  }): React.JSX
       />
       <ChatHeader
         title={bot.name === bot.nameRomaji ? bot.name : `${bot.name} - ${bot.nameRomaji}`}
-        onBack={(): void => props.navigation.navigate('Home')}
+        onTouch={(): void => props.navigation.navigate('Home')}
       />
       <GiftedChat
         messages={messages}
@@ -217,6 +220,7 @@ export default function Chat(props: { navigation: any, route: any  }): React.JSX
         onSend={(messages): Promise<void> => onSend(messages as Array<CustomMessage>)}
         isTyping={isTyping}
         scrollToBottom={true}
+        placeholder={i18n.t('chat.placeholder')}
       />
     </View>
   );

@@ -6,6 +6,7 @@ import { getLabelByValue, studyLanguages } from '../utils/languages';
 import { SystemContextType } from '../context/SystemProvider';
 import useSystem from '../hooks/useSystem';
 import { Bot } from '../type';
+import i18n from '../i18n';
 
 interface Props {
   chatId: string,
@@ -38,7 +39,7 @@ export default function Card(props: Props): React.JSX.Element {
           {customDateFormat(props.updatedAt)}
         </Text>
         <Text style={[styles.subText, { color: theme.font.primary }]}>
-          Chat id: {props.chatId}
+          {i18n.t('card.chatId')}{props.chatId}
         </Text>
       </View>
     </TouchableOpacity>
