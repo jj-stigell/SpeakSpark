@@ -19,7 +19,7 @@ interface Props {
 }
 
 export default function PlayButton(props: Props): React.JSX.Element {
-  const { darkMode }: SystemContextType = useSystem();
+  const { darkMode, uiLanguage }: SystemContextType = useSystem();
   const [playing, setPlaying] = useState<boolean>(false);
   const [sound, setSound] = useState<Audio.Sound | undefined>();
   const [loading, setLoading] = useState<boolean>(false);
@@ -45,6 +45,7 @@ export default function PlayButton(props: Props): React.JSX.Element {
         variables: {
           messageId: String(messageId),
           botId: props.message.user._id,
+          uiLanguage,
           generateTranslation: false,
           generateGrammarAnalysis: false,
           generateAudio: true

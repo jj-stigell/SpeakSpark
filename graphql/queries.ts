@@ -52,14 +52,16 @@ query GetMessage(
   $generateGrammarAnalysis: Boolean!,
   $generateAudio: Boolean!,
   $messageId: String!,
-  $botId: String!
+  $botId: String!,
+  $uiLanguage: String!
 ) {
   getMessage(
     generateTranslation: $generateTranslation,
     generateGrammarAnalysis: $generateGrammarAnalysis,
     generateAudio: $generateAudio,
     messageId: $messageId,
-    botId: $botId
+    botId: $botId,
+    uiLanguage: $uiLanguage
   ) {
     translation
     grammarAnalysis

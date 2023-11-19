@@ -20,7 +20,7 @@ interface Props {
 }
 
 export default function GrammarModal(props: Props): React.JSX.Element {
-  const { theme }: SystemContextType = useSystem();
+  const { theme, uiLanguage }: SystemContextType = useSystem();
   const [loading, setLoading] = React.useState<boolean>(true);
   const [data, setData] = React.useState<Message | undefined>(undefined);
 
@@ -39,6 +39,7 @@ export default function GrammarModal(props: Props): React.JSX.Element {
       message({ variables: {
         messageId: props.message._id,
         botId: props.message.user._id,
+        uiLanguage,
         generateTranslation: true,
         generateGrammarAnalysis: true,
         generateAudio: false
