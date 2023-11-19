@@ -8,6 +8,7 @@ import Home from './screens/main/Home';
 import Chat from './screens/main/Chat';
 import Settings from './screens/main/Settings';
 import NewChat from './screens/main/SelectBot';
+import NewChatLoader from './screens/main/NewChatLoader';
 
 import { AuthContextType } from './context/AuthProvider';
 import useAuth from './hooks/useAuth';
@@ -35,6 +36,7 @@ export default function Navigator(): React.JSX.Element {
           <React.Fragment>
             <Stack.Screen name="Home" component={Home}/>
             <Stack.Screen name="Chat" component={Chat}/>
+            <Stack.Screen name="NewChatLoader" component={NewChatLoader}/>
             <Stack.Screen name="Settings" component={Settings}/>
             <Stack.Screen name="NewChat" component={NewChat}/>
           </React.Fragment>

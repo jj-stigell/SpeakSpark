@@ -13,7 +13,7 @@ import ChatHeader from '../../components/ActionHeader';
 import Loader from '../../components/Loader';
 import PlayButton from '../../components/PlayButton';
 import GrammarModal from '../../components/GrammarModal';
-import { NEW_CHAT, POST_MESSAGE } from '../../graphql/mutations';
+import { POST_MESSAGE } from '../../graphql/mutations';
 import { useLazyQuery, useMutation } from '@apollo/client';
 import { GET_MESSAGES } from '../../graphql/queries';
 import { AuthContextType } from '../../context/AuthProvider';
@@ -33,7 +33,6 @@ export default function Chat(props: { navigation: any, route: any }): React.JSX.
   const [grammarModalVisible, setGrammarModalVisible] = useState<boolean>(false);
   const [isTyping, setIstyping] = React.useState<boolean>(false);
   const [message, setMessage] = React.useState<CustomMessage | undefined>(undefined);
-  const [chatId, setChatId] = React.useState<string>(props.route?.params?.chatId ?? '');
   const [messages, setMessages] = useState<Array<CustomMessage>>([]);
   const { auth }: AuthContextType = useAuth();
 
@@ -47,24 +46,6 @@ export default function Chat(props: { navigation: any, route: any }): React.JSX.
   const user: User = {
     _id: auth!.id
   };
-
-  const [newChat] = useMutation(NEW_CHAT, {
-    errorPolicy: 'all',
-    onCompleted: (data) => {
-      setChatId(data.newChat.id);
-      setIstyping(false);
-      setMessages([
-        {
-          _id: 1,
-          text: bot.welcomeMessage,
-          messageAudio: bot.welcomeAudio,
-          createdAt: new Date(),
-          user: botData
-        }
-      ]);
-      setLoading(false);
-    }
-  });
 
   const [postMessage] = useMutation(POST_MESSAGE, {
     errorPolicy: 'all',
@@ -120,12 +101,7 @@ export default function Chat(props: { navigation: any, route: any }): React.JSX.
   });
 
   React.useEffect(() => {
-    if (props.route?.params?.newChat) {
-      // New chat
-      setIstyping(true);
-      newChat({ variables: { botId: props.route.params.bot.id } });
-    } else if (props.route?.params?.chatId) {
-      // Existing chat
+    if (props.route?.params?.chatId) {
       getMessages({ variables: { chatId: props.route.params.chatId } });
     } else {
       notification.show(i18n.t('chat.idMissing'), { type: 'error' });
@@ -151,7 +127,7 @@ export default function Chat(props: { navigation: any, route: any }): React.JSX.
     setIstyping(true);
     await postMessage({ variables: {
       message: messages[0].text,
-      chatId: chatId ?? props.route.params.chatId
+      chatId: props.route.params.chatId
     } }
     );
     setIstyping(false);
@@ -221,7 +197,7 @@ export default function Chat(props: { navigation: any, route: any }): React.JSX.
   }
 
   if (loading) {
-    return (<Loader marginTop={300} loadingText={i18n.t('chat.loading')}/>);
+    return (<Loader marginTop={10} loadingText={i18n.t('chat.loading')}/>);
   }
 
   return (

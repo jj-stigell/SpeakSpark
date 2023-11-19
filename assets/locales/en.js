@@ -21,6 +21,7 @@ const translations = {
   },
   chat: {
     loading: 'Loading chat..',
+    loadingNewChat: 'Starting a new chat with %{name}',
     placeholder: 'Type a message...',
     audioError: 'Error fetching or playing audio!',
     idMissing: 'Chat id missing, navigating to home',

@@ -21,7 +21,7 @@ export default function BotCard(props: Props): React.JSX.Element {
   const [modalVisible, setModalVisible] = useState<boolean>(false);
 
   function newChat(bot: Bot): void {
-    props.navigation.navigate('Chat', { bot, newChat: true });
+    props.navigation.navigate('NewChatLoader', { bot, newChat: true });
   }
 
   return (
@@ -64,7 +64,6 @@ export default function BotCard(props: Props): React.JSX.Element {
               <View style={styles.horizontalLine} />
               <Button
                 title={i18n.t('card.startChatButton', { name: props.bot.name })}
-                //{`Start chat with ${props.bot.name}`}
                 onPress={(): void => newChat(props.bot)}
                 style={{ marginTop: 10, marginBottom: 15 }}
               />
