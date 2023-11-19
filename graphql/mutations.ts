@@ -49,6 +49,5 @@ mutation PostMessage($message: String!, $chatId: String!) {
     createdAt
     message
     role
-    audio
   }
 }`;

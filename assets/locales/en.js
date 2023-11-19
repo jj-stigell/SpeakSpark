@@ -23,7 +23,7 @@ const translations = {
     loading: 'Loading chat..',
     placeholder: 'Type a message...',
     audioError: 'Error fetching or playing audio!',
-    idMissing: 'Chat id missing, redirecting to home',
+    idMissing: 'Chat id missing, navigating to home',
     tooLong: 'Maximum message length is %{max}, your message is %{length} characters long',
     grammarModal: {
       translation: 'Translation:',

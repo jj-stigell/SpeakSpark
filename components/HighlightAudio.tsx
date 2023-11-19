@@ -19,6 +19,7 @@ function getNgrams(text: string, n: number): Array<string> {
   return ngrams;
 }
 
+// Experimental component for displaying the currently read word on the text when playing audio.
 export default function HighlightAudioText(props: Props): React.JSX.Element {
   const [highlightIndex, setHighlightIndex] = useState<number>(-1);
   const [sound, setSound] = useState<Audio.Sound | undefined>(undefined);

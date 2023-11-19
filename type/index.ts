@@ -18,7 +18,8 @@ export interface Message {
   audio: string,
   grammarAnalysis: string,
   role: ChatRole,
-  createdAt: Date
+  createdAt: Date,
+  translation: string
 }
 
 export interface Chat {

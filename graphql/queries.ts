@@ -43,7 +43,6 @@ query GetMessages($chatId: String!) {
     createdAt
     message
     role
-    audio
   }
 }`;
 
@@ -52,13 +51,15 @@ query GetMessage(
   $generateTranslation: Boolean!,
   $generateGrammarAnalysis: Boolean!,
   $generateAudio: Boolean!,
-  $messageId: String!
+  $messageId: String!,
+  $botId: String!
 ) {
   getMessage(
     generateTranslation: $generateTranslation,
     generateGrammarAnalysis: $generateGrammarAnalysis,
     generateAudio: $generateAudio,
-    messageId: $messageId
+    messageId: $messageId,
+    botId: $botId
   ) {
     translation
     grammarAnalysis

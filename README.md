@@ -2,7 +2,7 @@
 
 
 
-## Improvements
+## Possible improvements
 
 1. **Adaptive Learning**: Adjust the complexity of the bot's responses based on the user's proficiency. As the user progresses, the bot can use more complex sentences, vocabulary, and grammar.
 

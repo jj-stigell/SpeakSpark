@@ -44,6 +44,7 @@ export default function PlayButton(props: Props): React.JSX.Element {
       getMessage({
         variables: {
           messageId: String(messageId),
+          botId: props.message.user._id,
           generateTranslation: false,
           generateGrammarAnalysis: false,
           generateAudio: true

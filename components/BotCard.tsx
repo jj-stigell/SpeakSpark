@@ -42,20 +42,20 @@ export default function BotCard(props: Props): React.JSX.Element {
                 {props.bot.nameRomaji !== props.bot.name ? `- ${props.bot.nameRomaji}` : '' }
               </Text>
               <View style={styles.horizontalLine} />
-              <Text style={[styles.titleText, { color: theme.font.secondary }]}>
+              <Text style={[styles.titleText, { color: theme.font.primary }]}>
                 {i18n.t('card.introduction')}
               </Text>
               <Text style={[styles.messageText, { color: theme.font.primary }]}>
                 {props.bot.introduction}
               </Text>
-              <Text style={[styles.titleText, { color: theme.font.secondary }]}>
+              <Text style={[styles.titleText, { color: theme.font.primary }]}>
                 {i18n.t('card.language')}
               </Text>
               <Text style={[styles.messageText, { color: theme.font.primary }]}>
                 {getLabelByValue(props.bot.language, studyLanguages, 'label') + ' - '}
                 {getLabelByValue(props.bot.language, studyLanguages, 'english')}
               </Text>
-              <Text style={[styles.titleText, { color: theme.font.secondary }]}>
+              <Text style={[styles.titleText, { color: theme.font.primary }]}>
                 {i18n.t('card.difficulty')}
               </Text>
               <Text style={[styles.messageText, { color: theme.font.primary }]}>
