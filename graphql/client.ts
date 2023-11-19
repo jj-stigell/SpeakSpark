@@ -11,7 +11,7 @@ import { getFromStore } from '../utils/expoStore';
 
 // More info on links: https://www.apollographql.com/docs/react/api/link/introduction
 const httpLink: ApolloLink = createHttpLink({
-  uri: 'http://10.18.253.92:4000/graphql'
+  uri: 'https://api.graphqlplaceholder.com'
 });
 
 const errorLink: ApolloLink = onError(({ graphQLErrors, networkError }) => {
