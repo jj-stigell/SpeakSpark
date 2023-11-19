@@ -1,7 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/typedef */
 import React, { useState, useCallback } from 'react';
-import { GiftedChat, IMessage, Bubble, BubbleProps, User } from 'react-native-gifted-chat';
+import {
+  GiftedChat, IMessage, Bubble,
+  BubbleProps, User, SendProps, Send
+} from 'react-native-gifted-chat';
 import { View, TouchableOpacity } from 'react-native';
 import { Toast as notification } from 'react-native-toast-notifications';
 import { Ionicons } from '@expo/vector-icons';
@@ -30,7 +33,7 @@ export default function Chat(props: { navigation: any, route: any }): React.JSX.
   const [grammarModalVisible, setGrammarModalVisible] = useState<boolean>(false);
   const [isTyping, setIstyping] = React.useState<boolean>(false);
   const [message, setMessage] = React.useState<CustomMessage | undefined>(undefined);
-  const [chatId, setChatId] = React.useState<string>('');
+  const [chatId, setChatId] = React.useState<string>(props.route?.params?.chatId ?? '');
   const [messages, setMessages] = useState<Array<CustomMessage>>([]);
   const { auth }: AuthContextType = useAuth();
 
@@ -48,8 +51,6 @@ export default function Chat(props: { navigation: any, route: any }): React.JSX.
   const [newChat] = useMutation(NEW_CHAT, {
     errorPolicy: 'all',
     onCompleted: (data) => {
-      console.log('new chat started id ', data.newChat.id);
-
       setChatId(data.newChat.id);
       setIstyping(false);
       setMessages([
@@ -120,14 +121,11 @@ export default function Chat(props: { navigation: any, route: any }): React.JSX.
 
   React.useEffect(() => {
     if (props.route?.params?.newChat) {
+      // New chat
       setIstyping(true);
       newChat({ variables: { botId: props.route.params.bot.id } });
     } else if (props.route?.params?.chatId) {
-
-      setChatId(props.route.params.chatId);
-      console.log('existing chat id', chatId);
-      console.log('existing chat id', props.route.params.chatId);
-
+      // Existing chat
       getMessages({ variables: { chatId: props.route.params.chatId } });
     } else {
       notification.show(i18n.t('chat.idMissing'), { type: 'error' });
@@ -151,8 +149,6 @@ export default function Chat(props: { navigation: any, route: any }): React.JSX.
       GiftedChat.append(previousMessages, messages)
     );
     setIstyping(true);
-    console.log('posting to id', props.route.params.chatId, 'and', chatId);
-
     await postMessage({ variables: {
       message: messages[0].text,
       chatId: chatId ?? props.route.params.chatId
@@ -161,6 +157,7 @@ export default function Chat(props: { navigation: any, route: any }): React.JSX.
     setIstyping(false);
   }, []);
 
+  // Render speech bubble, conditional render for bot mesages.
   function renderBubble(props: Readonly<BubbleProps<IMessage>>): JSX.Element {
     return (
       <View
@@ -176,25 +173,50 @@ export default function Chat(props: { navigation: any, route: any }): React.JSX.
             }
           }}
         />
-        { props.currentMessage?.user._id != auth!.id && props.currentMessage?._id && (
-          <View style={{ flexDirection: 'column', marginLeft: 0 }}>
-            <TouchableOpacity onPress={(): void => {
-              setMessage(props.currentMessage as CustomMessage);
-              setGrammarModalVisible(true);
-            }}>
-              <Ionicons
-                name='information-circle'
-                style={{
-                  paddingRight: 8,
-                  color: darkMode ? 'white' : 'black'
-                }}
-                size={34}
-              />
-            </TouchableOpacity>
-            <PlayButton message={props.currentMessage as CustomMessage} />
-          </View>
-        ) }
+        {
+          props.currentMessage?.user._id != auth!.id &&
+          props.currentMessage?._id !== 1 &&
+          props.currentMessage?._id &&
+          (
+            <View style={{ flexDirection: 'column', marginLeft: 0 }}>
+              <TouchableOpacity onPress={(): void => {
+                setMessage(props.currentMessage as CustomMessage);
+                setGrammarModalVisible(true);
+              }}>
+                <Ionicons
+                  name='information-circle'
+                  style={{
+                    paddingRight: 8,
+                    color: darkMode ? 'white' : 'black'
+                  }}
+                  size={34}
+                />
+              </TouchableOpacity>
+              <PlayButton message={props.currentMessage as CustomMessage} />
+            </View>
+          )
+        }
       </View>
+    );
+  }
+
+  // Renders send button only as icon, no text.
+  function renderSend(props: Readonly<SendProps<IMessage>>): JSX.Element {
+    return (
+      <Send
+        {...props}
+      >
+        <View style={{ marginRight: 10, marginBottom: 10 }}>
+          <Ionicons
+            name='send'
+            style={{
+              paddingRight: 8,
+              color: darkMode ? 'white' : 'black'
+            }}
+            size={24}
+          />
+        </View>
+      </Send>
     );
   }
 
@@ -217,6 +239,7 @@ export default function Chat(props: { navigation: any, route: any }): React.JSX.
         messages={messages}
         user={user}
         renderBubble={renderBubble}
+        renderSend={renderSend}
         onSend={(messages): Promise<void> => onSend(messages as Array<CustomMessage>)}
         isTyping={isTyping}
         scrollToBottom={true}

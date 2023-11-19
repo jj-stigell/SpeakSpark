@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/typedef */
-import React from 'react';
-import { useQuery } from '@apollo/client';
+import React, { useEffect } from 'react';
+import { useLazyQuery } from '@apollo/client';
 import { Modal, StyleSheet, Text, View, ScrollView } from 'react-native';
 
 import Button from './Button';
@@ -11,6 +11,7 @@ import { GET_MESSAGE } from '../graphql/queries';
 import { SystemContextType } from '../context/SystemProvider';
 import useSystem from '../hooks/useSystem';
 import i18n from '../i18n';
+import { Message } from '../type';
 
 interface Props {
   message: CustomMessage,
@@ -20,18 +21,30 @@ interface Props {
 
 export default function GrammarModal(props: Props): React.JSX.Element {
   const { theme }: SystemContextType = useSystem();
+  const [loading, setLoading] = React.useState<boolean>(true);
+  const [data, setData] = React.useState<Message | undefined>(undefined);
 
-  const { data, loading, error } = useQuery(GET_MESSAGE, {
-    variables: {
-      messageId: props.message?._id ?? '',
-      generateTranslation: true,
-      generateGrammarAnalysis: true,
-      generateAudio: false
-    },
+  const [message] = useLazyQuery(GET_MESSAGE, {
     fetchPolicy: 'no-cache',
     errorPolicy: 'all',
-    skip: !props.modalVisible
+    onCompleted: (data) => {
+      setData(data.getMessage);
+      setLoading(false);
+    }
   });
+
+  useEffect(() => {
+    setLoading(true);
+    if (props.modalVisible) {
+      message({ variables: {
+        messageId: props.message._id,
+        botId: props.message.user._id,
+        generateTranslation: true,
+        generateGrammarAnalysis: true,
+        generateAudio: false
+      } });
+    }
+  }, [props.modalVisible]);
 
   return (
     <Modal
@@ -54,35 +67,21 @@ export default function GrammarModal(props: Props): React.JSX.Element {
                   backgroundColor={theme.background.secondary}
                 />
               ) : (
-                data?.getMessage && data.getMessage.grammarAnalysis ? (
-                  <React.Fragment>
-                    <Text style={styles.messageText}>{props.message.text}</Text>
-                    <PlayButton message={props.message} size={40} />
-                    <View style={styles.horizontalLine} />
-                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                      <Text style={[styles.subTitle, { flex: 1 }]}>
-                        {i18n.t('chat.grammarModal.translation')}
-                      </Text>
-                    </View>
-                    <Text style={[styles.subContent]}>
-                      {data.getMessage.translation}
+                <React.Fragment>
+                  <Text style={styles.messageText}>{props.message.text}</Text>
+                  <PlayButton message={props.message} size={40} />
+                  <View style={styles.horizontalLine} />
+                  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <Text style={[styles.subTitle, { flex: 1 }]}>
+                      {i18n.t('chat.grammarModal.translation')}
                     </Text>
-                    <Text style={styles.subTitle}>{i18n.t('chat.grammarModal.information')}</Text>
-                    <Text style={styles.subContent}>{data.getMessage.grammarAnalysis}</Text>
-                  </React.Fragment>
-                ) : (
-                  <React.Fragment>
-                    <Text style={{ textAlign: 'center' }}>
-                      {error ?
-                        i18n.t(
-                          'chat.grammarModal.graphQlError',
-                          { error: error.graphQLErrors[0].message }
-                        ) :
-                        i18n.t('chat.grammarModal.error')
-                      }
-                    </Text>
-                  </React.Fragment>
-                )
+                  </View>
+                  <Text style={[styles.subContent]}>
+                    {data?.translation}
+                  </Text>
+                  <Text style={styles.subTitle}>{i18n.t('chat.grammarModal.information')}</Text>
+                  <Text style={styles.subContent}>{data?.grammarAnalysis}</Text>
+                </React.Fragment>
               )}
             </React.Fragment>
             <Button
@@ -100,7 +99,7 @@ export default function GrammarModal(props: Props): React.JSX.Element {
 // eslint-disable-next-line @typescript-eslint/typedef
 const styles = StyleSheet.create({
   centeredView: {
-    justifyContent: 'flex-end', // Change this to 'center' if you want it to be vertically centered.
+    justifyContent: 'flex-end',
     alignItems: 'center'
   },
   modalView: {
