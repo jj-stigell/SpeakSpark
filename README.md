@@ -7,7 +7,7 @@ learning becomes a delightful, interactive experience.
 ## Demo video
 
 <a href="https://www.youtube.com/watch?v=gJnvtdeabE0">
-    <img src="https://i.ibb.co/KhhzFMh/Screenshot-2023-11-20-at-20-18-10.png" width="800" alt="Screenshot">
+    <img src="https://i.postimg.cc/zGhQxL7d/speakspark.png" width="600" alt="Screenshot">
 </a>
 
 ## About SpeakSpark
