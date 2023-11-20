@@ -1,8 +1,48 @@
 # SpeakSpark
 
+React Native application for language learning through AI-powered conversations.
+A gateway to a multilingual world, where language barriers are effortlessly overcome, and
+learning becomes a delightful, interactive experience.
 
-[![Watch the video](https://img.youtube.com/vi/gJnvtdeabE0/default.jpg)](https://youtu.be/gJnvtdeabE0)
+## Demo video
 
+<a href="https://www.youtube.com/watch?v=gJnvtdeabE0">
+    <img src="https://i.ibb.co/KhhzFMh/Screenshot-2023-11-20-at-20-18-10.png" width="800" alt="Screenshot">
+</a>
+
+## About SpeakSpark
+
+SpeakSpark leverages the power of artificial intelligence to provide an immersive learning experience.
+With SpeakSpark, you can chat in various languages, making language learning not only accessible
+but also engaging and fun. Here's what makes SpeakSpark special:
+
+- **AI-Powered Chat Partners:** Engage in conversations with AI bots fluent in multiple languages. These bots are designed to simulate real-life conversations, providing a safe and effective environment for language practice.
+- **Multilingual Support:** Chat in a range of languages including English (en), Japanese (ja), Korean (ko), German (de), French (fr), Spanish, and Chinese. This diverse language support opens doors to a variety of cultures and linguistic nuances.
+- **Translation and Grammar Analysis:** Receive instant translations of messages from your AI chat partners. More than just translations, SpeakSpark offers an analysis of these translations, helping you understand the grammar and structure of the language you're learning.
+- **User Interface Languages:** The user interface is available in English (en), Finnish (fi), Vietnamese (vi), Japanese (ja), Korean (ko), and German (de), ensuring a comfortable and familiar navigation experience for a wide range of users.
+- **Dark Mode:** A sleek dark mode is available for a more eye-friendly interface, especially during night-time usage or in low-light environments.
+
+## Known Bugs and Missing Features
+
+Below is a list of known bugs and missing features:
+
+- **Existing New Chat Issues:** Some users may experience difficulties when initiating new chat sessions.
+- **Latest Chats List Updates:** Keeping the latest chats list updated in real-time is currently not working.
+- **UI Updates After Language Change:** There are occasional delays or inconsistencies in the UI immediately following a language change.
+- **Performance of Answer and Translation Functions:** The response time for generating answers and translations is slower than desired, primarily when calling the OpenAI API and managing the backend storage of generated audio files.
+- **Loading Previous Messages in Old Chats:** Retrieving historical messages in older chat sessions is not fully optimized.
+- **Feedback for User Messages:** Currently, the app lacks adequate feedback mechanisms for user messages, which can affect the user experience.
+
+## Run the app
+
+App runs with [Expo](https://expo.dev/)
+
+1. Clone the repo
+
+2. Run with command
+```
+npm run start
+```
 
 ## Possible improvements
 
@@ -52,7 +92,7 @@
 
 ## Collecting feedback
 
-Collecting user feedback is crucial for refining and improving your app. Here are some effective methods and best practices to gather user feedback:
+Collecting user feedback is crucial for refining and improving app. Here are some effective methods and best practices to gather user feedback:
 
 1. **In-App Surveys and Feedback Forms**:
    - Use unobtrusive pop-up surveys after certain actions or milestones.
