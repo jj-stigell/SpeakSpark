@@ -1,6 +1,8 @@
 # SpeakSpark
 
 
+[![Watch the video](https://img.youtube.com/vi/gJnvtdeabE0/default.jpg)](https://youtu.be/gJnvtdeabE0)
+
 
 ## Possible improvements
 
